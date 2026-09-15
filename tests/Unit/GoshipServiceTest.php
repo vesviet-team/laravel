@@ -48,9 +48,10 @@ it('creates a waybill via Goship API', function () {
         'customer_name' => 'John',
         'phone' => '0901234567',
         'address' => '123 Main St',
-        'subtotal' => 100, // Added subtotal
+        'subtotal' => 100,
         'total_amount' => 100,
         'status' => 'pending',
+        'payment_method' => 'cod',
     ]);
 
     $service = new GoshipService;
@@ -61,4 +62,23 @@ it('creates a waybill via Goship API', function () {
     Http::assertSent(function ($request) {
         return str_contains($request->url(), 'goship.io/api/v2/shipments');
     });
+});
+
+it('blocks waybill creation for unpaid non-COD order', function () {
+    $order = Order::create([
+        'order_number' => 'ORD-UNPAID-'.time(),
+        'customer_name' => 'Jane',
+        'phone' => '0907654321',
+        'address' => '456 Side St',
+        'subtotal' => 200,
+        'total_amount' => 200,
+        'status' => 'pending',
+        'payment_method' => 'vietqr',
+        'payment_status' => 'pending',
+    ]);
+
+    $service = new GoshipService;
+    $waybill = $service->createWaybill($order);
+
+    expect($waybill)->toBeNull();
 });
