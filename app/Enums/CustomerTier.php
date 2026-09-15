@@ -20,9 +20,9 @@ namespace App\Enums;
  */
 enum CustomerTier: string
 {
-    case Bronze   = 'bronze';
-    case Silver   = 'silver';
-    case Gold     = 'gold';
+    case Bronze = 'bronze';
+    case Silver = 'silver';
+    case Gold = 'gold';
     case Platinum = 'platinum';
     case FirstTime = 'first_time';
 
@@ -33,10 +33,10 @@ enum CustomerTier: string
     public function minSpend(): int
     {
         return match ($this) {
-            self::Bronze   => 0,
+            self::Bronze => 0,
             self::FirstTime => 0,
-            self::Silver   => 5_000_000,
-            self::Gold     => 20_000_000,
+            self::Silver => 5_000_000,
+            self::Gold => 20_000_000,
             self::Platinum => 50_000_000,
         };
     }
@@ -47,9 +47,9 @@ enum CustomerTier: string
     public function label(): string
     {
         return match ($this) {
-            self::Bronze   => 'Thành Viên Mới',
-            self::Silver   => 'Thành Viên Thân Thiết',
-            self::Gold     => 'VIP Diamond',
+            self::Bronze => 'Thành Viên Mới',
+            self::Silver => 'Thành Viên Thân Thiết',
+            self::Gold => 'VIP Diamond',
             self::Platinum => 'Platinum',
             self::FirstTime => 'Lần Đầu Mua',
         };
@@ -75,9 +75,9 @@ enum CustomerTier: string
     {
         return match ($this) {
             self::FirstTime => 0,
-            self::Bronze   => 1,
-            self::Silver   => 2,
-            self::Gold     => 3,
+            self::Bronze => 1,
+            self::Silver => 2,
+            self::Gold => 3,
             self::Platinum => 4,
         };
     }

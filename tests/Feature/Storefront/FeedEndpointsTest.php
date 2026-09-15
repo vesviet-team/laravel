@@ -94,7 +94,7 @@ it('returns Google Merchant Center XML feed conforming to schema', function () {
     $response->assertStatus(200);
     $response->assertHeader('Content-Type', 'application/xml; charset=utf-8');
     expect($response->getContent())->toContain('<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0"');
-    expect($response->getContent())->toContain('<g:id>' . $this->product->id . '</g:id>');
+    expect($response->getContent())->toContain('<g:id>'.$this->product->id.'</g:id>');
     expect($response->getContent())->toContain('<g:title>Minimalist Sofa</g:title>');
     expect($response->getContent())->toContain('<g:availability>in_stock</g:availability>');
     expect($response->getContent())->toContain('<g:price>12000000 VND</g:price>');

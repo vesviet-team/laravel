@@ -15,13 +15,13 @@ beforeEach(function () {
     $this->category = Category::create(['name' => 'Test', 'slug' => 'test']);
 
     $this->product = Product::create([
-        'name'        => 'Test Product',
-        'slug'        => 'test-product',
-        'sku'         => 'TEST-001',
-        'price'       => 200000,
-        'stock'       => 50,
+        'name' => 'Test Product',
+        'slug' => 'test-product',
+        'sku' => 'TEST-001',
+        'price' => 200000,
+        'stock' => 50,
         'category_id' => $this->category->id,
-        'status'      => 'published',
+        'status' => 'published',
     ]);
 
     $this->customer = Customer::factory()->create();
@@ -63,14 +63,14 @@ test('CP-02: merging empty guest cart creates no DB rows', function () {
 test('CP-03: merge adds qty from guest to existing DB qty', function () {
     // Pre-seed DB with qty 2
     CustomerCartItem::create([
-        'customer_id'        => $this->customer->id,
-        'product_id'         => $this->product->id,
+        'customer_id' => $this->customer->id,
+        'product_id' => $this->product->id,
         'product_variant_id' => 0, // sentinel (no variant)
-        'quantity'           => 2,
-        'updated_at'         => now(),
+        'quantity' => 2,
+        'updated_at' => now(),
     ]);
 
-    $productKey = $this->product->id . '_0';
+    $productKey = $this->product->id.'_0';
     $guestCart = [$productKey => ['product_id' => $this->product->id, 'product_variant_id' => null, 'quantity' => 1]];
 
     $this->cartService->mergeGuestCartToDB($this->customer, $guestCart);
@@ -85,14 +85,14 @@ test('CP-03: merge adds qty from guest to existing DB qty', function () {
 
 test('CP-04: merge caps qty at 99 when sum exceeds limit', function () {
     CustomerCartItem::create([
-        'customer_id'        => $this->customer->id,
-        'product_id'         => $this->product->id,
+        'customer_id' => $this->customer->id,
+        'product_id' => $this->product->id,
         'product_variant_id' => 0, // sentinel (no variant)
-        'quantity'           => 98,
-        'updated_at'         => now(),
+        'quantity' => 98,
+        'updated_at' => now(),
     ]);
 
-    $productKey = $this->product->id . '_0';
+    $productKey = $this->product->id.'_0';
     $guestCart = [$productKey => ['product_id' => $this->product->id, 'product_variant_id' => null, 'quantity' => 5]];
 
     $this->cartService->mergeGuestCartToDB($this->customer, $guestCart);
@@ -165,11 +165,11 @@ test('CP-09: getCart() reloads from DB when session is empty', function () {
 
     // Seed DB directly (simulate pre-existing cart from another device)
     CustomerCartItem::create([
-        'customer_id'        => $this->customer->id,
-        'product_id'         => $this->product->id,
+        'customer_id' => $this->customer->id,
+        'product_id' => $this->product->id,
         'product_variant_id' => 0, // sentinel (no variant)
-        'quantity'           => 4,
-        'updated_at'         => now(),
+        'quantity' => 4,
+        'updated_at' => now(),
     ]);
 
     // Ensure session is empty (simulate session expiry)
@@ -178,7 +178,7 @@ test('CP-09: getCart() reloads from DB when session is empty', function () {
     $cart = $this->cartService->getCart();
 
     expect($cart)->not->toBeEmpty();
-    $key = $this->product->id . '_0';
+    $key = $this->product->id.'_0';
     expect($cart[$key]['quantity'])->toBe(4);
     // Session should now be warmed
     expect(Session::get('cart', []))->not->toBeEmpty();
@@ -201,7 +201,7 @@ test('CP-10: cart synced across devices via DB', function () {
     $cart = $this->cartService->getCart();
 
     expect($cart)->not->toBeEmpty();
-    $key = $this->product->id . '_0';
+    $key = $this->product->id.'_0';
     expect($cart[$key]['quantity'])->toBe(2);
 });
 
@@ -213,29 +213,29 @@ test('CP-11: removing one variant does not delete other variants of same product
     Auth::guard('customer')->login($this->customer);
 
     $product2 = Product::create([
-        'name'        => 'Variant Product',
-        'slug'        => 'variant-product',
-        'sku'         => 'VAR-001',
-        'price'       => 150000,
-        'stock'       => 20,
+        'name' => 'Variant Product',
+        'slug' => 'variant-product',
+        'sku' => 'VAR-001',
+        'price' => 150000,
+        'stock' => 20,
         'category_id' => $this->category->id,
-        'status'      => 'published',
+        'status' => 'published',
     ]);
 
     // Add same product with 2 different variant IDs (mocked via direct DB seed)
     CustomerCartItem::create([
-        'customer_id'        => $this->customer->id,
-        'product_id'         => $product2->id,
+        'customer_id' => $this->customer->id,
+        'product_id' => $product2->id,
         'product_variant_id' => 1, // size M
-        'quantity'           => 1,
-        'updated_at'         => now(),
+        'quantity' => 1,
+        'updated_at' => now(),
     ]);
     CustomerCartItem::create([
-        'customer_id'        => $this->customer->id,
-        'product_id'         => $product2->id,
+        'customer_id' => $this->customer->id,
+        'product_id' => $product2->id,
         'product_variant_id' => 2, // size L
-        'quantity'           => 1,
-        'updated_at'         => now(),
+        'quantity' => 1,
+        'updated_at' => now(),
     ]);
 
     // Warm session with both variants
@@ -250,9 +250,6 @@ test('CP-11: removing one variant does not delete other variants of same product
         ->count())->toBe(1);
 });
 
-
-
-
 // -----------------------------------------------------------------------------
 // CP-12: Customer isolation - Customer A cannot read Customer B's cart
 // -----------------------------------------------------------------------------
@@ -264,22 +261,22 @@ test('CP-12: customer isolation - getCart() returns only own items', function ()
 
     // Seed DB directly for Customer B
     $customerB = Customer::create([
-        'name'     => 'Customer B',
-        'email'    => 'b@test.com',
+        'name' => 'Customer B',
+        'email' => 'b@test.com',
         'password' => bcrypt('secret'),
-        'status'   => 'active',
+        'status' => 'active',
     ]);
     CustomerCartItem::create([
-        'customer_id'        => $customerB->id,
-        'product_id'         => $this->product->id,
+        'customer_id' => $customerB->id,
+        'product_id' => $this->product->id,
         'product_variant_id' => 0,
-        'quantity'           => 99,
-        'updated_at'         => now(),
+        'quantity' => 99,
+        'updated_at' => now(),
     ]);
 
     // A's cart must only contain A's items
     $cartA = $this->cartService->getCart();
-    $key = $this->product->id . '_0';
+    $key = $this->product->id.'_0';
     expect($cartA[$key]['quantity'])->toBe(3); // not 99 from B
     expect(CustomerCartItem::where('customer_id', $this->customer->id)->count())->toBe(1);
     expect(CustomerCartItem::where('customer_id', $customerB->id)->count())->toBe(1);
@@ -291,10 +288,10 @@ test('CP-12: customer isolation - getCart() returns only own items', function ()
 
 test('CP-13: mergeGuestCartToDB called correctly after 2FA completes', function () {
     // Simulate: guest added items to session before login
-    $guestCart = [$this->product->id . '_0' => [
-        'product_id'         => $this->product->id,
+    $guestCart = [$this->product->id.'_0' => [
+        'product_id' => $this->product->id,
         'product_variant_id' => null,
-        'quantity'           => 2,
+        'quantity' => 2,
     ]];
 
     // Call mergeGuestCartToDB directly (simulating what verifyTwoFactor now does)

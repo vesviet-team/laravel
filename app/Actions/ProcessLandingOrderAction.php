@@ -21,7 +21,7 @@ class ProcessLandingOrderAction
      *
      * @param  LandingPage  $landingPage  The landing page context.
      * @param  array  $data  Validated form data: name, phone, address, note, selectedComboId.
-     * @return Order  The created order.
+     * @return Order The created order.
      *
      * @throws RuntimeException on stock or data issues.
      */
@@ -44,30 +44,30 @@ class ProcessLandingOrderAction
         $order = DB::transaction(function () use ($landingPage, $data, $combo, $totalAmount) {
             $order = Order::create([
                 'landing_page_id' => $landingPage->id,
-                'order_number'    => $this->generateOrderNumber(),
-                'status'          => OrderStatus::Pending,
-                'payment_method'  => 'cod',
-                'customer_name'   => $data['name'],
-                'phone'           => $data['phone'],
-                'address'         => $data['address'],
-                'notes'           => $data['note'] ?: null,
-                'subtotal'        => $totalAmount,
+                'order_number' => $this->generateOrderNumber(),
+                'status' => OrderStatus::Pending,
+                'payment_method' => 'cod',
+                'customer_name' => $data['name'],
+                'phone' => $data['phone'],
+                'address' => $data['address'],
+                'notes' => $data['note'] ?: null,
+                'subtotal' => $totalAmount,
                 'discount_amount' => 0,
-                'shipping_fee'    => 0,
-                'total_amount'    => $totalAmount,
+                'shipping_fee' => 0,
+                'total_amount' => $totalAmount,
             ]);
 
             if ($landingPage->product_id) {
                 OrderItem::create([
-                    'order_id'           => $order->id,
-                    'product_id'         => $landingPage->product_id,
+                    'order_id' => $order->id,
+                    'product_id' => $landingPage->product_id,
                     'product_variant_id' => null,
-                    'product_name'       => $combo['name'] ?? $landingPage->product?->name ?? 'Unknown',
-                    'variant_name'       => null,
-                    'sku'                => $landingPage->product?->sku ?? null,
-                    'quantity'           => 1,
-                    'price_at_purchase'  => $totalAmount,
-                    'subtotal'           => $totalAmount,
+                    'product_name' => $combo['name'] ?? $landingPage->product?->name ?? 'Unknown',
+                    'variant_name' => null,
+                    'sku' => $landingPage->product?->sku ?? null,
+                    'quantity' => 1,
+                    'price_at_purchase' => $totalAmount,
+                    'subtotal' => $totalAmount,
                 ]);
             }
 
@@ -83,6 +83,6 @@ class ProcessLandingOrderAction
 
     protected function generateOrderNumber(): string
     {
-        return 'LP-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
+        return 'LP-'.now()->format('Ymd').'-'.strtoupper(Str::random(6));
     }
 }

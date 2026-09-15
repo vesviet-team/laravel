@@ -30,19 +30,19 @@ class ProductVariant extends Model
     ];
 
     protected $casts = [
-        'attributes_json'       => 'array',
-        'option_values'         => 'array',
-        'is_active'             => 'boolean',
-        'is_purchasable'        => 'boolean',
-        'price'                 => 'integer',
-        'compare_at_price'      => 'integer',
-        'stock'                 => 'integer',
-        'low_stock_threshold'   => 'integer',
-        'weight'                => 'integer',
-        'length'                => 'integer',
-        'width'                 => 'integer',
-        'height'                => 'integer',
-        'position'              => 'integer',
+        'attributes_json' => 'array',
+        'option_values' => 'array',
+        'is_active' => 'boolean',
+        'is_purchasable' => 'boolean',
+        'price' => 'integer',
+        'compare_at_price' => 'integer',
+        'stock' => 'integer',
+        'low_stock_threshold' => 'integer',
+        'weight' => 'integer',
+        'length' => 'integer',
+        'width' => 'integer',
+        'height' => 'integer',
+        'position' => 'integer',
     ];
 
     protected $appends = [
@@ -78,6 +78,7 @@ class ProductVariant extends Model
         if ($this->length && $this->width && $this->height) {
             return "{$this->length} x {$this->width} x {$this->height} cm";
         }
+
         return $this->product?->dimensions;
     }
 
@@ -86,7 +87,7 @@ class ProductVariant extends Model
      */
     public function getFormattedPriceAttribute(): string
     {
-        return number_format($this->price, 0, ',', '.') . '₫';
+        return number_format($this->price, 0, ',', '.').'₫';
     }
 
     /**
@@ -95,8 +96,9 @@ class ProductVariant extends Model
     public function getFormattedCompareAtPriceAttribute(): ?string
     {
         if ($this->compare_at_price) {
-            return number_format($this->compare_at_price, 0, ',', '.') . '₫';
+            return number_format($this->compare_at_price, 0, ',', '.').'₫';
         }
+
         return null;
     }
 
@@ -113,9 +115,10 @@ class ProductVariant extends Model
      */
     public function getDiscountPercentageAttribute(): ?int
     {
-        if (!$this->has_discount || !$this->compare_at_price) {
+        if (! $this->has_discount || ! $this->compare_at_price) {
             return null;
         }
+
         return (int) round((($this->compare_at_price - $this->price) / $this->compare_at_price) * 100);
     }
 
@@ -143,6 +146,7 @@ class ProductVariant extends Model
         if ($this->length && $this->width && $this->height) {
             return "{$this->length} x {$this->width} x {$this->height} cm";
         }
+
         return null;
     }
 
@@ -154,11 +158,11 @@ class ProductVariant extends Model
         if ($this->stock <= 0) {
             return 'Hết hàng';
         }
-        
+
         if ($this->is_low_stock) {
             return "Sắp hết hàng (còn {$this->stock})";
         }
-        
+
         return "Còn hàng ({$this->stock})";
     }
 
@@ -167,8 +171,8 @@ class ProductVariant extends Model
      */
     public function getIsAvailableAttribute(): bool
     {
-        return $this->is_active 
-            && $this->is_purchasable 
+        return $this->is_active
+            && $this->is_purchasable
             && $this->is_in_stock
             && $this->product?->is_in_stock ?? false;
     }
@@ -183,7 +187,7 @@ class ProductVariant extends Model
         }
 
         return collect($this->option_values)
-            ->map(fn ($value, $key) => ucfirst($key) . ': ' . $value)
+            ->map(fn ($value, $key) => ucfirst($key).': '.$value)
             ->implode(' / ');
     }
 
@@ -199,7 +203,7 @@ class ProductVariant extends Model
         return array_map(fn ($value, $key) => [
             'key' => $key,
             'value' => $value,
-            'label' => ucfirst($key) . ': ' . $value,
+            'label' => ucfirst($key).': '.$value,
         ], $this->option_values, array_keys($this->option_values));
     }
 
@@ -209,7 +213,7 @@ class ProductVariant extends Model
     public function getPrimaryImageUrlAttribute(): ?string
     {
         // Check variant-specific image in attributes
-        if (!empty($this->attributes_json['image'])) {
+        if (! empty($this->attributes_json['image'])) {
             return Product::resolveImageUrl($this->attributes_json['image']);
         }
 
@@ -225,7 +229,7 @@ class ProductVariant extends Model
         $images = [];
 
         // Variant-specific images
-        if (!empty($this->attributes_json['gallery']) && is_array($this->attributes_json['gallery'])) {
+        if (! empty($this->attributes_json['gallery']) && is_array($this->attributes_json['gallery'])) {
             foreach ($this->attributes_json['gallery'] as $item) {
                 if ($url = Product::resolveImageUrl($item)) {
                     $images[] = $url;

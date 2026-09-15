@@ -2,12 +2,13 @@
 
 namespace App\Filament\Seller\Resources\SimpleProductResource\Pages;
 
+use App\Actions\CreateSellerProductAction;
 use App\Filament\Seller\Resources\SimpleProductResource;
-use Filament\Actions;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 class CreateSimpleProduct extends CreateRecord
@@ -33,13 +34,13 @@ class CreateSimpleProduct extends CreateRecord
         $data['seller_id'] = $sellerProfile->id;
         $data['is_visible'] = $data['is_visible'] ?? true;
         $data['status'] = $data['status'] ?? 'published';
-        $data['slug'] = $data['slug'] ?? \Illuminate\Support\Str::slug($data['name']);
+        $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
 
         return $data;
     }
 
     protected function handleRecordCreation(array $data): Model
     {
-        return app(\App\Actions\CreateSellerProductAction::class)->execute($data);
+        return app(CreateSellerProductAction::class)->execute($data);
     }
 }

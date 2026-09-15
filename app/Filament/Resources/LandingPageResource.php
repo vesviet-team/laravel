@@ -3,21 +3,22 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\LandingPageResource\Pages;
-use App\Filament\Resources\LandingPageResource\RelationManagers;
 use App\Models\LandingPage;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class LandingPageResource extends Resource
 {
     protected static ?string $model = LandingPage::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
     protected static ?string $navigationGroup = 'Marketing';
+
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
@@ -31,7 +32,7 @@ class LandingPageResource extends Resource
                                 Forms\Components\TextInput::make('title')
                                     ->required()
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null),
+                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
                                 Forms\Components\TextInput::make('slug')
                                     ->required()
                                     ->unique(ignoreRecord: true)
@@ -78,7 +79,7 @@ class LandingPageResource extends Resource
                                 Forms\Components\TextInput::make('header_cta_text'),
                                 Forms\Components\Textarea::make('footer_content')->columnSpanFull(),
                             ]),
-                    ])->columnSpanFull()
+                    ])->columnSpanFull(),
             ]);
     }
 

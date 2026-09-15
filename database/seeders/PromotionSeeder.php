@@ -21,7 +21,7 @@ class PromotionSeeder extends Seeder
             ?? Category::firstOrCreate(
                 ['slug' => 'den-chieu-sang'],
                 [
-                    'name'        => 'Đèn Chiếu Sáng',
+                    'name' => 'Đèn Chiếu Sáng',
                     'description' => 'Đèn thả trần nghệ thuật, đèn bàn xi măng và đèn sàn trang trí tinh tế.',
                 ]
             );
@@ -33,12 +33,12 @@ class PromotionSeeder extends Seeder
             ?? Product::firstOrCreate(
                 ['slug' => 'copenhague-desk'],
                 [
-                    'name'        => 'Bàn Làm Việc Copenhague Desk',
-                    'sku'         => 'DSK-005',
-                    'price'       => 14200000,
-                    'stock'       => 12,
-                    'weight'      => 18000,
-                    'status'      => 'published',
+                    'name' => 'Bàn Làm Việc Copenhague Desk',
+                    'sku' => 'DSK-005',
+                    'price' => 14200000,
+                    'stock' => 12,
+                    'weight' => 18000,
+                    'status' => 'published',
                     'is_featured' => true,
                 ]
             );
@@ -49,12 +49,12 @@ class PromotionSeeder extends Seeder
             ?? Product::firstOrCreate(
                 ['slug' => 'synnes-dining-chair'],
                 [
-                    'name'        => 'Ghế Ăn Gỗ Sồi Synnes Dining Chair',
-                    'sku'         => 'CHR-004',
-                    'price'       => 5800000,
-                    'stock'       => 20,
-                    'weight'      => 4500,
-                    'status'      => 'published',
+                    'name' => 'Ghế Ăn Gỗ Sồi Synnes Dining Chair',
+                    'sku' => 'CHR-004',
+                    'price' => 5800000,
+                    'stock' => 20,
+                    'weight' => 4500,
+                    'status' => 'published',
                     'is_featured' => true,
                 ]
             );
@@ -64,21 +64,21 @@ class PromotionSeeder extends Seeder
         PromotionRule::updateOrCreate(
             ['name' => 'WELCOME10 - Ưu Đãi Chào Mừng Khách Hàng Mới (Giảm 10%)'],
             [
-                'name'                 => 'WELCOME10 - Ưu Đãi Chào Mừng Khách Hàng Mới (Giảm 10%)',
-                'code'                 => 'WELCOME10',
-                'rule_type'            => PromotionRule::RULE_TYPE_CART,
-                'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-                'discount_value'       => 10.0,
-                'max_discount_amount'  => 500000.0,
-                'min_order_amount'     => 300000.0,
-                'min_quantity'         => 0,
-                'conditions'           => null,
+                'name' => 'WELCOME10 - Ưu Đãi Chào Mừng Khách Hàng Mới (Giảm 10%)',
+                'code' => 'WELCOME10',
+                'rule_type' => PromotionRule::RULE_TYPE_CART,
+                'action_type' => PromotionRule::ACTION_PERCENTAGE,
+                'discount_value' => 10.0,
+                'max_discount_amount' => 500000.0,
+                'min_order_amount' => 300000.0,
+                'min_quantity' => 0,
+                'conditions' => null,
                 'target_customer_tier' => PromotionRule::TIER_ALL,
-                'usage_limit'          => null,
+                'usage_limit' => null,
                 'usage_limit_per_user' => 1,
-                'priority'             => 10,
-                'stop_further_rules'   => false,
-                'is_active'            => true,
+                'priority' => 10,
+                'stop_further_rules' => false,
+                'is_active' => true,
             ]
         );
 
@@ -87,15 +87,15 @@ class PromotionSeeder extends Seeder
         PromotionRule::updateOrCreate(
             ['name' => 'TIERED_PROMO - Chiết Khấu Bậc Thang Số Lượng'],
             [
-                'name'                 => 'TIERED_PROMO - Chiết Khấu Bậc Thang Số Lượng',
-                'code'                 => null,
-                'rule_type'            => PromotionRule::RULE_TYPE_CART,
-                'action_type'          => PromotionRule::ACTION_TIERED_QUANTITY,
-                'discount_value'       => 5.0,
-                'max_discount_amount'  => null,
-                'min_order_amount'     => 0.0,
-                'min_quantity'         => 0,
-                'conditions'           => [
+                'name' => 'TIERED_PROMO - Chiết Khấu Bậc Thang Số Lượng',
+                'code' => null,
+                'rule_type' => PromotionRule::RULE_TYPE_CART,
+                'action_type' => PromotionRule::ACTION_TIERED_QUANTITY,
+                'discount_value' => 5.0,
+                'max_discount_amount' => null,
+                'min_order_amount' => 0.0,
+                'min_quantity' => 0,
+                'conditions' => [
                     'tiered_steps' => [
                         ['min_qty' => 2, 'discount_value' => 5, 'discount_percent' => 5],
                         ['min_qty' => 4, 'discount_value' => 10, 'discount_percent' => 10],
@@ -103,11 +103,11 @@ class PromotionSeeder extends Seeder
                     ],
                 ],
                 'target_customer_tier' => PromotionRule::TIER_ALL,
-                'usage_limit'          => null,
+                'usage_limit' => null,
                 'usage_limit_per_user' => 1,
-                'priority'             => 20,
-                'stop_further_rules'   => false,
-                'is_active'            => true,
+                'priority' => 20,
+                'stop_further_rules' => false,
+                'is_active' => true,
             ]
         );
 
@@ -116,40 +116,40 @@ class PromotionSeeder extends Seeder
         PromotionRule::updateOrCreate(
             ['name' => 'BUY_DESK_GET_CHAIR - Mua Bàn Làm Việc Tặng Ghế Ăn Bắc Âu'],
             [
-                'name'                 => 'BUY_DESK_GET_CHAIR - Mua Bàn Làm Việc Tặng Ghế Ăn Bắc Âu',
-                'code'                 => null,
-                'rule_type'            => PromotionRule::RULE_TYPE_CART,
-                'action_type'          => PromotionRule::ACTION_BUY_X_GET_Y,
-                'discount_value'       => 100.0,
-                'max_discount_amount'  => null,
-                'min_order_amount'     => 0.0,
-                'min_quantity'         => 0,
-                'conditions'           => [
+                'name' => 'BUY_DESK_GET_CHAIR - Mua Bàn Làm Việc Tặng Ghế Ăn Bắc Âu',
+                'code' => null,
+                'rule_type' => PromotionRule::RULE_TYPE_CART,
+                'action_type' => PromotionRule::ACTION_BUY_X_GET_Y,
+                'discount_value' => 100.0,
+                'max_discount_amount' => null,
+                'min_order_amount' => 0.0,
+                'min_quantity' => 0,
+                'conditions' => [
                     'bxgy_config' => [
-                        'buy_product_id'   => $desk->id,
-                        'buy_quantity'     => 1,
-                        'get_product_id'   => $chair->id,
-                        'get_quantity'     => 1,
+                        'buy_product_id' => $desk->id,
+                        'buy_quantity' => 1,
+                        'get_product_id' => $chair->id,
+                        'get_quantity' => 1,
                         'discount_percent' => 100,
-                        'discount_value'   => 100,
-                        'is_free'          => true,
+                        'discount_value' => 100,
+                        'is_free' => true,
                     ],
-                    'trigger_product_ids'     => [$desk->id],
-                    'reward_product_id'       => $chair->id,
+                    'trigger_product_ids' => [$desk->id],
+                    'reward_product_id' => $chair->id,
                     'reward_discount_percent' => 100,
-                    'buy_product_id'          => $desk->id,
-                    'buy_quantity'            => 1,
-                    'get_product_id'          => $chair->id,
-                    'get_quantity'            => 1,
-                    'discount_percent'        => 100,
-                    'is_free'                 => true,
+                    'buy_product_id' => $desk->id,
+                    'buy_quantity' => 1,
+                    'get_product_id' => $chair->id,
+                    'get_quantity' => 1,
+                    'discount_percent' => 100,
+                    'is_free' => true,
                 ],
                 'target_customer_tier' => PromotionRule::TIER_ALL,
-                'usage_limit'          => null,
+                'usage_limit' => null,
                 'usage_limit_per_user' => 1,
-                'priority'             => 30,
-                'stop_further_rules'   => false,
-                'is_active'            => true,
+                'priority' => 30,
+                'stop_further_rules' => false,
+                'is_active' => true,
             ]
         );
 
@@ -158,23 +158,23 @@ class PromotionSeeder extends Seeder
         PromotionRule::updateOrCreate(
             ['name' => 'CATALOG_LIGHTING_15 - Giảm 15% Bộ Sưu Tập Đèn Chiếu Sáng'],
             [
-                'name'                 => 'CATALOG_LIGHTING_15 - Giảm 15% Bộ Sưu Tập Đèn Chiếu Sáng',
-                'code'                 => null,
-                'rule_type'            => PromotionRule::RULE_TYPE_CATALOG,
-                'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-                'discount_value'       => 15.0,
-                'max_discount_amount'  => null,
-                'min_order_amount'     => 0.0,
-                'min_quantity'         => 0,
-                'conditions'           => [
+                'name' => 'CATALOG_LIGHTING_15 - Giảm 15% Bộ Sưu Tập Đèn Chiếu Sáng',
+                'code' => null,
+                'rule_type' => PromotionRule::RULE_TYPE_CATALOG,
+                'action_type' => PromotionRule::ACTION_PERCENTAGE,
+                'discount_value' => 15.0,
+                'max_discount_amount' => null,
+                'min_order_amount' => 0.0,
+                'min_quantity' => 0,
+                'conditions' => [
                     'category_ids' => [$lightingCategory->id],
                 ],
                 'target_customer_tier' => PromotionRule::TIER_ALL,
-                'usage_limit'          => null,
+                'usage_limit' => null,
                 'usage_limit_per_user' => 1,
-                'priority'             => 5,
-                'stop_further_rules'   => false,
-                'is_active'            => true,
+                'priority' => 5,
+                'stop_further_rules' => false,
+                'is_active' => true,
             ]
         );
 
@@ -183,21 +183,21 @@ class PromotionSeeder extends Seeder
         PromotionRule::updateOrCreate(
             ['name' => 'FREESHIP500 - Miễn Phí Vận Chuyển Đơn Hàng Từ 500.000₫'],
             [
-                'name'                 => 'FREESHIP500 - Miễn Phí Vận Chuyển Đơn Hàng Từ 500.000₫',
-                'code'                 => null,
-                'rule_type'            => PromotionRule::RULE_TYPE_CART,
-                'action_type'          => PromotionRule::ACTION_FREE_SHIPPING,
-                'discount_value'       => 0.0,
-                'max_discount_amount'  => null,
-                'min_order_amount'     => 500000.0,
-                'min_quantity'         => 0,
-                'conditions'           => null,
+                'name' => 'FREESHIP500 - Miễn Phí Vận Chuyển Đơn Hàng Từ 500.000₫',
+                'code' => null,
+                'rule_type' => PromotionRule::RULE_TYPE_CART,
+                'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
+                'discount_value' => 0.0,
+                'max_discount_amount' => null,
+                'min_order_amount' => 500000.0,
+                'min_quantity' => 0,
+                'conditions' => null,
                 'target_customer_tier' => PromotionRule::TIER_ALL,
-                'usage_limit'          => null,
+                'usage_limit' => null,
                 'usage_limit_per_user' => 1,
-                'priority'             => 50,
-                'stop_further_rules'   => false,
-                'is_active'            => true,
+                'priority' => 50,
+                'stop_further_rules' => false,
+                'is_active' => true,
             ]
         );
 
@@ -206,21 +206,21 @@ class PromotionSeeder extends Seeder
         PromotionRule::updateOrCreate(
             ['name' => 'VIPGOLD20 - Đặc Quyền Giảm 20% Thành Viên VIP Gold'],
             [
-                'name'                 => 'VIPGOLD20 - Đặc Quyền Giảm 20% Thành Viên VIP Gold',
-                'code'                 => 'VIPGOLD20',
-                'rule_type'            => PromotionRule::RULE_TYPE_CART,
-                'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-                'discount_value'       => 20.0,
-                'max_discount_amount'  => 1000000.0,
-                'min_order_amount'     => 0.0,
-                'min_quantity'         => 0,
-                'conditions'           => null,
+                'name' => 'VIPGOLD20 - Đặc Quyền Giảm 20% Thành Viên VIP Gold',
+                'code' => 'VIPGOLD20',
+                'rule_type' => PromotionRule::RULE_TYPE_CART,
+                'action_type' => PromotionRule::ACTION_PERCENTAGE,
+                'discount_value' => 20.0,
+                'max_discount_amount' => 1000000.0,
+                'min_order_amount' => 0.0,
+                'min_quantity' => 0,
+                'conditions' => null,
                 'target_customer_tier' => 'vip_gold',
-                'usage_limit'          => null,
+                'usage_limit' => null,
                 'usage_limit_per_user' => 1,
-                'priority'             => 5,
-                'stop_further_rules'   => false,
-                'is_active'            => true,
+                'priority' => 5,
+                'stop_further_rules' => false,
+                'is_active' => true,
             ]
         );
 
@@ -240,22 +240,22 @@ class PromotionSeeder extends Seeder
         PromotionRule::updateOrCreate(
             ['name' => '[LEGACY] Combo 2+ Sản Phẩm Giảm 5%'],
             [
-                'name'                 => '[LEGACY] Combo 2+ Sản Phẩm Giảm 5%',
-                'code'                 => null,        // automatic rule — no coupon required
-                'rule_type'            => PromotionRule::RULE_TYPE_CART,
-                'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-                'discount_value'       => 5.0,         // 5% — was magic number 0.05 in code
-                'max_discount_amount'  => null,        // no cap — matches legacy behavior
-                'min_order_amount'     => 0.0,
-                'min_quantity'         => 2,           // requires 2+ eligible items
-                'conditions'           => null,        // all categories
+                'name' => '[LEGACY] Combo 2+ Sản Phẩm Giảm 5%',
+                'code' => null,        // automatic rule — no coupon required
+                'rule_type' => PromotionRule::RULE_TYPE_CART,
+                'action_type' => PromotionRule::ACTION_PERCENTAGE,
+                'discount_value' => 5.0,         // 5% — was magic number 0.05 in code
+                'max_discount_amount' => null,        // no cap — matches legacy behavior
+                'min_order_amount' => 0.0,
+                'min_quantity' => 2,           // requires 2+ eligible items
+                'conditions' => null,        // all categories
                 'target_customer_tier' => PromotionRule::TIER_ALL,
-                'usage_limit'          => null,
+                'usage_limit' => null,
                 'usage_limit_per_user' => 0,           // unlimited
-                'priority'             => 100,         // lowest priority — fallback only
-                'stop_further_rules'   => false,
+                'priority' => 100,         // lowest priority — fallback only
+                'stop_further_rules' => false,
                 // INACTIVE until Phase 3 migration completes (legacy code removed first)
-                'is_active'            => false,
+                'is_active' => false,
             ]
         );
     }

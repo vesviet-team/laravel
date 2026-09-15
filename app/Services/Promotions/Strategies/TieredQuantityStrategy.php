@@ -60,6 +60,7 @@ class TieredQuantityStrategy implements PromotionStrategyInterface
             usort($tieredSteps, function ($a, $b) {
                 $qtyA = (int) ($a['min_qty'] ?? $a['qty'] ?? $a['quantity'] ?? 0);
                 $qtyB = (int) ($b['min_qty'] ?? $b['qty'] ?? $b['quantity'] ?? 0);
+
                 return $qtyB <=> $qtyA;
             });
 

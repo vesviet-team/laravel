@@ -15,25 +15,25 @@ test('can create and persist a post with complete attributes', function () {
     $user = User::factory()->create();
 
     $post = Post::create([
-        'post_category_id'     => $category->id,
-        'user_id'              => $user->id,
-        'title'                => 'Nghệ Thuật Bài Trí Ánh Sáng Scandinavian',
-        'slug'                 => 'nghe-thuat-bai-tri-anh-sang-scandinavian',
-        'excerpt'              => 'Tóm tắt bài viết về ánh sáng nội thất.',
-        'body'                 => '<p>Nội dung chi tiết bài viết với đèn chiếu sáng và bàn ăn gỗ sồi.</p>',
-        'featured_image'       => 'posts/featured-1.jpg',
-        'banner_image'         => 'posts/banner-1.jpg',
-        'status'               => 'published',
-        'is_featured'          => true,
-        'meta_title'           => 'Nghệ Thuật Bài Trí Ánh Sáng',
-        'meta_description'     => 'Hướng dẫn bài trí ánh sáng ấm cúng chuẩn Bắc Âu.',
-        'meta_keywords'        => 'scandinavian, den-chieu-sang, noi-that',
-        'canonical_url'        => 'https://soberfurniture.vn/blog/nghe-thuat-bai-tri-anh-sang-scandinavian',
-        'schema_type'          => 'BlogPosting',
-        'faq_schema'           => [
+        'post_category_id' => $category->id,
+        'user_id' => $user->id,
+        'title' => 'Nghệ Thuật Bài Trí Ánh Sáng Scandinavian',
+        'slug' => 'nghe-thuat-bai-tri-anh-sang-scandinavian',
+        'excerpt' => 'Tóm tắt bài viết về ánh sáng nội thất.',
+        'body' => '<p>Nội dung chi tiết bài viết với đèn chiếu sáng và bàn ăn gỗ sồi.</p>',
+        'featured_image' => 'posts/featured-1.jpg',
+        'banner_image' => 'posts/banner-1.jpg',
+        'status' => 'published',
+        'is_featured' => true,
+        'meta_title' => 'Nghệ Thuật Bài Trí Ánh Sáng',
+        'meta_description' => 'Hướng dẫn bài trí ánh sáng ấm cúng chuẩn Bắc Âu.',
+        'meta_keywords' => 'scandinavian, den-chieu-sang, noi-that',
+        'canonical_url' => 'https://soberfurniture.vn/blog/nghe-thuat-bai-tri-anh-sang-scandinavian',
+        'schema_type' => 'BlogPosting',
+        'faq_schema' => [
             [
                 'question' => 'Nên chọn ánh sáng nào cho phòng khách?',
-                'answer'   => 'Nên sử dụng ánh sáng vàng ấm 2700K - 3000K.',
+                'answer' => 'Nên sử dụng ánh sáng vàng ấm 2700K - 3000K.',
             ],
         ],
     ]);
@@ -49,7 +49,7 @@ test('can create and persist a post with complete attributes', function () {
     expect($post->faq_schema[0]['question'])->toBe('Nên chọn ánh sáng nào cho phòng khách?');
 
     $this->assertDatabaseHas('posts', [
-        'id'   => $post->id,
+        'id' => $post->id,
         'slug' => 'nghe-thuat-bai-tri-anh-sang-scandinavian',
     ]);
 });
@@ -72,7 +72,7 @@ test('calculateReadingTime correctly estimates reading duration', function () {
     expect(Post::calculateReadingTime($vnWords400))->toBe(2);
 
     // HTML tags are stripped during calculation
-    $htmlContent = '<div>' . implode('</div><div>', array_fill(0, 450, '<p>ghế gỗ sồi cao cấp</p>')) . '</div>';
+    $htmlContent = '<div>'.implode('</div><div>', array_fill(0, 450, '<p>ghế gỗ sồi cao cấp</p>')).'</div>';
     // 450 * 5 words = 2250 words -> 12 minutes
     expect(Post::calculateReadingTime($htmlContent))->toBe(12);
 
@@ -102,15 +102,15 @@ test('automatically calculates reading_time_minutes on saving', function () {
     $user = User::factory()->create();
 
     // 450 words in body
-    $body = '<p>' . implode(' ', array_fill(0, 450, 'nội thất Bắc Âu tối giản cao cấp')) . '</p>';
+    $body = '<p>'.implode(' ', array_fill(0, 450, 'nội thất Bắc Âu tối giản cao cấp')).'</p>';
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Reading Time Test Post',
-        'slug'             => 'reading-time-test-post',
-        'body'             => $body,
-        'status'           => 'draft',
+        'user_id' => $user->id,
+        'title' => 'Reading Time Test Post',
+        'slug' => 'reading-time-test-post',
+        'body' => $body,
+        'status' => 'draft',
     ]);
 
     expect($post->reading_time_minutes)->toBeGreaterThanOrEqual(3);
@@ -122,12 +122,12 @@ test('automatically sets published_at to now on publish if null', function () {
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Auto Published Post',
-        'slug'             => 'auto-published-post',
-        'body'             => 'Content',
-        'status'           => 'published',
-        'published_at'     => null,
+        'user_id' => $user->id,
+        'title' => 'Auto Published Post',
+        'slug' => 'auto-published-post',
+        'body' => 'Content',
+        'status' => 'published',
+        'published_at' => null,
     ]);
 
     expect($post->published_at)->not->toBeNull();
@@ -141,12 +141,12 @@ test('does not overwrite explicit published_at timestamp', function () {
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Explicit Published Post',
-        'slug'             => 'explicit-published-post',
-        'body'             => 'Content',
-        'status'           => 'published',
-        'published_at'     => $pastDate,
+        'user_id' => $user->id,
+        'title' => 'Explicit Published Post',
+        'slug' => 'explicit-published-post',
+        'body' => 'Content',
+        'status' => 'published',
+        'published_at' => $pastDate,
     ]);
 
     expect($post->published_at->toDateString())->toBe($pastDate->toDateString());
@@ -158,12 +158,12 @@ test('leaves published_at as null for draft posts', function () {
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Draft Post',
-        'slug'             => 'draft-post-no-pub',
-        'body'             => 'Content',
-        'status'           => 'draft',
-        'published_at'     => null,
+        'user_id' => $user->id,
+        'title' => 'Draft Post',
+        'slug' => 'draft-post-no-pub',
+        'body' => 'Content',
+        'status' => 'draft',
+        'published_at' => null,
     ]);
 
     expect($post->published_at)->toBeNull();
@@ -175,41 +175,41 @@ test('scopePublished filters only published and past-dated posts', function () {
 
     $published1 = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Published 1',
-        'slug'             => 'pub-1',
-        'body'             => 'Body 1',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subHour(),
+        'user_id' => $user->id,
+        'title' => 'Published 1',
+        'slug' => 'pub-1',
+        'body' => 'Body 1',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subHour(),
     ]);
 
     $published2 = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Published 2',
-        'slug'             => 'pub-2',
-        'body'             => 'Body 2',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDays(5),
+        'user_id' => $user->id,
+        'title' => 'Published 2',
+        'slug' => 'pub-2',
+        'body' => 'Body 2',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDays(5),
     ]);
 
     $futurePost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Scheduled Future',
-        'slug'             => 'future',
-        'body'             => 'Body future',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->addDays(3),
+        'user_id' => $user->id,
+        'title' => 'Scheduled Future',
+        'slug' => 'future',
+        'body' => 'Body future',
+        'status' => 'published',
+        'published_at' => Carbon::now()->addDays(3),
     ]);
 
     $draftPost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Draft Post',
-        'slug'             => 'draft',
-        'body'             => 'Body draft',
-        'status'           => 'draft',
+        'user_id' => $user->id,
+        'title' => 'Draft Post',
+        'slug' => 'draft',
+        'body' => 'Body draft',
+        'status' => 'draft',
     ]);
 
     $results = Post::published()->get();
@@ -225,34 +225,34 @@ test('scopeFeatured filters only published and featured posts', function () {
 
     $featuredPub = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Featured Published',
-        'slug'             => 'feat-pub',
-        'body'             => 'Body',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
-        'is_featured'      => true,
+        'user_id' => $user->id,
+        'title' => 'Featured Published',
+        'slug' => 'feat-pub',
+        'body' => 'Body',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
+        'is_featured' => true,
     ]);
 
     $normalPub = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Normal Published',
-        'slug'             => 'norm-pub',
-        'body'             => 'Body',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
-        'is_featured'      => false,
+        'user_id' => $user->id,
+        'title' => 'Normal Published',
+        'slug' => 'norm-pub',
+        'body' => 'Body',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
+        'is_featured' => false,
     ]);
 
     $featuredDraft = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Featured Draft',
-        'slug'             => 'feat-draft',
-        'body'             => 'Body',
-        'status'           => 'draft',
-        'is_featured'      => true,
+        'user_id' => $user->id,
+        'title' => 'Featured Draft',
+        'slug' => 'feat-draft',
+        'body' => 'Body',
+        'status' => 'draft',
+        'is_featured' => true,
     ]);
 
     $results = Post::featured()->get();
@@ -268,20 +268,20 @@ test('scopeByCategory filters by id, slug string, and model instance', function 
 
     $postA = Post::create([
         'post_category_id' => $catA->id,
-        'user_id'          => $user->id,
-        'title'            => 'Post in A',
-        'slug'             => 'post-a',
-        'body'             => 'Body',
-        'status'           => 'published',
+        'user_id' => $user->id,
+        'title' => 'Post in A',
+        'slug' => 'post-a',
+        'body' => 'Body',
+        'status' => 'published',
     ]);
 
     $postB = Post::create([
         'post_category_id' => $catB->id,
-        'user_id'          => $user->id,
-        'title'            => 'Post in B',
-        'slug'             => 'post-b',
-        'body'             => 'Body',
-        'status'           => 'published',
+        'user_id' => $user->id,
+        'title' => 'Post in B',
+        'slug' => 'post-b',
+        'body' => 'Body',
+        'status' => 'published',
     ]);
 
     // Test with integer ID
@@ -301,7 +301,7 @@ test('scopeByCategory filters by id, slug string, and model instance', function 
 });
 
 test('content and body accessors and mutators work seamlessly', function () {
-    $post = new Post();
+    $post = new Post;
     $post->content = '<p>Custom Content</p>';
 
     expect($post->body)->toBe('<p>Custom Content</p>');
@@ -317,11 +317,11 @@ test('relationships category, postCategory, author, user work properly', functio
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Relation Post',
-        'slug'             => 'relation-post',
-        'body'             => 'Body',
-        'status'           => 'published',
+        'user_id' => $user->id,
+        'title' => 'Relation Post',
+        'slug' => 'relation-post',
+        'body' => 'Body',
+        'status' => 'published',
     ]);
 
     expect($post->category)->not->toBeNull();
@@ -348,31 +348,31 @@ test('products relationship supports contextual commerce with sort order', funct
 
     $product1 = Product::create([
         'category_id' => $ecomCat->id,
-        'name'        => 'Ambit Pendant Lamp',
-        'slug'        => 'ambit-pendant-lamp',
-        'sku'         => 'AMB-001',
-        'price'       => 2500000,
-        'stock'       => 10,
-        'status'      => 'published',
+        'name' => 'Ambit Pendant Lamp',
+        'slug' => 'ambit-pendant-lamp',
+        'sku' => 'AMB-001',
+        'price' => 2500000,
+        'stock' => 10,
+        'status' => 'published',
     ]);
 
     $product2 = Product::create([
         'category_id' => $ecomCat->id,
-        'name'        => 'Synnes Dining Chair',
-        'slug'        => 'synnes-dining-chair',
-        'sku'         => 'SYN-002',
-        'price'       => 4200000,
-        'stock'       => 5,
-        'status'      => 'published',
+        'name' => 'Synnes Dining Chair',
+        'slug' => 'synnes-dining-chair',
+        'sku' => 'SYN-002',
+        'price' => 4200000,
+        'stock' => 5,
+        'status' => 'published',
     ]);
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Commerce Article',
-        'slug'             => 'commerce-article',
-        'body'             => 'Body with commerce products',
-        'status'           => 'published',
+        'user_id' => $user->id,
+        'title' => 'Commerce Article',
+        'slug' => 'commerce-article',
+        'body' => 'Body with commerce products',
+        'status' => 'published',
     ]);
 
     // Attach products with explicit sort order
@@ -400,19 +400,19 @@ test('featured and banner image url accessors resolve correctly', function () {
 
     $postWithExternal = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'External Image Post',
-        'slug'             => 'ext-post',
-        'body'             => 'Body',
-        'featured_image'   => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc',
-        'banner_image'     => 'https://images.unsplash.com/photo-1524758631624-e2822e304c36',
-        'status'           => 'published',
+        'user_id' => $user->id,
+        'title' => 'External Image Post',
+        'slug' => 'ext-post',
+        'body' => 'Body',
+        'featured_image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc',
+        'banner_image' => 'https://images.unsplash.com/photo-1524758631624-e2822e304c36',
+        'status' => 'published',
     ]);
 
     expect($postWithExternal->featured_image_url)->toBe('https://images.unsplash.com/photo-1555041469-a586c61ea9bc');
     expect($postWithExternal->banner_image_url)->toBe('https://images.unsplash.com/photo-1524758631624-e2822e304c36');
 
-    $postEmpty = new Post();
+    $postEmpty = new Post;
     expect($postEmpty->featured_image_url)->toBeNull();
     expect($postEmpty->banner_image_url)->toBeNull();
 });

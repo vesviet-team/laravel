@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\BannerObserver;
+use Database\Factories\BannerFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,23 +14,28 @@ use Illuminate\Support\Facades\Storage;
 #[ObservedBy([BannerObserver::class])]
 class Banner extends Model
 {
-    /** @use HasFactory<\Database\Factories\BannerFactory> */
+    /** @use HasFactory<BannerFactory> */
     use HasFactory;
 
     public const POSITION_HERO_SLIDER = 'hero_slider';
+
     public const POSITION_HOME_PROMO_2COL = 'home_promo_2col';
+
     public const POSITION_HOME_COLLECTION_3COL = 'home_collection_3col';
+
     public const POSITION_CATALOG_HEADER = 'catalog_header';
+
     public const POSITION_BLOG_SIDEBAR = 'blog_sidebar';
+
     public const POSITION_TOP_ANNOUNCEMENT = 'top_announcement';
 
     public const POSITIONS = [
-        self::POSITION_HERO_SLIDER          => '🌟 Slide Trang Chủ (Hero)',
-        self::POSITION_HOME_PROMO_2COL      => '🏷️ Khuyến Mãi 2 Cột (Promo)',
+        self::POSITION_HERO_SLIDER => '🌟 Slide Trang Chủ (Hero)',
+        self::POSITION_HOME_PROMO_2COL => '🏷️ Khuyến Mãi 2 Cột (Promo)',
         self::POSITION_HOME_COLLECTION_3COL => '🛋️ Bộ Sưu Tập 3 Cột (Collection)',
-        self::POSITION_CATALOG_HEADER       => '📦 Header Catalog',
-        self::POSITION_BLOG_SIDEBAR         => '📰 Blog Sidebar',
-        self::POSITION_TOP_ANNOUNCEMENT     => '📢 Thông Báo Header',
+        self::POSITION_CATALOG_HEADER => '📦 Header Catalog',
+        self::POSITION_BLOG_SIDEBAR => '📰 Blog Sidebar',
+        self::POSITION_TOP_ANNOUNCEMENT => '📢 Thông Báo Header',
     ];
 
     /**
@@ -62,10 +68,10 @@ class Banner extends Model
     {
         return [
             'open_in_new_tab' => 'boolean',
-            'starts_at'       => 'datetime',
-            'ends_at'         => 'datetime',
-            'sort_order'      => 'integer',
-            'clicks_count'    => 'integer',
+            'starts_at' => 'datetime',
+            'ends_at' => 'datetime',
+            'sort_order' => 'integer',
+            'clicks_count' => 'integer',
         ];
     }
 
@@ -79,11 +85,11 @@ class Banner extends Model
         return $query->where('status', 'active')
             ->where(function (Builder $q) use ($now) {
                 $q->whereNull('starts_at')
-                  ->orWhere('starts_at', '<=', $now);
+                    ->orWhere('starts_at', '<=', $now);
             })
             ->where(function (Builder $q) use ($now) {
                 $q->whereNull('ends_at')
-                  ->orWhere('ends_at', '>=', $now);
+                    ->orWhere('ends_at', '>=', $now);
             });
     }
 

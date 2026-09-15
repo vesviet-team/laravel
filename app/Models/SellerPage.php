@@ -2,18 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToSeller;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Traits\BelongsToSeller;
 
 class SellerPage extends Model
 {
     // Slice 0 / P0-A: UsesTenantConnection removed — this project uses shared-database
     // multi-tenancy. BelongsToSeller global scope (TenantSellerScope) handles seller_id
     // filtering. UsesTenantConnection would switch DB connections which don't exist here.
-    use HasFactory, SoftDeletes, BelongsToSeller;
+    use BelongsToSeller, HasFactory, SoftDeletes;
 
     /**
      * Cache key prefix for storefront page cache.
@@ -49,6 +48,6 @@ class SellerPage extends Model
      */
     public static function cacheKeyFor(int $sellerId): string
     {
-        return self::CACHE_KEY_PREFIX . $sellerId;
+        return self::CACHE_KEY_PREFIX.$sellerId;
     }
 }

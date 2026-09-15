@@ -128,7 +128,7 @@ class PromotionRuleResource extends Resource
                                     Forms\Components\Select::make('rule_type')
                                         ->label('Phạm vi áp dụng (Rule Type)')
                                         ->options([
-                                            PromotionRule::RULE_TYPE_CART    => 'Khuyến Mãi Giỏ Hàng & Coupon (Cart Sales Rule)',
+                                            PromotionRule::RULE_TYPE_CART => 'Khuyến Mãi Giỏ Hàng & Coupon (Cart Sales Rule)',
                                             PromotionRule::RULE_TYPE_CATALOG => 'Khuyến Mãi Danh Mục & Giá Niêm Yết (Catalog Price Rule)',
                                         ])
                                         ->default(PromotionRule::RULE_TYPE_CART)
@@ -149,15 +149,15 @@ class PromotionRuleResource extends Resource
                                         ->label('Hình thức chiết khấu (Action Type)')
                                         ->options(fn (Get $get): array => match ($get('rule_type')) {
                                             PromotionRule::RULE_TYPE_CATALOG => [
-                                                PromotionRule::ACTION_PERCENTAGE   => 'Giảm theo phần trăm (%)',
+                                                PromotionRule::ACTION_PERCENTAGE => 'Giảm theo phần trăm (%)',
                                                 PromotionRule::ACTION_FIXED_AMOUNT => 'Giảm số tiền cố định (₫)',
                                             ],
                                             default => [
-                                                PromotionRule::ACTION_PERCENTAGE      => 'Giảm theo phần trăm (%)',
-                                                PromotionRule::ACTION_FIXED_AMOUNT    => 'Giảm số tiền cố định (₫)',
-                                                PromotionRule::ACTION_BUY_X_GET_Y     => 'Mua X Tặng Y (BXGY)',
+                                                PromotionRule::ACTION_PERCENTAGE => 'Giảm theo phần trăm (%)',
+                                                PromotionRule::ACTION_FIXED_AMOUNT => 'Giảm số tiền cố định (₫)',
+                                                PromotionRule::ACTION_BUY_X_GET_Y => 'Mua X Tặng Y (BXGY)',
                                                 PromotionRule::ACTION_TIERED_QUANTITY => 'Chiết khấu bậc thang số lượng (Tiered)',
-                                                PromotionRule::ACTION_FREE_SHIPPING   => 'Miễn phí vận chuyển (Free Shipping)',
+                                                PromotionRule::ACTION_FREE_SHIPPING => 'Miễn phí vận chuyển (Free Shipping)',
                                             ],
                                         })
                                         ->default(PromotionRule::ACTION_PERCENTAGE)
@@ -166,11 +166,11 @@ class PromotionRuleResource extends Resource
 
                                     Forms\Components\TextInput::make('discount_value')
                                         ->label(fn (Get $get): string => match ($get('action_type')) {
-                                            PromotionRule::ACTION_PERCENTAGE      => 'Tỷ lệ giảm giá (%)',
-                                            PromotionRule::ACTION_FIXED_AMOUNT    => 'Số tiền giảm trực tiếp (₫)',
-                                            PromotionRule::ACTION_FREE_SHIPPING   => 'Mức hỗ trợ phí ship (₫, để 0 nếu miễn phí 100%)',
+                                            PromotionRule::ACTION_PERCENTAGE => 'Tỷ lệ giảm giá (%)',
+                                            PromotionRule::ACTION_FIXED_AMOUNT => 'Số tiền giảm trực tiếp (₫)',
+                                            PromotionRule::ACTION_FREE_SHIPPING => 'Mức hỗ trợ phí ship (₫, để 0 nếu miễn phí 100%)',
                                             PromotionRule::ACTION_TIERED_QUANTITY => 'Tỷ lệ giảm mặc định (%)',
-                                            default                               => 'Giá trị chiết khấu',
+                                            default => 'Giá trị chiết khấu',
                                         })
                                         ->numeric()
                                         ->required(fn (Get $get) => $get('action_type') !== PromotionRule::ACTION_BUY_X_GET_Y)
@@ -215,12 +215,12 @@ class PromotionRuleResource extends Resource
                                     Forms\Components\Select::make('target_customer_tier')
                                         ->label('Phân khúc khách hàng áp dụng')
                                         ->options([
-                                            PromotionRule::TIER_ALL        => 'Tất cả khách hàng (Đại trà)',
+                                            PromotionRule::TIER_ALL => 'Tất cả khách hàng (Đại trà)',
                                             PromotionRule::TIER_FIRST_TIME => 'Khách hàng mới (Đơn hàng đầu tiên)',
-                                            PromotionRule::TIER_BRONZE     => 'Hạng Đồng (Tất cả thành viên đã đăng ký)',
-                                            PromotionRule::TIER_SILVER     => 'Hạng Bạc (Chi tiêu từ 5.000.000₫)',
-                                            PromotionRule::TIER_GOLD       => 'Hạng Vàng / VIP (Chi tiêu từ 20.000.000₫)',
-                                            PromotionRule::TIER_PLATINUM   => 'Hạng Bạch Kim (Chi tiêu từ 50.000.000₫)',
+                                            PromotionRule::TIER_BRONZE => 'Hạng Đồng (Tất cả thành viên đã đăng ký)',
+                                            PromotionRule::TIER_SILVER => 'Hạng Bạc (Chi tiêu từ 5.000.000₫)',
+                                            PromotionRule::TIER_GOLD => 'Hạng Vàng / VIP (Chi tiêu từ 20.000.000₫)',
+                                            PromotionRule::TIER_PLATINUM => 'Hạng Bạch Kim (Chi tiêu từ 50.000.000₫)',
                                         ])
                                         ->default(PromotionRule::TIER_ALL)
                                         ->required(),
@@ -408,13 +408,13 @@ class PromotionRuleResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         PromotionRule::RULE_TYPE_CATALOG => 'info',
-                        PromotionRule::RULE_TYPE_CART    => 'success',
-                        default                          => 'gray',
+                        PromotionRule::RULE_TYPE_CART => 'success',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         PromotionRule::RULE_TYPE_CATALOG => 'Catalog Rule',
-                        PromotionRule::RULE_TYPE_CART    => 'Cart Rule',
-                        default                          => $state,
+                        PromotionRule::RULE_TYPE_CART => 'Cart Rule',
+                        default => $state,
                     })
                     ->sortable(),
 
@@ -422,34 +422,34 @@ class PromotionRuleResource extends Resource
                     ->label('Hình Thức')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        PromotionRule::ACTION_PERCENTAGE      => 'warning',
-                        PromotionRule::ACTION_FIXED_AMOUNT    => 'success',
-                        PromotionRule::ACTION_BUY_X_GET_Y     => 'danger',
+                        PromotionRule::ACTION_PERCENTAGE => 'warning',
+                        PromotionRule::ACTION_FIXED_AMOUNT => 'success',
+                        PromotionRule::ACTION_BUY_X_GET_Y => 'danger',
                         PromotionRule::ACTION_TIERED_QUANTITY => 'purple',
-                        PromotionRule::ACTION_FREE_SHIPPING   => 'cyan',
-                        default                               => 'gray',
+                        PromotionRule::ACTION_FREE_SHIPPING => 'cyan',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        PromotionRule::ACTION_PERCENTAGE      => 'Giảm %',
-                        PromotionRule::ACTION_FIXED_AMOUNT    => 'Giảm Tiền Mặt',
-                        PromotionRule::ACTION_BUY_X_GET_Y     => 'BXGY Tặng Quà',
+                        PromotionRule::ACTION_PERCENTAGE => 'Giảm %',
+                        PromotionRule::ACTION_FIXED_AMOUNT => 'Giảm Tiền Mặt',
+                        PromotionRule::ACTION_BUY_X_GET_Y => 'BXGY Tặng Quà',
                         PromotionRule::ACTION_TIERED_QUANTITY => 'Bậc Thang',
-                        PromotionRule::ACTION_FREE_SHIPPING   => 'Freeship',
-                        default                               => $state,
+                        PromotionRule::ACTION_FREE_SHIPPING => 'Freeship',
+                        default => $state,
                     })
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('discount_value')
                     ->label('Mức Giảm')
                     ->formatStateUsing(fn (PromotionRule $record): string => $record->formatted_discount)
-                    ->description(fn (PromotionRule $record): ?string => $record->max_discount_amount 
-                        ? 'Tối đa: ' . number_format($record->max_discount_amount, 0, ',', '.') . '₫' 
+                    ->description(fn (PromotionRule $record): ?string => $record->max_discount_amount
+                        ? 'Tối đa: '.number_format($record->max_discount_amount, 0, ',', '.').'₫'
                         : null)
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('usage_stat')
                     ->label('Đã Dùng / Hạn Mức')
-                    ->formatStateUsing(fn (PromotionRule $record): string => "{$record->used_count} / " . ($record->usage_limit !== null ? number_format($record->usage_limit, 0, ',', '.') : '∞'))
+                    ->formatStateUsing(fn (PromotionRule $record): string => "{$record->used_count} / ".($record->usage_limit !== null ? number_format($record->usage_limit, 0, ',', '.') : '∞'))
                     ->sortable(query: fn (Builder $query, string $direction): Builder => $query->orderBy('used_count', $direction)),
 
                 Tables\Columns\TextColumn::make('schedule_status')
@@ -463,19 +463,21 @@ class PromotionRuleResource extends Resource
                         if ($record->ends_at && $now->gt($record->ends_at)) {
                             return 'danger';
                         }
+
                         return 'success';
                     })
                     ->formatStateUsing(function (PromotionRule $record): string {
                         $now = now();
                         if ($record->starts_at && $now->lt($record->starts_at)) {
-                            return 'Sắp diễn ra (' . $record->starts_at->format('d/m/Y') . ')';
+                            return 'Sắp diễn ra ('.$record->starts_at->format('d/m/Y').')';
                         }
                         if ($record->ends_at && $now->gt($record->ends_at)) {
-                            return 'Đã kết thúc (' . $record->ends_at->format('d/m/Y') . ')';
+                            return 'Đã kết thúc ('.$record->ends_at->format('d/m/Y').')';
                         }
                         if ($record->ends_at) {
-                            return 'Đến ' . $record->ends_at->format('d/m/Y H:i');
+                            return 'Đến '.$record->ends_at->format('d/m/Y H:i');
                         }
+
                         return 'Vô thời hạn';
                     }),
 
@@ -494,29 +496,29 @@ class PromotionRuleResource extends Resource
                 Tables\Filters\SelectFilter::make('rule_type')
                     ->label('Loại quy tắc')
                     ->options([
-                        PromotionRule::RULE_TYPE_CART    => 'Cart Rules (Giỏ hàng & Coupon)',
+                        PromotionRule::RULE_TYPE_CART => 'Cart Rules (Giỏ hàng & Coupon)',
                         PromotionRule::RULE_TYPE_CATALOG => 'Catalog Rules (Danh mục & Giá niêm yết)',
                     ]),
 
                 Tables\Filters\SelectFilter::make('action_type')
                     ->label('Hình thức chiết khấu')
                     ->options([
-                        PromotionRule::ACTION_PERCENTAGE      => 'Giảm theo phần trăm (%)',
-                        PromotionRule::ACTION_FIXED_AMOUNT    => 'Giảm số tiền cố định (₫)',
-                        PromotionRule::ACTION_BUY_X_GET_Y     => 'Mua X Tặng Y (BXGY)',
+                        PromotionRule::ACTION_PERCENTAGE => 'Giảm theo phần trăm (%)',
+                        PromotionRule::ACTION_FIXED_AMOUNT => 'Giảm số tiền cố định (₫)',
+                        PromotionRule::ACTION_BUY_X_GET_Y => 'Mua X Tặng Y (BXGY)',
                         PromotionRule::ACTION_TIERED_QUANTITY => 'Chiết khấu bậc thang',
-                        PromotionRule::ACTION_FREE_SHIPPING   => 'Miễn phí vận chuyển',
+                        PromotionRule::ACTION_FREE_SHIPPING => 'Miễn phí vận chuyển',
                     ]),
 
                 Tables\Filters\SelectFilter::make('target_customer_tier')
                     ->label('Phân khúc khách hàng')
                     ->options([
-                        PromotionRule::TIER_ALL        => 'Tất cả khách hàng',
+                        PromotionRule::TIER_ALL => 'Tất cả khách hàng',
                         PromotionRule::TIER_FIRST_TIME => 'Khách hàng mới',
-                        PromotionRule::TIER_BRONZE     => 'Hạng Đồng',
-                        PromotionRule::TIER_SILVER     => 'Hạng Bạc',
-                        PromotionRule::TIER_GOLD       => 'Hạng Vàng',
-                        PromotionRule::TIER_PLATINUM   => 'Hạng Bạch Kim',
+                        PromotionRule::TIER_BRONZE => 'Hạng Đồng',
+                        PromotionRule::TIER_SILVER => 'Hạng Bạc',
+                        PromotionRule::TIER_GOLD => 'Hạng Vàng',
+                        PromotionRule::TIER_PLATINUM => 'Hạng Bạch Kim',
                     ]),
 
                 Tables\Filters\TernaryFilter::make('is_active')
@@ -537,10 +539,11 @@ class PromotionRuleResource extends Resource
                     ->icon('heroicon-m-document-duplicate')
                     ->color('gray')
                     ->mutateRecordDataUsing(function (array $data): array {
-                        $data['name'] = $data['name'] . ' (Bản sao)';
-                        $data['code'] = ! empty($data['code']) ? $data['code'] . '_COPY' : null;
+                        $data['name'] = $data['name'].' (Bản sao)';
+                        $data['code'] = ! empty($data['code']) ? $data['code'].'_COPY' : null;
                         $data['used_count'] = 0;
                         $data['is_active'] = false;
+
                         return $data;
                     }),
 
@@ -578,9 +581,9 @@ class PromotionRuleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListPromotionRules::route('/'),
+            'index' => Pages\ListPromotionRules::route('/'),
             'create' => Pages\CreatePromotionRule::route('/create'),
-            'edit'   => Pages\EditPromotionRule::route('/{record}/edit'),
+            'edit' => Pages\EditPromotionRule::route('/{record}/edit'),
         ];
     }
 }

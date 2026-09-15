@@ -2,13 +2,12 @@
 
 namespace App\Filament\Resources\FlashSaleResource\RelationManagers;
 
+use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ItemsRelationManager extends RelationManager
 {
@@ -30,9 +29,9 @@ class ItemsRelationManager extends RelationManager
                     ->minValue(0)
                     ->rules([
                         fn (Forms\Get $get): \Closure => function (string $attribute, $value, \Closure $fail) use ($get) {
-                            $product = \App\Models\Product::find($get('product_id'));
+                            $product = Product::find($get('product_id'));
                             if ($product && $value >= $product->price) {
-                                $fail('Giá Flash Sale (' . number_format($value, 0, ',', '.') . 'đ) phải nhỏ hơn giá gốc của sản phẩm (' . number_format($product->price, 0, ',', '.') . 'đ).');
+                                $fail('Giá Flash Sale ('.number_format($value, 0, ',', '.').'đ) phải nhỏ hơn giá gốc của sản phẩm ('.number_format($product->price, 0, ',', '.').'đ).');
                             }
                         },
                     ]),

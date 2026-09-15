@@ -13,9 +13,13 @@ use Filament\Tables\Table;
 class SellerProfileResource extends Resource
 {
     protected static ?string $model = SellerProfile::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+
     protected static ?string $navigationLabel = 'Sellers';
+
     protected static ?string $modelLabel = 'Seller';
+
     protected static ?string $navigationGroup = 'Shop';
 
     public static function form(Form $form): Form

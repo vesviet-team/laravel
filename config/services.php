@@ -36,18 +36,18 @@ return [
     ],
 
     'goship' => [
-        'base_url'              => env('GOSHIP_BASE_URL', 'https://api.goship.io/api/v2'),
-        'token'                 => env('GOSHIP_TOKEN', ''),
-        'warehouse_name'        => env('GOSHIP_WAREHOUSE_NAME', 'MYSHOP Store'),
-        'warehouse_phone'       => env('GOSHIP_WAREHOUSE_PHONE', '0901234567'),
-        'warehouse_address'     => env('GOSHIP_WAREHOUSE_ADDRESS', '123 Nguyen Van Linh'),
-        'warehouse_city_id'     => env('GOSHIP_WAREHOUSE_CITY_ID', '1'),
+        'base_url' => env('GOSHIP_BASE_URL', 'https://api.goship.io/api/v2'),
+        'token' => env('GOSHIP_TOKEN', ''),
+        'warehouse_name' => env('GOSHIP_WAREHOUSE_NAME', 'MYSHOP Store'),
+        'warehouse_phone' => env('GOSHIP_WAREHOUSE_PHONE', '0901234567'),
+        'warehouse_address' => env('GOSHIP_WAREHOUSE_ADDRESS', '123 Nguyen Van Linh'),
+        'warehouse_city_id' => env('GOSHIP_WAREHOUSE_CITY_ID', '1'),
         'warehouse_district_id' => env('GOSHIP_WAREHOUSE_DISTRICT_ID', '1'),
     ],
 
     'banking' => [
-        'bank_code'    => env('BANK_CODE', 'MB'),
-        'account_no'   => env('BANK_ACCOUNT_NO', '0123456789'),
+        'bank_code' => env('BANK_CODE', 'MB'),
+        'account_no' => env('BANK_ACCOUNT_NO', '0123456789'),
         'account_name' => env('BANK_ACCOUNT_NAME', 'MYSTORE COMPANY'),
     ],
 

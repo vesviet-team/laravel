@@ -17,11 +17,11 @@ interface PromotionStrategyInterface
     /**
      * Calculate the discount amount produced by this rule against the current cart/context.
      *
-     * @param  PromotionRule  $rule             The rule being evaluated
-     * @param  float          $eligibleSubtotal Subtotal of items eligible for discount (excluding flash-sale items)
-     * @param  array          $cartItems        Enriched cart item array from CartService
-     * @param  float          $shippingFee      Current shipping fee in VND
-     * @return AppliedRuleDiscount|null         Returns AppliedRuleDiscount if discount > 0, null otherwise
+     * @param  PromotionRule  $rule  The rule being evaluated
+     * @param  float  $eligibleSubtotal  Subtotal of items eligible for discount (excluding flash-sale items)
+     * @param  array  $cartItems  Enriched cart item array from CartService
+     * @param  float  $shippingFee  Current shipping fee in VND
+     * @return AppliedRuleDiscount|null Returns AppliedRuleDiscount if discount > 0, null otherwise
      */
     public function calculate(
         PromotionRule $rule,

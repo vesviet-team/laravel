@@ -3,9 +3,8 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Seller\Pages\Auth\Register;
-use App\Filament\Seller\Resources\SellerOrderResource;
-use App\Filament\Seller\Resources\SellerPageResource;
-use App\Filament\Seller\Resources\SimpleProductResource;
+use App\Filament\Seller\Pages\Tenancy\EditSellerProfile;
+use App\Http\Middleware\SyncSpatieTenantWithFilament;
 use App\Models\SellerProfile;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -69,10 +68,10 @@ class SellerPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->tenant(SellerProfile::class, ownershipRelationship: 'seller', slugAttribute: 'subdomain')
-            ->tenantProfile(\App\Filament\Seller\Pages\Tenancy\EditSellerProfile::class)
+            ->tenantProfile(EditSellerProfile::class)
             ->profile()
             ->tenantMiddleware([
-                \App\Http\Middleware\SyncSpatieTenantWithFilament::class,
+                SyncSpatieTenantWithFilament::class,
             ])
             ->renderHook(
                 PanelsRenderHook::BODY_END,

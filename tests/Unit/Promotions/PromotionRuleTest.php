@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\OrderStatus;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\PromotionRule;
 use App\Models\PromotionUsage;
 use App\Observers\PromotionRuleObserver;
@@ -37,15 +37,15 @@ test('can create and persist promotion rule with full fillable attributes and ca
     $endsAt = Carbon::parse('2026-08-31 23:59:59');
 
     $rule = PromotionRule::create([
-        'name'                 => 'Đại Tiệc Mùa Hè 2026',
-        'code'                 => 'SUMMER2026',
-        'rule_type'            => PromotionRule::RULE_TYPE_CART,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-        'discount_value'       => 15.5,
-        'max_discount_amount'  => 500000.0,
-        'min_order_amount'     => 1000000.0,
-        'min_quantity'         => 2,
-        'conditions'           => [
+        'name' => 'Đại Tiệc Mùa Hè 2026',
+        'code' => 'SUMMER2026',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
+        'discount_value' => 15.5,
+        'max_discount_amount' => 500000.0,
+        'min_order_amount' => 1000000.0,
+        'min_quantity' => 2,
+        'conditions' => [
             'category_ids' => [1, 2],
             'tiered_steps' => [
                 ['qty' => 2, 'percent' => 5],
@@ -53,14 +53,14 @@ test('can create and persist promotion rule with full fillable attributes and ca
             ],
         ],
         'target_customer_tier' => PromotionRule::TIER_ALL,
-        'usage_limit'          => 100,
+        'usage_limit' => 100,
         'usage_limit_per_user' => 2,
-        'used_count'           => 10,
-        'priority'             => 5,
-        'stop_further_rules'   => true,
-        'starts_at'            => $startsAt,
-        'ends_at'              => $endsAt,
-        'is_active'            => true,
+        'used_count' => 10,
+        'priority' => 5,
+        'stop_further_rules' => true,
+        'starts_at' => $startsAt,
+        'ends_at' => $endsAt,
+        'is_active' => true,
     ]);
 
     expect($rule->exists)->toBeTrue();
@@ -86,7 +86,7 @@ test('can create and persist promotion rule with full fillable attributes and ca
     expect($rule->ends_at)->toBeInstanceOf(Carbon::class);
 
     $this->assertDatabaseHas('promotion_rules', [
-        'id'   => $rule->id,
+        'id' => $rule->id,
         'code' => 'SUMMER2026',
         'name' => 'Đại Tiệc Mùa Hè 2026',
     ]);
@@ -94,7 +94,7 @@ test('can create and persist promotion rule with full fillable attributes and ca
 
 test('default promotion rule attributes match specification', function () {
     $rule = PromotionRule::create([
-        'name'        => 'Default Promotion',
+        'name' => 'Default Promotion',
         'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
     ]);
 
@@ -117,15 +117,15 @@ test('default promotion rule attributes match specification', function () {
 
 test('unique code constraint rejects duplicate non-null coupon codes', function () {
     PromotionRule::create([
-        'name'        => 'First Promo',
-        'code'        => 'UNIQUECODE',
+        'name' => 'First Promo',
+        'code' => 'UNIQUECODE',
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
 
     expect(function () {
         PromotionRule::create([
-            'name'        => 'Duplicate Promo',
-            'code'        => 'UNIQUECODE',
+            'name' => 'Duplicate Promo',
+            'code' => 'UNIQUECODE',
             'action_type' => PromotionRule::ACTION_PERCENTAGE,
         ]);
     })->toThrow(QueryException::class);
@@ -133,14 +133,14 @@ test('unique code constraint rejects duplicate non-null coupon codes', function 
 
 test('multiple rules can be created with null coupon code', function () {
     $rule1 = PromotionRule::create([
-        'name'        => 'Auto Promo 1',
-        'code'        => null,
+        'name' => 'Auto Promo 1',
+        'code' => null,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
 
     $rule2 = PromotionRule::create([
-        'name'        => 'Auto Promo 2',
-        'code'        => null,
+        'name' => 'Auto Promo 2',
+        'code' => null,
         'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
     ]);
 
@@ -153,61 +153,61 @@ test('scopeActive filters by is_active, scheduling window, and usage limits', fu
 
     // 1. Active with no scheduling boundaries
     $activeIndefinite = PromotionRule::create([
-        'name'        => 'Active Indefinite',
-        'is_active'   => true,
+        'name' => 'Active Indefinite',
+        'is_active' => true,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
 
     // 2. Active currently within valid window
     $activeWindow = PromotionRule::create([
-        'name'        => 'Active Window',
-        'is_active'   => true,
+        'name' => 'Active Window',
+        'is_active' => true,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
-        'starts_at'   => Carbon::parse('2026-08-15 00:00:00'),
-        'ends_at'     => Carbon::parse('2026-08-25 00:00:00'),
+        'starts_at' => Carbon::parse('2026-08-15 00:00:00'),
+        'ends_at' => Carbon::parse('2026-08-25 00:00:00'),
     ]);
 
     // 3. Active with available usage limit
     $activeUsage = PromotionRule::create([
-        'name'        => 'Active Usage Available',
-        'is_active'   => true,
+        'name' => 'Active Usage Available',
+        'is_active' => true,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'usage_limit' => 10,
-        'used_count'  => 5,
+        'used_count' => 5,
     ]);
 
     // 4. Inactive rule (should be excluded)
     $inactive = PromotionRule::create([
-        'name'        => 'Inactive Rule',
-        'is_active'   => false,
+        'name' => 'Inactive Rule',
+        'is_active' => false,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
 
     // 5. Future scheduled rule (should be excluded)
     $futureScheduled = PromotionRule::create([
-        'name'        => 'Future Promo',
-        'is_active'   => true,
+        'name' => 'Future Promo',
+        'is_active' => true,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
-        'starts_at'   => Carbon::parse('2026-08-25 00:00:00'),
-        'ends_at'     => Carbon::parse('2026-08-30 00:00:00'),
+        'starts_at' => Carbon::parse('2026-08-25 00:00:00'),
+        'ends_at' => Carbon::parse('2026-08-30 00:00:00'),
     ]);
 
     // 6. Expired rule (should be excluded)
     $expired = PromotionRule::create([
-        'name'        => 'Expired Promo',
-        'is_active'   => true,
+        'name' => 'Expired Promo',
+        'is_active' => true,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
-        'starts_at'   => Carbon::parse('2026-08-01 00:00:00'),
-        'ends_at'     => Carbon::parse('2026-08-19 23:59:59'),
+        'starts_at' => Carbon::parse('2026-08-01 00:00:00'),
+        'ends_at' => Carbon::parse('2026-08-19 23:59:59'),
     ]);
 
     // 7. Exhausted usage rule (should be excluded)
     $exhausted = PromotionRule::create([
-        'name'        => 'Exhausted Promo',
-        'is_active'   => true,
+        'name' => 'Exhausted Promo',
+        'is_active' => true,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'usage_limit' => 10,
-        'used_count'  => 10,
+        'used_count' => 10,
     ]);
 
     $activeRules = PromotionRule::active()->get();
@@ -222,18 +222,18 @@ test('scopeActive filters by is_active, scheduling window, and usage limits', fu
 
 test('scopeCatalogRules and scopeCartRules filter rules by classification', function () {
     $catalog1 = PromotionRule::create([
-        'name'        => 'Catalog Promo 1',
-        'rule_type'   => PromotionRule::RULE_TYPE_CATALOG,
+        'name' => 'Catalog Promo 1',
+        'rule_type' => PromotionRule::RULE_TYPE_CATALOG,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
     $catalog2 = PromotionRule::create([
-        'name'        => 'Catalog Promo 2',
-        'rule_type'   => PromotionRule::RULE_TYPE_CATALOG,
+        'name' => 'Catalog Promo 2',
+        'rule_type' => PromotionRule::RULE_TYPE_CATALOG,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
     $cart1 = PromotionRule::create([
-        'name'        => 'Cart Promo 1',
-        'rule_type'   => PromotionRule::RULE_TYPE_CART,
+        'name' => 'Cart Promo 1',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
         'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
     ]);
 
@@ -248,18 +248,18 @@ test('scopeCatalogRules and scopeCartRules filter rules by classification', func
 
 test('scopeOrderedByPriority sorts rules ascending by priority', function () {
     $ruleLow = PromotionRule::create([
-        'name'        => 'Low Priority',
-        'priority'    => 20,
+        'name' => 'Low Priority',
+        'priority' => 20,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
     $ruleHigh = PromotionRule::create([
-        'name'        => 'High Priority',
-        'priority'    => 1,
+        'name' => 'High Priority',
+        'priority' => 1,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
     $ruleMed = PromotionRule::create([
-        'name'        => 'Medium Priority',
-        'priority'    => 10,
+        'name' => 'Medium Priority',
+        'priority' => 10,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
 
@@ -275,33 +275,33 @@ test('isApplicableToCustomer validates active status and scheduling dates', func
     Carbon::setTestNow('2026-08-20 12:00:00');
 
     $inactiveRule = PromotionRule::create([
-        'name'        => 'Inactive',
-        'is_active'   => false,
+        'name' => 'Inactive',
+        'is_active' => false,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
     expect($inactiveRule->isApplicableToCustomer(null, 1000000, 2))->toBeFalse();
 
     $futureRule = PromotionRule::create([
-        'name'        => 'Future',
-        'is_active'   => true,
-        'starts_at'   => Carbon::parse('2026-08-25 00:00:00'),
+        'name' => 'Future',
+        'is_active' => true,
+        'starts_at' => Carbon::parse('2026-08-25 00:00:00'),
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
     expect($futureRule->isApplicableToCustomer(null, 1000000, 2))->toBeFalse();
 
     $expiredRule = PromotionRule::create([
-        'name'        => 'Expired',
-        'is_active'   => true,
-        'ends_at'     => Carbon::parse('2026-08-15 00:00:00'),
+        'name' => 'Expired',
+        'is_active' => true,
+        'ends_at' => Carbon::parse('2026-08-15 00:00:00'),
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
     expect($expiredRule->isApplicableToCustomer(null, 1000000, 2))->toBeFalse();
 
     $validRule = PromotionRule::create([
-        'name'        => 'Valid',
-        'is_active'   => true,
-        'starts_at'   => Carbon::parse('2026-08-15 00:00:00'),
-        'ends_at'     => Carbon::parse('2026-08-25 00:00:00'),
+        'name' => 'Valid',
+        'is_active' => true,
+        'starts_at' => Carbon::parse('2026-08-15 00:00:00'),
+        'ends_at' => Carbon::parse('2026-08-25 00:00:00'),
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
     expect($validRule->isApplicableToCustomer(null, 1000000, 2))->toBeTrue();
@@ -311,11 +311,11 @@ test('isApplicableToCustomer validates active status and scheduling dates', func
 
 test('isApplicableToCustomer validates minimum order subtotal and minimum item quantity', function () {
     $rule = PromotionRule::create([
-        'name'             => 'Min Conditions Rule',
-        'is_active'        => true,
+        'name' => 'Min Conditions Rule',
+        'is_active' => true,
         'min_order_amount' => 500000.0,
-        'min_quantity'     => 3,
-        'action_type'      => PromotionRule::ACTION_PERCENTAGE,
+        'min_quantity' => 3,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
 
     // Subtotal below threshold
@@ -331,16 +331,16 @@ test('isApplicableToCustomer validates minimum order subtotal and minimum item q
 
 test('isApplicableToCustomer validates customer tier segments', function () {
     $allRule = PromotionRule::create([
-        'name'                 => 'All Tiers',
+        'name' => 'All Tiers',
         'target_customer_tier' => PromotionRule::TIER_ALL,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
     expect($allRule->isApplicableToCustomer(null, 100000, 1))->toBeTrue();
 
     $firstTimeRule = PromotionRule::create([
-        'name'                 => 'First Time Customers Only',
+        'name' => 'First Time Customers Only',
         'target_customer_tier' => PromotionRule::TIER_FIRST_TIME,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
 
     // Guest with no prior order
@@ -348,33 +348,33 @@ test('isApplicableToCustomer validates customer tier segments', function () {
 
     // Customer with 0 orders
     $newCustomer = Customer::create([
-        'name'     => 'New Buyer',
-        'email'    => 'newbuyer@example.com',
+        'name' => 'New Buyer',
+        'email' => 'newbuyer@example.com',
         'password' => 'secret123',
     ]);
     expect($firstTimeRule->isApplicableToCustomer($newCustomer, 100000, 1))->toBeTrue();
 
     // Customer with existing order
     Order::create([
-        'customer_id'     => $newCustomer->id,
-        'order_number'    => 'SO-1001',
-        'status'          => \App\Enums\OrderStatus::Delivered,
-        'email'           => $newCustomer->email,
-        'customer_name'   => $newCustomer->name,
-        'phone'           => '0901234567',
-        'address'         => '123 Main St',
-        'subtotal'        => 500000,
+        'customer_id' => $newCustomer->id,
+        'order_number' => 'SO-1001',
+        'status' => OrderStatus::Delivered,
+        'email' => $newCustomer->email,
+        'customer_name' => $newCustomer->name,
+        'phone' => '0901234567',
+        'address' => '123 Main St',
+        'subtotal' => 500000,
         'discount_amount' => 0,
-        'shipping_fee'    => 30000,
-        'total_amount'    => 530000,
+        'shipping_fee' => 30000,
+        'total_amount' => 530000,
     ]);
     expect($firstTimeRule->isApplicableToCustomer($newCustomer, 100000, 1))->toBeFalse();
 
     // VIP Gold rule
     $goldRule = PromotionRule::create([
-        'name'                 => 'VIP Gold Only',
+        'name' => 'VIP Gold Only',
         'target_customer_tier' => PromotionRule::TIER_GOLD,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
 
     // Guest is not VIP
@@ -382,22 +382,22 @@ test('isApplicableToCustomer validates customer tier segments', function () {
 
     // Customer with total spent >= 20M
     $vipCustomer = Customer::create([
-        'name'     => 'VIP Customer',
-        'email'    => 'vip@example.com',
+        'name' => 'VIP Customer',
+        'email' => 'vip@example.com',
         'password' => 'secret123',
     ]);
     Order::create([
-        'customer_id'     => $vipCustomer->id,
-        'order_number'    => 'SO-VIP-1',
-        'status'          => \App\Enums\OrderStatus::Delivered,
-        'email'           => $vipCustomer->email,
-        'customer_name'   => $vipCustomer->name,
-        'phone'           => '0909999999',
-        'address'         => '456 Gold Ave',
-        'subtotal'        => 25000000,
+        'customer_id' => $vipCustomer->id,
+        'order_number' => 'SO-VIP-1',
+        'status' => OrderStatus::Delivered,
+        'email' => $vipCustomer->email,
+        'customer_name' => $vipCustomer->name,
+        'phone' => '0909999999',
+        'address' => '456 Gold Ave',
+        'subtotal' => 25000000,
         'discount_amount' => 0,
-        'shipping_fee'    => 0,
-        'total_amount'    => 25000000,
+        'shipping_fee' => 0,
+        'total_amount' => 25000000,
     ]);
     expect($goldRule->isApplicableToCustomer($vipCustomer, 100000, 1))->toBeTrue();
 });
@@ -407,8 +407,8 @@ test('isApplicableToCustomer validates category and product restrictions in cond
     $categoryB = Category::create(['name' => 'Lighting', 'slug' => 'lighting']);
 
     $categoryRule = PromotionRule::create([
-        'name'        => 'Lighting Discount',
-        'conditions'  => ['category_ids' => [$categoryB->id]],
+        'name' => 'Lighting Discount',
+        'conditions' => ['category_ids' => [$categoryB->id]],
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
 
@@ -421,14 +421,14 @@ test('isApplicableToCustomer validates category and product restrictions in cond
 
 test('isApplicableToCustomer validates per-user usage limits against promotion_usages', function () {
     $rule = PromotionRule::create([
-        'name'                 => 'One-Time Coupon',
+        'name' => 'One-Time Coupon',
         'usage_limit_per_user' => 1,
-        'action_type'          => PromotionRule::ACTION_FIXED_AMOUNT,
+        'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
     ]);
 
     $customer = Customer::create([
-        'name'     => 'John Doe',
-        'email'    => 'john@example.com',
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
         'password' => 'secret123',
     ]);
 
@@ -451,14 +451,14 @@ test('isApplicableToCustomer validates per-user usage limits against promotion_u
 
 test('recordUsage creates promotion_usages record and increments used_count atomically', function () {
     $rule = PromotionRule::create([
-        'name'        => 'Promo 50K',
-        'used_count'  => 0,
+        'name' => 'Promo 50K',
+        'used_count' => 0,
         'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
     ]);
 
     $customer = Customer::create([
-        'name'     => 'Jane Doe',
-        'email'    => 'jane@example.com',
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
         'password' => 'secret123',
     ]);
 
@@ -472,9 +472,9 @@ test('recordUsage creates promotion_usages record and increments used_count atom
 
     $this->assertDatabaseHas('promotion_usages', [
         'promotion_rule_id' => $rule->id,
-        'customer_id'       => $customer->id,
-        'email'             => 'jane@example.com',
-        'discount_amount'   => 50000.0,
+        'customer_id' => $customer->id,
+        'email' => 'jane@example.com',
+        'discount_amount' => 50000.0,
     ]);
 
     $rule->refresh();
@@ -494,8 +494,8 @@ test('PromotionRuleObserver invalidates active catalog rules cache on save, dele
     expect(Cache::has($cacheKey))->toBeTrue();
 
     $rule = PromotionRule::create([
-        'name'        => 'Catalog Promo',
-        'rule_type'   => PromotionRule::RULE_TYPE_CATALOG,
+        'name' => 'Catalog Promo',
+        'rule_type' => PromotionRule::RULE_TYPE_CATALOG,
         'action_type' => PromotionRule::ACTION_PERCENTAGE,
     ]);
 

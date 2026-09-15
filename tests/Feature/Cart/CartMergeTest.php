@@ -13,7 +13,7 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Session::start();
-    $this->service  = app(CartService::class);
+    $this->service = app(CartService::class);
     $this->customer = Customer::factory()->create();
 
     $this->productA = Product::create([
@@ -31,9 +31,9 @@ beforeEach(function () {
 it('merges guest cart items into db cart on login', function () {
     $guestCart = [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 2,
+            'quantity' => 2,
         ],
     ];
 
@@ -50,17 +50,17 @@ it('merges guest cart items into db cart on login', function () {
 it('sums quantities when db cart already has same item', function () {
     // Pre-existing DB item: 3
     CustomerCartItem::create([
-        'customer_id'        => $this->customer->id,
-        'product_id'         => $this->productA->id,
+        'customer_id' => $this->customer->id,
+        'product_id' => $this->productA->id,
         'product_variant_id' => 0,
-        'quantity'           => 3,
+        'quantity' => 3,
     ]);
 
     $guestCart = [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 4, // should merge to 7
+            'quantity' => 4, // should merge to 7
         ],
     ];
 
@@ -75,17 +75,17 @@ it('sums quantities when db cart already has same item', function () {
 
 it('caps merged quantity at 99', function () {
     CustomerCartItem::create([
-        'customer_id'        => $this->customer->id,
-        'product_id'         => $this->productA->id,
+        'customer_id' => $this->customer->id,
+        'product_id' => $this->productA->id,
         'product_variant_id' => 0,
-        'quantity'           => 90,
+        'quantity' => 90,
     ]);
 
     $guestCart = [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 20, // 90 + 20 = 110 → capped at 99
+            'quantity' => 20, // 90 + 20 = 110 → capped at 99
         ],
     ];
 
@@ -110,9 +110,9 @@ it('clears session key after merge so db becomes source of truth', function () {
 
     $guestCart = [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ];
 
@@ -124,14 +124,14 @@ it('clears session key after merge so db becomes source of truth', function () {
 it('merges multiple products at once', function () {
     $guestCart = [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 2,
+            'quantity' => 2,
         ],
         "{$this->productB->id}_0" => [
-            'product_id'         => $this->productB->id,
+            'product_id' => $this->productB->id,
             'product_variant_id' => null,
-            'quantity'           => 3,
+            'quantity' => 3,
         ],
     ];
 

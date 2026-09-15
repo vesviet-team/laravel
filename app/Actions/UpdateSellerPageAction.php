@@ -27,8 +27,7 @@ class UpdateSellerPageAction
      * Update the seller page with new data and invalidate storefront cache.
      *
      * @param  SellerProfile  $seller  The active seller tenant.
-     * @param  array          $data    Validated data from EditSellerPage form.
-     * @return SellerPage
+     * @param  array  $data  Validated data from EditSellerPage form.
      *
      * @throws SellerActionException
      */
@@ -43,7 +42,7 @@ class UpdateSellerPageAction
 
                 $page->fill(array_filter([
                     'theme_config' => $data['theme_config'] ?? null,
-                    'blocks'       => $data['blocks'] ?? null,
+                    'blocks' => $data['blocks'] ?? null,
                     'is_published' => $data['is_published'] ?? null,
                 ], fn ($v) => $v !== null));
 

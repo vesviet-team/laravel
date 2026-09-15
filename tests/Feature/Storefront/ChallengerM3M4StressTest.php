@@ -21,9 +21,9 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
 
         $adversarialTitle = 'Nội Thất "Bắc Âu" & Hiện Đại: Bí Quyết \'Decor\' Nhà Đẹp (2026) — Gỗ Tự Nhiên & Đá Marble';
         $adversarialExcerpt = 'Hướng dẫn "tối ưu" không gian với đồ gỗ sồi / walnut & đèn chùm; \ "backslash" & 100% tự nhiên';
-        $adversarialBody = <<<HTML
+        $adversarialBody = <<<'HTML'
         <h2>1. Giới thiệu "Không Gian Sống" & Phong Thủy</h2>
-        <p>Chi tiết phần 1 với ký tự đặc biệt: "quote", 'single', &amp; ampersand, / slash, \\ backslash.</p>
+        <p>Chi tiết phần 1 với ký tự đặc biệt: "quote", 'single', &amp; ampersand, / slash, \ backslash.</p>
         <h3>1.1. Chi tiết &lt;Phong Cách&gt; "Minimalism"</h3>
         <p>Chi tiết phần 1.1.</p>
         <h2>2. Sản phẩm & Lựa chọn</h2>
@@ -33,7 +33,7 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
         $adversarialFaq = [
             [
                 'question' => 'Làm sao để bảo quản "Gỗ Tự Nhiên" & chống mối mọt trong môi trường ẩm?',
-                'answer'   => "Sử dụng dầu lau thực vật & lau khô bề mặt ngay khi dính nước. Không dùng cồn 90° hoặc axit mạnh.\nXuống dòng và dấu ngoặc kép \"OK\".",
+                'answer' => "Sử dụng dầu lau thực vật & lau khô bề mặt ngay khi dính nước. Không dùng cồn 90° hoặc axit mạnh.\nXuống dòng và dấu ngoặc kép \"OK\".",
             ],
             [
                 'q' => 'Sản phẩm có hỗ trợ bảo hành tại "TP. Hồ Chí Minh" & Hà Nội không?',
@@ -43,18 +43,18 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
 
         $post = Post::create([
             'post_category_id' => $category->id,
-            'user_id'          => $user->id,
-            'title'            => $adversarialTitle,
-            'slug'             => 'adversarial-stress-post-slug',
-            'excerpt'          => $adversarialExcerpt,
-            'body'             => $adversarialBody,
-            'seo_title'        => 'SEO: ' . $adversarialTitle,
-            'seo_description'  => 'SEO Desc: ' . $adversarialExcerpt,
-            'canonical_url'    => 'https://myshop.vn/blog/adversarial-stress-post-slug?param=1&flag=true',
-            'faq_schema'       => $adversarialFaq,
-            'schema_type'      => 'Article',
-            'status'           => 'published',
-            'published_at'     => Carbon::now()->subHour(),
+            'user_id' => $user->id,
+            'title' => $adversarialTitle,
+            'slug' => 'adversarial-stress-post-slug',
+            'excerpt' => $adversarialExcerpt,
+            'body' => $adversarialBody,
+            'seo_title' => 'SEO: '.$adversarialTitle,
+            'seo_description' => 'SEO Desc: '.$adversarialExcerpt,
+            'canonical_url' => 'https://myshop.vn/blog/adversarial-stress-post-slug?param=1&flag=true',
+            'faq_schema' => $adversarialFaq,
+            'schema_type' => 'Article',
+            'status' => 'published',
+            'published_at' => Carbon::now()->subHour(),
         ]);
 
         $response = $this->get(route('blog.show', $post->slug));
@@ -71,7 +71,7 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
             $decoded = json_decode($trimmed, true);
 
             // Assert JSON is strictly valid RFC 8259 without parsing errors
-            expect(json_last_error())->toBe(JSON_ERROR_NONE, "JSON-LD index {$index} failed parsing: " . json_last_error_msg());
+            expect(json_last_error())->toBe(JSON_ERROR_NONE, "JSON-LD index {$index} failed parsing: ".json_last_error_msg());
             expect($decoded)->toBeArray();
             expect($decoded['@context'])->toBe('https://schema.org');
         }
@@ -81,7 +81,7 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
         $article = collect($schemas)->firstWhere('@type', 'Article');
         expect($article)->not->toBeNull();
         expect($article['headline'])->toBe($adversarialTitle);
-        expect($article['description'])->toBe('SEO Desc: ' . $adversarialExcerpt);
+        expect($article['description'])->toBe('SEO Desc: '.$adversarialExcerpt);
         expect($article['author']['name'])->toBe('Tác Giả "Đặc Biệt" (Senior Architect)');
 
         // Verify Breadcrumb schema
@@ -102,19 +102,19 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
 
     test('Empirical Page JSON-LD schema parsing stress test with adversarial inputs and policy template', function () {
         $page = Page::create([
-            'title'            => 'Chính Sách & Quy Định "Bảo Hành" VIP (2026)',
-            'slug'             => 'chinh-sach-bao-hanh-vip',
-            'excerpt'          => 'Quy định bảo hành "1 đổi 1" trong vòng 30 ngày đối với lỗi từ nhà sản xuất.',
-            'body'             => '<h2>1. Phạm Vi Áp Dụng</h2><p>Áp dụng cho toàn bộ "sản phẩm" & phụ kiện.</p>',
-            'seo_title'        => 'Chính Sách "Bảo Hành" VIP 2026 | MYSHOP',
-            'seo_description'  => 'Chi tiết chính sách bảo hành & đổi trả tận nơi.',
-            'canonical_url'    => 'https://myshop.vn/chinh-sach-bao-hanh-vip',
-            'template'         => 'policy',
-            'is_published'     => true,
-            'faq_schema'       => [
+            'title' => 'Chính Sách & Quy Định "Bảo Hành" VIP (2026)',
+            'slug' => 'chinh-sach-bao-hanh-vip',
+            'excerpt' => 'Quy định bảo hành "1 đổi 1" trong vòng 30 ngày đối với lỗi từ nhà sản xuất.',
+            'body' => '<h2>1. Phạm Vi Áp Dụng</h2><p>Áp dụng cho toàn bộ "sản phẩm" & phụ kiện.</p>',
+            'seo_title' => 'Chính Sách "Bảo Hành" VIP 2026 | MYSHOP',
+            'seo_description' => 'Chi tiết chính sách bảo hành & đổi trả tận nơi.',
+            'canonical_url' => 'https://myshop.vn/chinh-sach-bao-hanh-vip',
+            'template' => 'policy',
+            'is_published' => true,
+            'faq_schema' => [
                 [
                     'question' => 'Quy trình đổi trả diễn ra trong bao lâu?',
-                    'answer'   => 'Từ 2 - 5 ngày làm việc kể từ khi nhận được yêu cầu.',
+                    'answer' => 'Từ 2 - 5 ngày làm việc kể từ khi nhận được yêu cầu.',
                 ],
             ],
         ]);
@@ -130,7 +130,7 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
             $trimmed = trim($jsonString);
             $decoded = json_decode($trimmed, true);
 
-            expect(json_last_error())->toBe(JSON_ERROR_NONE, "Page JSON-LD index {$index} failed parsing: " . json_last_error_msg());
+            expect(json_last_error())->toBe(JSON_ERROR_NONE, "Page JSON-LD index {$index} failed parsing: ".json_last_error_msg());
             expect($decoded)->toBeArray();
             expect($decoded['@context'])->toBe('https://schema.org');
         }
@@ -149,7 +149,7 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
     });
 
     test('TocService Adversarial Matrix: duplicate titles, extreme diacritics, empty headings, attributes', function () {
-        $tocService = new TocService();
+        $tocService = new TocService;
 
         // 1. 20 duplicate headings stress test
         $duplicateHtml = '';
@@ -188,7 +188,7 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
         expect($specialResult['toc'][1]['id'])->not->toBeEmpty();
 
         // 5. Multi-line heading & nested tags
-        $multilineHtml = <<<HTML
+        $multilineHtml = <<<'HTML'
         <h2 class="title">
             <span>Phong Cách</span>
             <strong>Scandinavian</strong>
@@ -233,12 +233,12 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
         $user = User::factory()->create();
         $postNoCategory = Post::create([
             'post_category_id' => null,
-            'user_id'          => $user->id,
-            'title'            => 'Bài Viết Không Có Chuyên Mục',
-            'slug'             => 'bai-viet-khong-co-chuyen-muc',
-            'body'             => '<h2>Nội Dung</h2><p>Mô tả bài viết.</p>',
-            'status'           => 'published',
-            'published_at'     => Carbon::now()->subDay(),
+            'user_id' => $user->id,
+            'title' => 'Bài Viết Không Có Chuyên Mục',
+            'slug' => 'bai-viet-khong-co-chuyen-muc',
+            'body' => '<h2>Nội Dung</h2><p>Mô tả bài viết.</p>',
+            'status' => 'published',
+            'published_at' => Carbon::now()->subDay(),
         ]);
 
         $response = $this->get(route('blog.show', $postNoCategory->slug));
@@ -264,22 +264,22 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
 
         $product = Product::create([
             'category_id' => $ecomCat->id,
-            'name'        => 'Ghế Lounge Eames & Ottoman',
-            'slug'        => 'ghe-lounge-eames-ottoman',
-            'sku'         => 'EAM-001',
-            'price'       => 18000000,
-            'stock'       => 3,
-            'status'      => 'published',
+            'name' => 'Ghế Lounge Eames & Ottoman',
+            'slug' => 'ghe-lounge-eames-ottoman',
+            'sku' => 'EAM-001',
+            'price' => 18000000,
+            'stock' => 3,
+            'status' => 'published',
         ]);
 
         $post = Post::create([
             'post_category_id' => $category->id,
-            'user_id'          => $user->id,
-            'title'            => 'Tác Phẩm Biểu Tượng Eames Lounge',
-            'slug'             => 'tac-pham-bieu-tuong-eames-lounge',
-            'body'             => '<h2>Lịch sử ra đời</h2><p>Chi tiết về Eames Lounge.</p>',
-            'status'           => 'published',
-            'published_at'     => Carbon::now()->subDay(),
+            'user_id' => $user->id,
+            'title' => 'Tác Phẩm Biểu Tượng Eames Lounge',
+            'slug' => 'tac-pham-bieu-tuong-eames-lounge',
+            'body' => '<h2>Lịch sử ra đời</h2><p>Chi tiết về Eames Lounge.</p>',
+            'status' => 'published',
+            'published_at' => Carbon::now()->subDay(),
         ]);
 
         $post->products()->attach($product->id, ['sort_order' => 1]);
@@ -297,12 +297,12 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
 
         $futurePost = Post::create([
             'post_category_id' => $category->id,
-            'user_id'          => $user->id,
-            'title'            => 'Bài Viết Lên Lịch Tháng Sau',
-            'slug'             => 'bai-viet-len-lich-thang-sau',
-            'body'             => '<h2>Nội Dung Tương Lai</h2><p>Chưa đến ngày công bố.</p>',
-            'status'           => 'published',
-            'published_at'     => Carbon::now()->addDays(30),
+            'user_id' => $user->id,
+            'title' => 'Bài Viết Lên Lịch Tháng Sau',
+            'slug' => 'bai-viet-len-lich-thang-sau',
+            'body' => '<h2>Nội Dung Tương Lai</h2><p>Chưa đến ngày công bố.</p>',
+            'status' => 'published',
+            'published_at' => Carbon::now()->addDays(30),
         ]);
 
         // Guest gets 404
@@ -320,29 +320,29 @@ describe('Challenger M3 & M4 Empirical Stress Tests', function () {
         $category = Category::create(['name' => 'Bàn', 'slug' => 'ban-landing']);
         $product = Product::create([
             'category_id' => $category->id,
-            'name'        => 'Bàn Gỗ Sồi Bắc Âu Pro',
-            'slug'        => 'ban-go-soi-bac-au-pro',
-            'sku'         => 'BAN-PRO-01',
-            'price'       => 15000000,
-            'stock'       => 10,
-            'status'      => 'published',
+            'name' => 'Bàn Gỗ Sồi Bắc Âu Pro',
+            'slug' => 'ban-go-soi-bac-au-pro',
+            'sku' => 'BAN-PRO-01',
+            'price' => 15000000,
+            'stock' => 10,
+            'status' => 'published',
         ]);
 
         $activeLanding = LandingPage::create([
-            'title'           => 'Landing Page Khuyến Mãi Hè',
-            'slug'            => 'khuyen-mai-he-2026',
-            'product_id'      => $product->id,
-            'is_active'       => true,
-            'features_json'   => ['Feature A', 'Feature B'],
+            'title' => 'Landing Page Khuyến Mãi Hè',
+            'slug' => 'khuyen-mai-he-2026',
+            'product_id' => $product->id,
+            'is_active' => true,
+            'features_json' => ['Feature A', 'Feature B'],
             'header_cta_text' => 'Mua Ngay',
         ]);
 
         $inactiveLanding = LandingPage::create([
-            'title'           => 'Landing Page Đã Đóng',
-            'slug'            => 'khuyen-mai-da-dong',
-            'product_id'      => $product->id,
-            'is_active'       => false,
-            'features_json'   => ['Feature C'],
+            'title' => 'Landing Page Đã Đóng',
+            'slug' => 'khuyen-mai-da-dong',
+            'product_id' => $product->id,
+            'is_active' => false,
+            'features_json' => ['Feature C'],
             'header_cta_text' => 'Hết Hạn',
         ]);
 

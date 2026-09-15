@@ -13,12 +13,13 @@ use Filament\Tables\Table;
 class SellerPageResource extends Resource
 {
     protected static ?string $model = SellerPage::class;
-    
+
     protected static ?string $modelLabel = 'Trang cửa hàng';
+
     protected static ?string $pluralModelLabel = 'Trang cửa hàng';
-    
+
     protected static ?string $navigationIcon = 'heroicon-o-window';
-    
+
     // We only need one page per seller, so we can use a custom approach or standard resource
     // For a single page, often a Page component is better than a Resource, but Resource works if we restrict creation.
 
@@ -53,7 +54,7 @@ class SellerPageResource extends Resource
                                                 ])
                                                 ->default('light'),
                                         ]),
-                                        
+
                                     Forms\Components\Tabs\Tab::make('Nội dung (Blocks)')
                                         ->icon('heroicon-o-bars-3-bottom-left')
                                         ->schema([
@@ -89,7 +90,7 @@ class SellerPageResource extends Resource
                                                                 ->schema([
                                                                     Forms\Components\TextInput::make('q')->label('Hỏi')->required(),
                                                                     Forms\Components\Textarea::make('a')->label('Đáp')->required(),
-                                                                ])
+                                                                ]),
                                                         ]),
                                                     Forms\Components\Builder\Block::make('socials')
                                                         ->label('Mạng xã hội')
@@ -103,17 +104,17 @@ class SellerPageResource extends Resource
                                                 ->cloneable(),
                                         ]),
                                 ]),
-                                
+
                             Forms\Components\Toggle::make('is_published')
                                 ->label('Xuất bản trang (Công khai)')
                                 ->default(false),
                         ])->grow(true),
-                        
+
                     Forms\Components\Section::make('Xem trước (Preview)')
                         ->schema([
-                            Forms\Components\View::make('filament.seller.components.mobile-preview-frame')
+                            Forms\Components\View::make('filament.seller.components.mobile-preview-frame'),
                         ])->grow(false)->extraAttributes(['style' => 'min-width: 350px; width: 350px;']),
-                ])->from('md')
+                ])->from('md'),
             ])->columns(1);
     }
 
@@ -134,12 +135,12 @@ class SellerPageResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('view_live')
                     ->label('Xem trang trực tiếp')
-                    ->url(fn (SellerPage $record): string => 'https://' . $record->seller->subdomain . '.' . config('app.url'))
+                    ->url(fn (SellerPage $record): string => 'https://'.$record->seller->subdomain.'.'.config('app.url'))
                     ->openUrlInNewTab(),
             ])
             ->bulkActions([]);
     }
-    
+
     public static function getPages(): array
     {
         return [

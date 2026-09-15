@@ -3,11 +3,11 @@
 use App\Services\TocService;
 
 beforeEach(function () {
-    $this->tocService = new TocService();
+    $this->tocService = new TocService;
 });
 
 test('extracts h2 and h3 headings and generates correct slug ids and hierarchy', function () {
-    $html = <<<HTML
+    $html = <<<'HTML'
     <h2>Giới thiệu chung</h2>
     <p>Nội dung giới thiệu...</p>
     <h3>Chi tiết phong cách Bắc Âu</h3>
@@ -19,17 +19,17 @@ test('extracts h2 and h3 headings and generates correct slug ids and hierarchy',
 
     expect($result['toc'])->toHaveCount(3);
     expect($result['toc'][0])->toBe([
-        'id'    => 'gioi-thieu-chung',
+        'id' => 'gioi-thieu-chung',
         'title' => 'Giới thiệu chung',
         'level' => 2,
     ]);
     expect($result['toc'][1])->toBe([
-        'id'    => 'chi-tiet-phong-cach-bac-au',
+        'id' => 'chi-tiet-phong-cach-bac-au',
         'title' => 'Chi tiết phong cách Bắc Âu',
         'level' => 3,
     ]);
     expect($result['toc'][2])->toBe([
-        'id'    => 'ket-luan',
+        'id' => 'ket-luan',
         'title' => 'Kết luận',
         'level' => 2,
     ]);
@@ -73,7 +73,7 @@ test('replaces existing id attributes in headings with clean slugs', function ()
 });
 
 test('resolves duplicate heading titles with unique incremental suffixes', function () {
-    $html = <<<HTML
+    $html = <<<'HTML'
     <h2>Không Gian Sống</h2>
     <p>Phần 1</p>
     <h2>Không Gian Sống</h2>
@@ -109,7 +109,7 @@ test('handles html with no headings gracefully', function () {
 });
 
 test('ignores h1, h4, h5, h6 headings and only processes h2 and h3', function () {
-    $html = <<<HTML
+    $html = <<<'HTML'
     <h1>Tiêu Đề Bài Viết H1</h1>
     <h2>Tiêu Đề H2 Hợp Lệ</h2>
     <h4>Tiêu Đề Con H4</h4>

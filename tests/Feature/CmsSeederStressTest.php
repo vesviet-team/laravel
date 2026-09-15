@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Category;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\PostCategory;
@@ -111,12 +110,12 @@ test('adversarial stress: eager loading post with category, products, and author
         $firstProductSort = $post->products->first()?->pivot?->sort_order;
 
         $renderedOutput[] = [
-            'post'        => $post->title,
-            'category'    => $categoryName,
-            'author'      => $authorName,
-            'products'    => $productCount,
-            'first_prod'  => $firstProductTitle,
-            'sort_order'  => $firstProductSort,
+            'post' => $post->title,
+            'category' => $categoryName,
+            'author' => $authorName,
+            'products' => $productCount,
+            'first_prod' => $firstProductTitle,
+            'sort_order' => $firstProductSort,
         ];
     }
 

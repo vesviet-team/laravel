@@ -1,10 +1,7 @@
 <?php
 
-use App\Actions\ProcessCheckoutAction;
 use App\Enums\OrderStatus;
-use App\Exceptions\CommerceException;
 use App\Models\Category;
-use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -12,7 +9,6 @@ use App\Models\ProductVariant;
 use App\Services\CartService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Session;
 
 uses(RefreshDatabase::class);
 
@@ -23,14 +19,14 @@ beforeEach(function () {
     ]);
 
     $this->product = Product::create([
-        'name'        => 'Oak Table',
-        'slug'        => 'oak-table',
-        'sku'         => 'TBL-001',
-        'price'       => 1000000,
-        'stock'       => 10,
-        'weight'      => 2500, // 2.5 kg
+        'name' => 'Oak Table',
+        'slug' => 'oak-table',
+        'sku' => 'TBL-001',
+        'price' => 1000000,
+        'stock' => 10,
+        'weight' => 2500, // 2.5 kg
         'category_id' => $this->category->id,
-        'status'      => 'published',
+        'status' => 'published',
     ]);
 });
 
@@ -48,12 +44,12 @@ test('CartService includes real product weight in enriched cart items', function
 test('CartService includes variant weight when configured', function () {
     $variant = ProductVariant::create([
         'product_id' => $this->product->id,
-        'name'       => 'Large Oak Table',
-        'sku'        => 'TBL-001-L',
-        'price'      => 1500000,
-        'stock'      => 5,
-        'weight'     => 4000, // 4 kg override
-        'is_active'  => true,
+        'name' => 'Large Oak Table',
+        'sku' => 'TBL-001-L',
+        'price' => 1500000,
+        'stock' => 5,
+        'weight' => 4000, // 4 kg override
+        'is_active' => true,
     ]);
 
     $cartService = app(CartService::class);
@@ -72,12 +68,12 @@ test('Checkout creates order with payment_status unpaid and expiry for online pa
     $response = $this->post('/checkout', [
         'shippingData' => [
             'customer_name' => 'Le Van B',
-            'phone'         => '0912345678',
-            'email'         => 'levanb@example.com',
-            'address'       => '456 Le Loi',
-            'city'          => 'Ho Chi Minh',
-            'district'      => 'District 1',
-            'ward'          => 'Ben Nghe',
+            'phone' => '0912345678',
+            'email' => 'levanb@example.com',
+            'address' => '456 Le Loi',
+            'city' => 'Ho Chi Minh',
+            'district' => 'District 1',
+            'ward' => 'Ben Nghe',
         ],
         'payment_method' => 'banking',
     ]);
@@ -99,11 +95,11 @@ test('Checkout creates COD order without payment expiration', function () {
     $response = $this->post('/checkout', [
         'shippingData' => [
             'customer_name' => 'Nguyen Van COD',
-            'phone'         => '0987654321',
-            'address'       => '789 Tran Phu',
-            'city'          => 'Ha Noi',
-            'district'      => 'Ba Dinh',
-            'ward'          => 'Lieu Giai',
+            'phone' => '0987654321',
+            'address' => '789 Tran Phu',
+            'city' => 'Ha Noi',
+            'district' => 'Ba Dinh',
+            'ward' => 'Lieu Giai',
         ],
         'payment_method' => 'cod',
     ]);
@@ -120,24 +116,24 @@ test('Checkout creates COD order without payment expiration', function () {
 test('Command orders:cancel-expired-unpaid auto-cancels expired orders and restores stock', function () {
     // 1. Create an expired unpaid order with 2 reserved items
     $order = Order::create([
-        'order_number'       => 'ORD-EXP-001',
-        'status'             => OrderStatus::Pending,
-        'payment_method'     => 'banking',
-        'payment_status'     => 'unpaid',
+        'order_number' => 'ORD-EXP-001',
+        'status' => OrderStatus::Pending,
+        'payment_method' => 'banking',
+        'payment_status' => 'unpaid',
         'payment_expires_at' => now()->subMinute(), // Expired 1 minute ago
-        'customer_name'      => 'Expired User',
-        'phone'              => '0901234567',
-        'address'            => '123 Expired St',
-        'subtotal'           => 2000000,
-        'total_amount'       => 2000000,
+        'customer_name' => 'Expired User',
+        'phone' => '0901234567',
+        'address' => '123 Expired St',
+        'subtotal' => 2000000,
+        'total_amount' => 2000000,
     ]);
 
     OrderItem::create([
-        'order_id'          => $order->id,
-        'product_id'        => $this->product->id,
-        'product_name'      => $this->product->name,
+        'order_id' => $order->id,
+        'product_id' => $this->product->id,
+        'product_name' => $this->product->name,
         'price_at_purchase' => 1000000,
-        'quantity'          => 2,
+        'quantity' => 2,
     ]);
 
     // Initial stock is 10. Simulate that 2 units were deducted
@@ -157,16 +153,16 @@ test('Command orders:cancel-expired-unpaid auto-cancels expired orders and resto
 
 test('Command orders:cancel-expired-unpaid leaves COD orders unaffected', function () {
     $codOrder = Order::create([
-        'order_number'       => 'ORD-COD-001',
-        'status'             => OrderStatus::Pending,
-        'payment_method'     => 'cod',
-        'payment_status'     => 'unpaid',
+        'order_number' => 'ORD-COD-001',
+        'status' => OrderStatus::Pending,
+        'payment_method' => 'cod',
+        'payment_status' => 'unpaid',
         'payment_expires_at' => now()->subHour(),
-        'customer_name'      => 'COD User',
-        'phone'              => '0901234567',
-        'address'            => '123 COD St',
-        'subtotal'           => 1000000,
-        'total_amount'       => 1000000,
+        'customer_name' => 'COD User',
+        'phone' => '0901234567',
+        'address' => '123 COD St',
+        'subtotal' => 1000000,
+        'total_amount' => 1000000,
     ]);
 
     Artisan::call('orders:cancel-expired-unpaid');

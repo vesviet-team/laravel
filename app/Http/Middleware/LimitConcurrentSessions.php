@@ -25,7 +25,7 @@ class LimitConcurrentSessions
             return $next($request);
         }
 
-        if (!Auth::guard('customer')->check()) {
+        if (! Auth::guard('customer')->check()) {
             return $next($request);
         }
 
@@ -50,9 +50,9 @@ class LimitConcurrentSessions
     protected function trackSession($customer, string $sessionId): void
     {
         $sessions = $customer->active_sessions ?? [];
-        
+
         // Add current session if not already tracked
-        if (!in_array($sessionId, $sessions)) {
+        if (! in_array($sessionId, $sessions)) {
             $sessions[] = $sessionId;
             $customer->active_sessions = $sessions;
             $customer->saveQuietly();
@@ -65,6 +65,7 @@ class LimitConcurrentSessions
     protected function exceedsMaxSessions($customer): bool
     {
         $sessions = $customer->active_sessions ?? [];
+
         return count($sessions) > $this->maxSessions;
     }
 
@@ -74,7 +75,7 @@ class LimitConcurrentSessions
     protected function revokeOldestSession($customer): void
     {
         $sessions = $customer->active_sessions ?? [];
-        
+
         if (empty($sessions)) {
             return;
         }

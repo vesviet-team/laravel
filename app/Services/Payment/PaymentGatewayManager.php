@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Services\Payment\Contracts\PaymentGatewayInterface;
 use App\Services\Payment\Drivers\CodPaymentDriver;
 use App\Services\Payment\Drivers\VietQrPaymentDriver;
-use InvalidArgumentException;
 
 class PaymentGatewayManager
 {
@@ -16,9 +15,9 @@ class PaymentGatewayManager
     public function driver(string $method): PaymentGatewayInterface
     {
         return match (strtolower(trim($method))) {
-            'cod'              => app(CodPaymentDriver::class),
+            'cod' => app(CodPaymentDriver::class),
             'vietqr', 'banking' => app(VietQrPaymentDriver::class),
-            default            => app(CodPaymentDriver::class),
+            default => app(CodPaymentDriver::class),
         };
     }
 

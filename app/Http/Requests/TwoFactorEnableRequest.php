@@ -14,23 +14,23 @@ class TwoFactorEnableRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "code" => ["required", "string", "size:6", "regex:/^\d{6}$/"],
+            'code' => ['required', 'string', 'size:6', "regex:/^\d{6}$/"],
         ];
     }
 
     public function messages(): array
     {
         return [
-            "code.required" => "Vui lòng nhập mã xác thực 6 chữ số.",
-            "code.size" => "Mã xác thực phải có 6 chữ số.",
-            "code.regex" => "Mã xác thực chỉ được chứa chữ số.",
+            'code.required' => 'Vui lòng nhập mã xác thực 6 chữ số.',
+            'code.size' => 'Mã xác thực phải có 6 chữ số.',
+            'code.regex' => 'Mã xác thực chỉ được chứa chữ số.',
         ];
     }
 
     public function attributes(): array
     {
         return [
-            "code" => "mã xác thực",
+            'code' => 'mã xác thực',
         ];
     }
 }

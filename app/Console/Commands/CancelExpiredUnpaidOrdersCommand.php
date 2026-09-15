@@ -41,6 +41,7 @@ class CancelExpiredUnpaidOrdersCommand extends Command
 
         if ($count === 0) {
             $this->info('No expired unpaid orders found.');
+
             return self::SUCCESS;
         }
 
@@ -56,17 +57,17 @@ class CancelExpiredUnpaidOrdersCommand extends Command
                 ]);
 
                 Log::info('Order auto-cancelled due to payment expiration', [
-                    'order_id'           => $order->id,
-                    'order_number'       => $order->order_number,
+                    'order_id' => $order->id,
+                    'order_number' => $order->order_number,
                     'payment_expires_at' => $order->payment_expires_at?->toIso8601String(),
                 ]);
 
                 $cancelled++;
             } catch (\Throwable $e) {
                 Log::error('Failed to auto-cancel expired unpaid order', [
-                    'order_id'     => $order->id,
+                    'order_id' => $order->id,
                     'order_number' => $order->order_number,
-                    'error'        => $e->getMessage(),
+                    'error' => $e->getMessage(),
                 ]);
             }
         }

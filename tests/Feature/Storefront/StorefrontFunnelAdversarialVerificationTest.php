@@ -3,6 +3,7 @@
 namespace Tests\Feature\Storefront;
 
 use App\Actions\ProcessCheckoutAction;
+use App\Events\OrderPlaced;
 use App\Livewire\CartDrawer;
 use App\Livewire\CouponInput;
 use App\Models\Category;
@@ -18,13 +19,14 @@ use App\Services\CartService;
 use App\Services\Promotions\PromotionEngine;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Session;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    \Illuminate\Support\Facades\Event::fake([\App\Events\OrderPlaced::class]);
+    Event::fake([OrderPlaced::class]);
     Cache::flush();
     Session::flush();
 
@@ -851,4 +853,3 @@ describe('Pillar 4: Adversarial Stress Vectors & Edge Case Mining', function () 
         expect($component->get('couponError'))->toContain('không tồn tại hoặc đã hết hạn');
     });
 });
-

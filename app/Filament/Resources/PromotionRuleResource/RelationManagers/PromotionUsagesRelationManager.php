@@ -76,7 +76,7 @@ class PromotionUsagesRelationManager extends RelationManager
                     ->searchable()
                     ->sortable()
                     ->default(fn (PromotionUsage $record): string => $record->customer_name ?? 'Khách vãng lai')
-                    ->description(fn (PromotionUsage $record): ?string => $record->customer?->phone ? 'SĐT: ' . $record->customer->phone : null),
+                    ->description(fn (PromotionUsage $record): ?string => $record->customer?->phone ? 'SĐT: '.$record->customer->phone : null),
 
                 TextColumn::make('email')
                     ->label('Email Sử Dụng')
@@ -88,13 +88,13 @@ class PromotionUsagesRelationManager extends RelationManager
 
                 TextColumn::make('discount_amount')
                     ->label('Số Tiền Đã Giảm')
-                    ->formatStateUsing(fn ($state): string => number_format((float) $state, 0, ',', '.') . '₫')
+                    ->formatStateUsing(fn ($state): string => number_format((float) $state, 0, ',', '.').'₫')
                     ->sortable()
                     ->color('success')
                     ->weight('bold')
                     ->summarize([
                         Tables\Columns\Summarizers\Sum::make()
-                            ->formatStateUsing(fn ($state): string => number_format((float) $state, 0, ',', '.') . '₫')
+                            ->formatStateUsing(fn ($state): string => number_format((float) $state, 0, ',', '.').'₫')
                             ->label('Tổng giá trị đã giảm'),
                     ]),
 
@@ -125,7 +125,7 @@ class PromotionUsagesRelationManager extends RelationManager
                     ->label('Loại khách hàng')
                     ->options([
                         'registered' => 'Thành viên đã đăng ký',
-                        'guest'      => 'Khách vãng lai (Guest)',
+                        'guest' => 'Khách vãng lai (Guest)',
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         if ($data['value'] === 'registered') {
@@ -155,7 +155,7 @@ class PromotionUsagesRelationManager extends RelationManager
                                 ->default(fn (PromotionUsage $record): string => $record->customer_name ?? 'Khách vãng lai'),
                             Forms\Components\TextInput::make('discount_amount')
                                 ->label('Số tiền giảm')
-                                ->formatStateUsing(fn ($state): string => number_format((float) $state, 0, ',', '.') . '₫'),
+                                ->formatStateUsing(fn ($state): string => number_format((float) $state, 0, ',', '.').'₫'),
                             Forms\Components\DateTimePicker::make('created_at')
                                 ->label('Thời gian ghi nhận'),
                         ]),

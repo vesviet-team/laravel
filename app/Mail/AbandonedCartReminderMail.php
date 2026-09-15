@@ -21,7 +21,7 @@ class AbandonedCartReminderMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Giỏ hàng của bạn đang chờ — Hoàn tất đặt hàng tại ' . config('app.name', 'Sober Furniture'),
+            subject: 'Giỏ hàng của bạn đang chờ — Hoàn tất đặt hàng tại '.config('app.name', 'Sober Furniture'),
         );
     }
 

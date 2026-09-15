@@ -2,22 +2,23 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\NewsletterSubscriberExporter;
 use App\Filament\Resources\NewsletterSubscriberResource\Pages;
-use App\Filament\Resources\NewsletterSubscriberResource\RelationManagers;
 use App\Models\NewsletterSubscriber;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class NewsletterSubscriberResource extends Resource
 {
     protected static ?string $model = NewsletterSubscriber::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-envelope';
+
     protected static ?string $navigationGroup = 'Marketing';
+
     protected static ?int $navigationSort = 5;
 
     public static function canCreate(): bool
@@ -52,7 +53,7 @@ class NewsletterSubscriberResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\ExportBulkAction::make()
-                        ->exporter(\App\Filament\Exports\NewsletterSubscriberExporter::class),
+                        ->exporter(NewsletterSubscriberExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);

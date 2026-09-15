@@ -10,7 +10,6 @@ use App\Http\Requests\CheckoutRequest;
 use App\Models\Order;
 use App\Models\Province;
 use App\Services\CartService;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
@@ -29,7 +28,7 @@ class CheckoutController extends Controller
         }
 
         // Enriched items: contains name, price, variant_name, subtotal
-        $cart     = $this->cartService->getCartItemsDetails();
+        $cart = $this->cartService->getCartItemsDetails();
         $subtotal = $this->cartService->calculateTotal();
         $customer = auth('customer')->user();
 
@@ -84,8 +83,8 @@ class CheckoutController extends Controller
             // (could contain DB errors, stack traces, internal class names — OWASP A05)
             // [B-04] Do NOT log raw cart session data — use only safe metadata (item count).
             Log::error('Checkout failed', [
-                'exception'       => get_class($e),
-                'message'         => $e->getMessage(),
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
                 'cart_item_count' => count(session()->get('cart', [])),
             ]);
 
@@ -103,7 +102,7 @@ class CheckoutController extends Controller
         $isValidSession = session('checkout_completed') === $order_number;
         $isMatchingCustomer = auth('customer')->check() && auth('customer')->id() === $order->customer_id;
 
-        if (!$isValidSession && !$isMatchingCustomer) {
+        if (! $isValidSession && ! $isMatchingCustomer) {
             abort(403, 'Bạn không có quyền truy cập thông tin đơn hàng này.');
         }
 

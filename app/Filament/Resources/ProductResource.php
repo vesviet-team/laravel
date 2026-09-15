@@ -14,9 +14,13 @@ use Illuminate\Support\Str;
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-cube';
+
     protected static ?string $navigationGroup = 'Shop';
+
     protected static ?int $navigationSort = 1;
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form
@@ -158,11 +162,17 @@ class ProductResource extends Resource
                                 Forms\Components\KeyValue::make('attributes_json')
                                     ->label('Additional Attributes')
                                     ->formatStateUsing(function ($state) {
-                                        if (!is_array($state)) return $state;
+                                        if (! is_array($state)) {
+                                            return $state;
+                                        }
+
                                         return array_map(fn ($val) => is_array($val) ? json_encode($val, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : (string) $val, $state);
                                     })
                                     ->mutateDehydratedStateUsing(function ($state) {
-                                        if (!is_array($state)) return $state;
+                                        if (! is_array($state)) {
+                                            return $state;
+                                        }
+
                                         return array_map(function ($val) {
                                             if (is_string($val)) {
                                                 $decoded = json_decode($val, true);
@@ -170,6 +180,7 @@ class ProductResource extends Resource
                                                     return $decoded;
                                                 }
                                             }
+
                                             return $val;
                                         }, $state);
                                     }),
@@ -201,8 +212,8 @@ class ProductResource extends Resource
                         Forms\Components\Select::make('status')
                             ->options([
                                 'published' => 'Published (Đã xuất bản)',
-                                'draft'     => 'Draft (Bản nháp)',
-                                'archived'  => 'Archived (Lưu trữ)',
+                                'draft' => 'Draft (Bản nháp)',
+                                'archived' => 'Archived (Lưu trữ)',
                             ])
                             ->required()
                             ->default('published'),
@@ -275,6 +286,7 @@ class ProductResource extends Resource
                     ->limit(50)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
+
                         return strlen($state) > 50 ? $state : null;
                     }),
                 Tables\Columns\TextColumn::make('sku')
@@ -285,12 +297,12 @@ class ProductResource extends Resource
                     ->copyMessage('Đã copy SKU'),
                 Tables\Columns\TextColumn::make('price')
                     ->label('Giá bán')
-                    ->formatStateUsing(fn ($state) => number_format((float) $state, 0, ',', '.') . '₫')
+                    ->formatStateUsing(fn ($state) => number_format((float) $state, 0, ',', '.').'₫')
                     ->sortable()
                     ->alignEnd(),
                 Tables\Columns\TextColumn::make('compare_at_price')
                     ->label('Giá gốc')
-                    ->formatStateUsing(fn ($state) => $state ? number_format((float) $state, 0, ',', '.') . '₫' : '—')
+                    ->formatStateUsing(fn ($state) => $state ? number_format((float) $state, 0, ',', '.').'₫' : '—')
                     ->sortable()
                     ->alignEnd()
                     ->toggleable(),
@@ -395,12 +407,12 @@ class ProductResource extends Resource
                         ->label(fn (Product $record): string => $record->is_featured ? 'Bỏ nổi bật' : 'Đặt nổi bật')
                         ->icon(fn (Product $record): string => $record->is_featured ? 'heroicon-o-star' : 'heroicon-o-star')
                         ->color(fn (Product $record): string => $record->is_featured ? 'warning' : 'primary')
-                        ->action(fn (Product $record) => $record->update(['is_featured' => !$record->is_featured])),
+                        ->action(fn (Product $record) => $record->update(['is_featured' => ! $record->is_featured])),
                     Tables\Actions\Action::make('toggle_visible')
                         ->label(fn (Product $record): string => $record->is_visible ? 'Ẩn khỏi catalog' : 'Hiện trong catalog')
                         ->icon(fn (Product $record): string => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
                         ->color(fn (Product $record): string => $record->is_visible ? 'gray' : 'primary')
-                        ->action(fn (Product $record) => $record->update(['is_visible' => !$record->is_visible])),
+                        ->action(fn (Product $record) => $record->update(['is_visible' => ! $record->is_visible])),
                 ]),
             ])
             ->bulkActions([

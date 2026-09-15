@@ -7,7 +7,6 @@ use App\Models\Product;
 use App\Models\PromotionRule;
 use App\Observers\PromotionRuleObserver;
 use App\Services\Promotions\Contracts\PromotionStrategyInterface;
-use App\Services\Promotions\DTOs\AppliedRuleDiscount;
 use App\Services\Promotions\DTOs\PromotedPriceResult;
 use App\Services\Promotions\DTOs\PromotionDiscountBreakdown;
 use App\Services\Promotions\Strategies\BuyXGetYStrategy;
@@ -26,11 +25,11 @@ class PromotionEngine
      * @var array<string, class-string<PromotionStrategyInterface>>
      */
     protected array $strategyMap = [
-        PromotionRule::ACTION_PERCENTAGE      => PercentageWithCapStrategy::class,
-        PromotionRule::ACTION_FIXED_AMOUNT    => FixedAmountStrategy::class,
-        PromotionRule::ACTION_FREE_SHIPPING   => FreeShippingStrategy::class,
+        PromotionRule::ACTION_PERCENTAGE => PercentageWithCapStrategy::class,
+        PromotionRule::ACTION_FIXED_AMOUNT => FixedAmountStrategy::class,
+        PromotionRule::ACTION_FREE_SHIPPING => FreeShippingStrategy::class,
         PromotionRule::ACTION_TIERED_QUANTITY => TieredQuantityStrategy::class,
-        PromotionRule::ACTION_BUY_X_GET_Y     => BuyXGetYStrategy::class,
+        PromotionRule::ACTION_BUY_X_GET_Y => BuyXGetYStrategy::class,
     ];
 
     /**
@@ -132,7 +131,7 @@ class PromotionEngine
             } elseif ($rule->action_type === PromotionRule::ACTION_FIXED_AMOUNT) {
                 $discountAmount = min((float) $rule->discount_value, $originalPrice);
                 $discountPercentage = $originalPrice > 0 ? round(($discountAmount / $originalPrice) * 100, 1) : 0.0;
-                $badgeLabel = '-' . number_format($discountAmount, 0, ',', '.') . '₫ PROMO';
+                $badgeLabel = '-'.number_format($discountAmount, 0, ',', '.').'₫ PROMO';
             } else {
                 continue;
             }
@@ -157,13 +156,12 @@ class PromotionEngine
     /**
      * Execute full Cart Discount Calculation Pipeline.
      *
-     * @param float $subtotal Raw cart subtotal before any discounts
-     * @param array $cartItems Enriched cart items from CartService
-     * @param string|null $couponCode Optional promo/coupon code
-     * @param float $shippingFee Shipping fee in VND
-     * @param Customer|null $customer Authenticated customer model
-     * @param string $email Customer/guest email for tier and anti-fraud verification
-     * @return PromotionDiscountBreakdown
+     * @param  float  $subtotal  Raw cart subtotal before any discounts
+     * @param  array  $cartItems  Enriched cart items from CartService
+     * @param  string|null  $couponCode  Optional promo/coupon code
+     * @param  float  $shippingFee  Shipping fee in VND
+     * @param  Customer|null  $customer  Authenticated customer model
+     * @param  string  $email  Customer/guest email for tier and anti-fraud verification
      */
     public function calculateCartDiscounts(
         float $subtotal,
@@ -184,10 +182,10 @@ class PromotionEngine
 
         foreach ($cartItems as $item) {
             $itemPrice = (float) ($item['price'] ?? 0.0);
-            $itemQty   = (int) ($item['quantity'] ?? 1);
+            $itemQty = (int) ($item['quantity'] ?? 1);
             $lineTotal = (float) ($item['subtotal'] ?? ($itemPrice * $itemQty));
-            $pid       = (int) ($item['product_id'] ?? $item['id'] ?? 0);
-            $cid       = (int) ($item['category_id'] ?? 0);
+            $pid = (int) ($item['product_id'] ?? $item['id'] ?? 0);
+            $cid = (int) ($item['category_id'] ?? 0);
 
             if ($pid > 0) {
                 $productIds[] = $pid;

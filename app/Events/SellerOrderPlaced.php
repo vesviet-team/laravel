@@ -13,6 +13,7 @@ class SellerOrderPlaced
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public Order $order;
+
     public SellerProfile $seller;
 
     /**

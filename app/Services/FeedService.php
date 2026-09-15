@@ -16,11 +16,11 @@ class FeedService
      */
     public function renderSitemapIndex(): string
     {
-        $xml = new XMLWriter();
+        $xml = new XMLWriter;
         $xml->openMemory();
         $xml->setIndent(true);
         $xml->startDocument('1.0', 'UTF-8');
-        
+
         $xml->startElement('sitemapindex');
         $xml->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 
@@ -51,7 +51,7 @@ class FeedService
      */
     public function renderProductsSitemap(): string
     {
-        $xml = new XMLWriter();
+        $xml = new XMLWriter;
         $xml->openMemory();
         $xml->setIndent(true);
         $xml->startDocument('1.0', 'UTF-8');
@@ -73,7 +73,7 @@ class FeedService
 
             if ($product->image_path) {
                 $xml->startElement('image:image');
-                $xml->writeElement('image:loc', asset('storage/' . $product->image_path));
+                $xml->writeElement('image:loc', asset('storage/'.$product->image_path));
                 $xml->writeElement('image:title', $product->name);
                 $xml->endElement();
             }
@@ -92,7 +92,7 @@ class FeedService
      */
     public function renderCategoriesSitemap(): string
     {
-        $xml = new XMLWriter();
+        $xml = new XMLWriter;
         $xml->openMemory();
         $xml->setIndent(true);
         $xml->startDocument('1.0', 'UTF-8');
@@ -122,7 +122,7 @@ class FeedService
      */
     public function renderPostsSitemap(): string
     {
-        $xml = new XMLWriter();
+        $xml = new XMLWriter;
         $xml->openMemory();
         $xml->setIndent(true);
         $xml->startDocument('1.0', 'UTF-8');
@@ -144,7 +144,7 @@ class FeedService
 
             if ($post->featured_image) {
                 $xml->startElement('image:image');
-                $xml->writeElement('image:loc', asset('storage/' . $post->featured_image));
+                $xml->writeElement('image:loc', asset('storage/'.$post->featured_image));
                 $xml->writeElement('image:title', $post->title);
                 $xml->endElement();
             }
@@ -163,7 +163,7 @@ class FeedService
      */
     public function renderPagesSitemap(): string
     {
-        $xml = new XMLWriter();
+        $xml = new XMLWriter;
         $xml->openMemory();
         $xml->setIndent(true);
         $xml->startDocument('1.0', 'UTF-8');
@@ -210,7 +210,7 @@ class FeedService
      */
     public function renderGoogleMerchantFeed(): string
     {
-        $xml = new XMLWriter();
+        $xml = new XMLWriter;
         $xml->openMemory();
         $xml->setIndent(true);
         $xml->startDocument('1.0', 'UTF-8');
@@ -220,7 +220,7 @@ class FeedService
         $xml->writeAttribute('xmlns:g', 'http://base.google.com/ns/1.0');
 
         $xml->startElement('channel');
-        $xml->writeElement('title', config('app.name', 'Sober Furniture') . ' - Google Shopping Catalog');
+        $xml->writeElement('title', config('app.name', 'Sober Furniture').' - Google Shopping Catalog');
         $xml->writeElement('link', url('/'));
         $xml->writeElement('description', 'High-quality furniture, lighting and minimalist interior products');
 
@@ -234,16 +234,16 @@ class FeedService
             $xml->writeElement('g:title', $product->name);
             $xml->writeElement('g:description', $product->description ?? $product->name);
             $xml->writeElement('g:link', route('products.show', $product->slug));
-            
+
             if ($product->image_path) {
-                $xml->writeElement('g:image_link', asset('storage/' . $product->image_path));
+                $xml->writeElement('g:image_link', asset('storage/'.$product->image_path));
             } else {
                 $xml->writeElement('g:image_link', asset('images/placeholder.jpg'));
             }
 
             $availability = ($product->stock > 0) ? 'in_stock' : 'out_of_stock';
             $xml->writeElement('g:availability', $availability);
-            $xml->writeElement('g:price', number_format($product->price, 0, '', '') . ' VND');
+            $xml->writeElement('g:price', number_format($product->price, 0, '', '').' VND');
             $xml->writeElement('g:brand', config('app.name', 'Sober Furniture'));
             $xml->writeElement('g:condition', 'new');
 
@@ -266,7 +266,7 @@ class FeedService
      */
     public function renderBlogRssFeed(): string
     {
-        $xml = new XMLWriter();
+        $xml = new XMLWriter;
         $xml->openMemory();
         $xml->setIndent(true);
         $xml->startDocument('1.0', 'UTF-8');
@@ -276,7 +276,7 @@ class FeedService
         $xml->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 
         $xml->startElement('channel');
-        $xml->writeElement('title', config('app.name', 'Sober Furniture') . ' - Blog & Design Hub');
+        $xml->writeElement('title', config('app.name', 'Sober Furniture').' - Blog & Design Hub');
         $xml->writeElement('link', route('blog.index'));
         $xml->writeElement('description', 'Latest interior design ideas, living space trends, and home decor guides.');
         $xml->writeElement('language', 'vi');

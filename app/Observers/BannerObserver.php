@@ -3,13 +3,14 @@
 namespace App\Observers;
 
 use App\Models\Banner;
+use Illuminate\Support\Facades\Cache;
 
 class BannerObserver
 {
     private function clearCache(): void
     {
-        \Illuminate\Support\Facades\Cache::forget('home_banners');
-        \Illuminate\Support\Facades\Cache::forget('top_announcement_banner');
+        Cache::forget('home_banners');
+        Cache::forget('top_announcement_banner');
     }
 
     /**

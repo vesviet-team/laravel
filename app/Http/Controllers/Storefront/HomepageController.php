@@ -7,6 +7,7 @@ use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class HomepageController extends Controller
@@ -30,7 +31,7 @@ class HomepageController extends Controller
 
         // Ensure class definitions are fully loaded before cache deserialization
         class_exists(Banner::class);
-        class_exists(\Illuminate\Database\Eloquent\Collection::class);
+        class_exists(Collection::class);
 
         $banners = Cache::remember('home_banners', 3600, function () {
             return [
@@ -42,8 +43,8 @@ class HomepageController extends Controller
 
         // Self-healing defensive check against stale incomplete class cache
         if (
-            !is_array($banners) ||
-            !isset($banners['heroSlides']) ||
+            ! is_array($banners) ||
+            ! isset($banners['heroSlides']) ||
             $banners['heroSlides'] instanceof \__PHP_Incomplete_Class ||
             (isset($banners['promoBanners']) && $banners['promoBanners'] instanceof \__PHP_Incomplete_Class) ||
             (isset($banners['collectionBanners']) && $banners['collectionBanners'] instanceof \__PHP_Incomplete_Class)
@@ -70,4 +71,3 @@ class HomepageController extends Controller
         ));
     }
 }
-

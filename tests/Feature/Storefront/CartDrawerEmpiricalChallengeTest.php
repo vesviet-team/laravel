@@ -20,30 +20,30 @@ beforeEach(function () {
     Cache::flush();
 
     $this->category = Category::create([
-        'name'      => 'Bàn Ghế Scandinavian',
-        'slug'      => 'ban-ghe',
+        'name' => 'Bàn Ghế Scandinavian',
+        'slug' => 'ban-ghe',
         'is_active' => true,
     ]);
 
     $this->productA = Product::create([
-        'name'        => 'Ghế Lounge Gỗ Sồi',
-        'slug'        => 'ghe-lounge-go-soi',
-        'sku'         => 'CHR-001',
-        'price'       => 250000,
-        'stock'       => 20,
+        'name' => 'Ghế Lounge Gỗ Sồi',
+        'slug' => 'ghe-lounge-go-soi',
+        'sku' => 'CHR-001',
+        'price' => 250000,
+        'stock' => 20,
         'category_id' => $this->category->id,
-        'status'      => 'published',
+        'status' => 'published',
         'is_featured' => false,
     ]);
 
     $this->productB = Product::create([
-        'name'        => 'Bàn Trà Tối Giản',
-        'slug'        => 'ban-tra-toi-gian',
-        'sku'         => 'TBL-001',
-        'price'       => 100000,
-        'stock'       => 15,
+        'name' => 'Bàn Trà Tối Giản',
+        'slug' => 'ban-tra-toi-gian',
+        'sku' => 'TBL-001',
+        'price' => 100000,
+        'stock' => 15,
         'category_id' => $this->category->id,
-        'status'      => 'published',
+        'status' => 'published',
         'is_featured' => true,
     ]);
 });
@@ -54,13 +54,13 @@ beforeEach(function () {
 
 test('Challenge 1.1: Smart Nudge with empty cart returns null (0% / inactive)', function () {
     PromotionRule::create([
-        'name'             => 'Freeship Đơn Từ 500K',
-        'rule_type'        => PromotionRule::RULE_TYPE_CART,
-        'action_type'      => PromotionRule::ACTION_FREE_SHIPPING,
-        'discount_value'   => 0.0,
+        'name' => 'Freeship Đơn Từ 500K',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
+        'discount_value' => 0.0,
         'min_order_amount' => 500000.0,
-        'priority'         => 1,
-        'is_active'        => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     Session::put('cart', []);
@@ -75,20 +75,20 @@ test('Challenge 1.1: Smart Nudge with empty cart returns null (0% / inactive)', 
 
 test('Challenge 1.2: Smart Nudge with subtotal 250,000đ / 500,000đ shows exactly 50% and gap 250,000đ', function () {
     PromotionRule::create([
-        'name'             => 'Freeship Đơn Từ 500K',
-        'rule_type'        => PromotionRule::RULE_TYPE_CART,
-        'action_type'      => PromotionRule::ACTION_FREE_SHIPPING,
-        'discount_value'   => 0.0,
+        'name' => 'Freeship Đơn Từ 500K',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
+        'discount_value' => 0.0,
         'min_order_amount' => 500000.0,
-        'priority'         => 1,
-        'is_active'        => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1, // 1 * 250,000 = 250,000₫
+            'quantity' => 1, // 1 * 250,000 = 250,000₫
         ],
     ]);
 
@@ -107,26 +107,26 @@ test('Challenge 1.2: Smart Nudge with subtotal 250,000đ / 500,000đ shows exact
 
 test('Challenge 1.3: Smart Nudge with subtotal exceeding threshold (600,000đ / 500,000đ) shows 100% unlocked message', function () {
     PromotionRule::create([
-        'name'             => 'Freeship Đơn Từ 500K',
-        'rule_type'        => PromotionRule::RULE_TYPE_CART,
-        'action_type'      => PromotionRule::ACTION_FREE_SHIPPING,
-        'discount_value'   => 0.0,
+        'name' => 'Freeship Đơn Từ 500K',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
+        'discount_value' => 0.0,
         'min_order_amount' => 500000.0,
-        'priority'         => 1,
-        'is_active'        => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // 2x Product A (500k) + 1x Product B (100k) = 600,000₫
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 2,
+            'quantity' => 2,
         ],
         "{$this->productB->id}_0" => [
-            'product_id'         => $this->productB->id,
+            'product_id' => $this->productB->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ]);
 
@@ -148,26 +148,26 @@ test('Challenge 1.3: Smart Nudge with subtotal exceeding threshold (600,000đ / 
 
 test('Challenge 2.1: Tiered Quantity Nudge with 1 item when tier requires 2 items (Step 1: 2 items -> 5%)', function () {
     PromotionRule::create([
-        'name'           => 'Chiết Khấu Số Lượng Lớn',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_TIERED_QUANTITY,
+        'name' => 'Chiết Khấu Số Lượng Lớn',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_TIERED_QUANTITY,
         'discount_value' => 5.0,
-        'conditions'     => [
+        'conditions' => [
             'tiered_steps' => [
                 ['min_qty' => 2, 'discount_percent' => 5],
                 ['min_qty' => 4, 'discount_percent' => 10],
             ],
         ],
-        'priority'       => 1,
-        'is_active'      => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // 1 item in cart
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ]);
 
@@ -185,26 +185,26 @@ test('Challenge 2.1: Tiered Quantity Nudge with 1 item when tier requires 2 item
 
 test('Challenge 2.2: Tiered Quantity Nudge with 3 items when tier requires 4 items (Step 2: 4 items -> 10%)', function () {
     PromotionRule::create([
-        'name'           => 'Chiết Khấu Số Lượng Lớn',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_TIERED_QUANTITY,
+        'name' => 'Chiết Khấu Số Lượng Lớn',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_TIERED_QUANTITY,
         'discount_value' => 5.0,
-        'conditions'     => [
+        'conditions' => [
             'tiered_steps' => [
                 ['min_qty' => 2, 'discount_percent' => 5],
                 ['min_qty' => 4, 'discount_percent' => 10],
             ],
         ],
-        'priority'       => 1,
-        'is_active'      => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // 3 items in cart
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 3,
+            'quantity' => 3,
         ],
     ]);
 
@@ -227,20 +227,20 @@ test('Challenge 2.2: Tiered Quantity Nudge with 3 items when tier requires 4 ite
 
 test('Challenge 3.1: 1-Click Apply for Valid Coupon applies successfully and syncs session', function () {
     PromotionRule::create([
-        'name'           => 'Mã Khuyến Mãi Hợp Lệ 10%',
-        'code'           => 'VALID10',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Mã Khuyến Mãi Hợp Lệ 10%',
+        'code' => 'VALID10',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10.0,
-        'priority'       => 1,
-        'is_active'      => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 2, // 500,000₫
+            'quantity' => 2, // 500,000₫
         ],
     ]);
 
@@ -257,21 +257,21 @@ test('Challenge 3.1: 1-Click Apply for Valid Coupon applies successfully and syn
 
 test('Challenge 3.2: 1-Click Apply for Expired Coupon is rejected with error', function () {
     PromotionRule::create([
-        'name'           => 'Mã Khuyến Mãi Hết Hạn',
-        'code'           => 'EXPIRED20',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Mã Khuyến Mãi Hết Hạn',
+        'code' => 'EXPIRED20',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 20.0,
-        'ends_at'        => now()->subDay(),
-        'priority'       => 1,
-        'is_active'      => true,
+        'ends_at' => now()->subDay(),
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ]);
 
@@ -286,21 +286,21 @@ test('Challenge 3.2: 1-Click Apply for Expired Coupon is rejected with error', f
 
 test('Challenge 3.3: 1-Click Apply for Coupon with Unmet Min Subtotal is rejected with informative gap message', function () {
     PromotionRule::create([
-        'name'             => 'Đơn Hàng Lớn 1 Triệu',
-        'code'             => 'MIN1M',
-        'rule_type'        => PromotionRule::RULE_TYPE_CART,
-        'action_type'      => PromotionRule::ACTION_FIXED_AMOUNT,
-        'discount_value'   => 100000.0,
+        'name' => 'Đơn Hàng Lớn 1 Triệu',
+        'code' => 'MIN1M',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
+        'discount_value' => 100000.0,
         'min_order_amount' => 1000000.0,
-        'priority'         => 1,
-        'is_active'        => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1, // 250,000₫ < 1,000,000₫ (gap 750,000₫)
+            'quantity' => 1, // 250,000₫ < 1,000,000₫ (gap 750,000₫)
         ],
     ]);
 
@@ -314,36 +314,36 @@ test('Challenge 3.3: 1-Click Apply for Coupon with Unmet Min Subtotal is rejecte
 
 test('Challenge 3.4: 1-Click Apply for Coupon with Per-Customer Limit Reached is rejected', function () {
     $customer = Customer::create([
-        'name'     => 'Khách Hàng Thân Thiết',
-        'email'    => 'vip@example.com',
+        'name' => 'Khách Hàng Thân Thiết',
+        'email' => 'vip@example.com',
         'password' => bcrypt('secret123'),
     ]);
 
     $rule = PromotionRule::create([
-        'name'                 => 'Mã 1 Lần / Khách Hàng',
-        'code'                 => 'ONCE10',
-        'rule_type'            => PromotionRule::RULE_TYPE_CART,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-        'discount_value'       => 10.0,
+        'name' => 'Mã 1 Lần / Khách Hàng',
+        'code' => 'ONCE10',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
+        'discount_value' => 10.0,
         'usage_limit_per_user' => 1,
-        'priority'             => 1,
-        'is_active'            => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // Record existing usage for this customer
     PromotionUsage::create([
         'promotion_rule_id' => $rule->id,
-        'customer_id'       => $customer->id,
-        'email'             => $customer->email,
-        'discount_amount'   => 25000.0,
-        'used_at'           => now(),
+        'customer_id' => $customer->id,
+        'email' => $customer->email,
+        'discount_amount' => 25000.0,
+        'used_at' => now(),
     ]);
 
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ]);
 
@@ -364,31 +364,31 @@ test('Challenge 3.4: 1-Click Apply for Coupon with Per-Customer Limit Reached is
 test('Challenge 4: Dispatching cart-updated instantly re-renders subtotal, discounts, and smart nudge bar', function () {
     // Freeship threshold 500,000₫
     PromotionRule::create([
-        'name'             => 'Freeship 500K',
-        'rule_type'        => PromotionRule::RULE_TYPE_CART,
-        'action_type'      => PromotionRule::ACTION_FREE_SHIPPING,
-        'discount_value'   => 0.0,
+        'name' => 'Freeship 500K',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
+        'discount_value' => 0.0,
         'min_order_amount' => 500000.0,
-        'priority'         => 1,
-        'is_active'        => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // 10% Automatic Cart Discount
     PromotionRule::create([
-        'name'           => 'Giảm 10% Đơn Hàng',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Giảm 10% Đơn Hàng',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10.0,
-        'priority'       => 2,
-        'is_active'      => true,
+        'priority' => 2,
+        'is_active' => true,
     ]);
 
     // Initial state: 1 item (250k)
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ]);
 

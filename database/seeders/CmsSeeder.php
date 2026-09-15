@@ -24,30 +24,30 @@ class CmsSeeder extends Seeder
         // ── 2. POST CATEGORIES ──────────────────────────────────────────────
         $categoriesData = [
             [
-                'name'            => 'Kiến Thức Nội Thất',
-                'slug'            => 'kien-thuc-noi-that',
-                'description'     => 'Cẩm nang bài trí không gian, nguyên lý thiết kế ánh sáng, phối màu và nghệ thuật kiến tạo tổ ấm phong cách Bắc Âu.',
-                'is_active'       => true,
-                'sort_order'      => 1,
-                'seo_title'       => 'Kiến Thức Nội Thất Bắc Âu — Sober Furniture',
+                'name' => 'Kiến Thức Nội Thất',
+                'slug' => 'kien-thuc-noi-that',
+                'description' => 'Cẩm nang bài trí không gian, nguyên lý thiết kế ánh sáng, phối màu và nghệ thuật kiến tạo tổ ấm phong cách Bắc Âu.',
+                'is_active' => true,
+                'sort_order' => 1,
+                'seo_title' => 'Kiến Thức Nội Thất Bắc Âu — Sober Furniture',
                 'seo_description' => 'Khám phá cẩm nang chuyên sâu về bài trí nội thất Scandinavian, nguyên tắc ánh sáng và lựa chọn vật liệu cao cấp.',
             ],
             [
-                'name'            => 'Phong Cách Sống',
-                'slug'            => 'phong-cach-song',
-                'description'     => 'Khám phá triết lý sống Hygge & Lagom, cảm hứng sống chậm, tinh giản và những câu chuyện kiến trúc đương đại.',
-                'is_active'       => true,
-                'sort_order'      => 2,
-                'seo_title'       => 'Phong Cách Sống Scandinavian — Sober Furniture',
+                'name' => 'Phong Cách Sống',
+                'slug' => 'phong-cach-song',
+                'description' => 'Khám phá triết lý sống Hygge & Lagom, cảm hứng sống chậm, tinh giản và những câu chuyện kiến trúc đương đại.',
+                'is_active' => true,
+                'sort_order' => 2,
+                'seo_title' => 'Phong Cách Sống Scandinavian — Sober Furniture',
                 'seo_description' => 'Lan tỏa tinh thần sống tối giản, bình yên và trọn vẹn với phong cách sống đặc trưng vùng Scandinavia.',
             ],
             [
-                'name'            => 'Hướng Dẫn Bảo Quản',
-                'slug'            => 'huong-dan-bao-quan',
-                'description'     => 'Hướng dẫn chi tiết quy trình bảo dưỡng đồ gỗ tự nhiên, kim loại sơn tĩnh điện, đồ da và vải nỉ cao cấp.',
-                'is_active'       => true,
-                'sort_order'      => 3,
-                'seo_title'       => 'Hướng Dẫn Bảo Quản Nội Thất — Sober Furniture',
+                'name' => 'Hướng Dẫn Bảo Quản',
+                'slug' => 'huong-dan-bao-quan',
+                'description' => 'Hướng dẫn chi tiết quy trình bảo dưỡng đồ gỗ tự nhiên, kim loại sơn tĩnh điện, đồ da và vải nỉ cao cấp.',
+                'is_active' => true,
+                'sort_order' => 3,
+                'seo_title' => 'Hướng Dẫn Bảo Quản Nội Thất — Sober Furniture',
                 'seo_description' => 'Bí quyết vệ sinh, bảo dưỡng bàn ghế gỗ sồi, sofa vải nỉ và đèn trang trí luôn bền đẹp như mới.',
             ],
         ];
@@ -64,21 +64,21 @@ class CmsSeeder extends Seeder
         $postsData = [
             [
                 'post_category_id' => $createdCategories['kien-thuc-noi-that']->id ?? null,
-                'user_id'          => $authorId,
-                'title'            => 'Nghệ thuật bài trí ánh sáng ấm cúng cho không gian phòng khách Scandinavian',
-                'slug'             => 'nghe-thuat-bai-tri-anh-sang-scandinavian',
-                'excerpt'          => 'Ánh sáng là linh hồn của phong cách nội thất Bắc Âu. Khám phá cách kết hợp đèn thả trần, đèn bàn và ánh sáng tự nhiên để tạo nên không gian ấm cúng (Hygge) chuẩn mực.',
-                'featured_image'   => 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=1200&auto=format&fit=crop&q=80',
-                'banner_image'     => 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=1600&auto=format&fit=crop&q=80',
-                'og_image'         => 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=1200&auto=format&fit=crop&q=80',
-                'status'           => 'published',
-                'published_at'     => Carbon::now()->subDays(10),
-                'is_featured'      => true,
-                'schema_type'      => 'BlogPosting',
-                'seo_title'        => 'Nghệ Thuật Bài Trí Ánh Sáng Phòng Khách Scandinavian — Sober Furniture',
-                'seo_description'  => 'Bí quyết phân tầng ánh sáng và bố trí đèn thả trần, đèn bàn cho phòng khách phong cách Bắc Âu ấm cúng chuẩn Hygge.',
-                'meta_keywords'    => 'ánh sáng scandinavian, đèn thả trần, đèn bàn phong cách bắc âu, nội thất hygge',
-                'body'             => <<<'HTML'
+                'user_id' => $authorId,
+                'title' => 'Nghệ thuật bài trí ánh sáng ấm cúng cho không gian phòng khách Scandinavian',
+                'slug' => 'nghe-thuat-bai-tri-anh-sang-scandinavian',
+                'excerpt' => 'Ánh sáng là linh hồn của phong cách nội thất Bắc Âu. Khám phá cách kết hợp đèn thả trần, đèn bàn và ánh sáng tự nhiên để tạo nên không gian ấm cúng (Hygge) chuẩn mực.',
+                'featured_image' => 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=1200&auto=format&fit=crop&q=80',
+                'banner_image' => 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=1600&auto=format&fit=crop&q=80',
+                'og_image' => 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=1200&auto=format&fit=crop&q=80',
+                'status' => 'published',
+                'published_at' => Carbon::now()->subDays(10),
+                'is_featured' => true,
+                'schema_type' => 'BlogPosting',
+                'seo_title' => 'Nghệ Thuật Bài Trí Ánh Sáng Phòng Khách Scandinavian — Sober Furniture',
+                'seo_description' => 'Bí quyết phân tầng ánh sáng và bố trí đèn thả trần, đèn bàn cho phòng khách phong cách Bắc Âu ấm cúng chuẩn Hygge.',
+                'meta_keywords' => 'ánh sáng scandinavian, đèn thả trần, đèn bàn phong cách bắc âu, nội thất hygge',
+                'body' => <<<'HTML'
 <p class="lead">Trong văn hóa Bắc Âu, nơi mùa đông kéo dài với những ngày ngắn ngủi, ánh sáng không đơn thuần chỉ là công cụ chiếu sáng mà đã trở thành một biểu tượng tinh thần — hiện thân của niềm ấm áp, sự chở che và linh hồn của phong cách sống Hygge.</p>
 
 <h2>1. Triết Lý Ánh Sáng Trong Không Gian Sống Bắc Âu</h2>
@@ -110,21 +110,21 @@ class CmsSeeder extends Seeder
 <h2>4. Lời Khuyên Hoàn Thiện Không Gian Hygge</h2>
 <p>Hãy bổ sung thêm ánh nến tự nhiên từ sáp ong hoặc sáp đậu nành vào các buổi tối cuối tuần. Ánh lửa bập bùng hòa quyện cùng ánh đèn vàng dịu nhẹ sẽ mang lại cho bạn và gia đình những khoảnh khắc sum vầy trọn vẹn và an yên nhất.</p>
 HTML,
-                'faq_schema'       => [
+                'faq_schema' => [
                     [
                         'question' => 'Nhiệt độ màu nào phù hợp nhất cho phòng khách phong cách Scandinavian?',
-                        'answer'   => 'Nhiệt độ màu lý tưởng là từ 2700K đến 3000K (ánh sáng vàng ấm dịu nhẹ). Tông màu này giúp không gian có cảm giác ấm cúng, thư thái và giảm độ chói mắt.',
+                        'answer' => 'Nhiệt độ màu lý tưởng là từ 2700K đến 3000K (ánh sáng vàng ấm dịu nhẹ). Tông màu này giúp không gian có cảm giác ấm cúng, thư thái và giảm độ chói mắt.',
                     ],
                     [
                         'question' => 'Nên treo đèn thả trần Ambit Pendant Lamp cách mặt bàn bao nhiêu cm?',
-                        'answer'   => 'Khoảng cách tiêu chuẩn từ đáy chao đèn thả đến mặt bàn ăn hoặc bàn trà là từ 65cm đến 75cm để tối ưu vùng sáng và không cản trở tầm nhìn đối thoại.',
+                        'answer' => 'Khoảng cách tiêu chuẩn từ đáy chao đèn thả đến mặt bàn ăn hoặc bàn trà là từ 65cm đến 75cm để tối ưu vùng sáng và không cản trở tầm nhìn đối thoại.',
                     ],
                     [
                         'question' => 'Làm sao để tối ưu ánh sáng tự nhiên trong căn hộ diện tích nhỏ?',
-                        'answer'   => 'Hãy sử dụng rèm vải voan mỏng màu trắng, bố trí gương soi đối diện cửa sổ để phản chiếu ánh sáng và chọn sơn tường tông trắng mờ hoặc xám tro nhạt.',
+                        'answer' => 'Hãy sử dụng rèm vải voan mỏng màu trắng, bố trí gương soi đối diện cửa sổ để phản chiếu ánh sáng và chọn sơn tường tông trắng mờ hoặc xám tro nhạt.',
                     ],
                 ],
-                'products'         => [
+                'products' => [
                     ['slug' => 'ambit-pendant-lamp', 'sort_order' => 1],
                     ['slug' => 'cement-wood-lamp', 'sort_order' => 2],
                     ['slug' => 'synnes-dining-chair', 'sort_order' => 3],
@@ -133,21 +133,21 @@ HTML,
 
             [
                 'post_category_id' => $createdCategories['huong-dan-bao-quan']->id ?? null,
-                'user_id'          => $authorId,
-                'title'            => 'Bí quyết lựa chọn và bảo quản bàn ghế gỗ sồi tự nhiên luôn bền đẹp như mới',
-                'slug'             => 'bi-quyet-lua-chon-va-bao-quan-ban-ghe-go-soi',
-                'excerpt'          => 'Gỗ sồi (Oak) là chất liệu được ưa chuộng hàng đầu trong nội thất Bắc Âu. Cẩm nang bảo dưỡng, xử lý độ ẩm và giữ màu vân gỗ sáng đẹp trường tồn theo thời gian.',
-                'featured_image'   => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&auto=format&fit=crop&q=80',
-                'banner_image'     => 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1600&auto=format&fit=crop&q=80',
-                'og_image'         => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&auto=format&fit=crop&q=80',
-                'status'           => 'published',
-                'published_at'     => Carbon::now()->subDays(8),
-                'is_featured'      => true,
-                'schema_type'      => 'Article',
-                'seo_title'        => 'Bí Quyết Lựa Chọn Và Bảo Quản Bàn Ghế Gỗ Sồi — Sober Furniture',
-                'seo_description'  => 'Hướng dẫn toàn diện về cách chăm sóc, xử lý ẩm mốc và lau dầu dưỡng định kỳ cho bàn ghế gỗ sồi tự nhiên nhập khẩu.',
-                'meta_keywords'    => 'bảo quản gỗ sồi, bàn ăn gỗ sồi, ghế ăn synnes, vệ sinh đồ gỗ nội thất',
-                'body'             => <<<'HTML'
+                'user_id' => $authorId,
+                'title' => 'Bí quyết lựa chọn và bảo quản bàn ghế gỗ sồi tự nhiên luôn bền đẹp như mới',
+                'slug' => 'bi-quyet-lua-chon-va-bao-quan-ban-ghe-go-soi',
+                'excerpt' => 'Gỗ sồi (Oak) là chất liệu được ưa chuộng hàng đầu trong nội thất Bắc Âu. Cẩm nang bảo dưỡng, xử lý độ ẩm và giữ màu vân gỗ sáng đẹp trường tồn theo thời gian.',
+                'featured_image' => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&auto=format&fit=crop&q=80',
+                'banner_image' => 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1600&auto=format&fit=crop&q=80',
+                'og_image' => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&auto=format&fit=crop&q=80',
+                'status' => 'published',
+                'published_at' => Carbon::now()->subDays(8),
+                'is_featured' => true,
+                'schema_type' => 'Article',
+                'seo_title' => 'Bí Quyết Lựa Chọn Và Bảo Quản Bàn Ghế Gỗ Sồi — Sober Furniture',
+                'seo_description' => 'Hướng dẫn toàn diện về cách chăm sóc, xử lý ẩm mốc và lau dầu dưỡng định kỳ cho bàn ghế gỗ sồi tự nhiên nhập khẩu.',
+                'meta_keywords' => 'bảo quản gỗ sồi, bàn ăn gỗ sồi, ghế ăn synnes, vệ sinh đồ gỗ nội thất',
+                'body' => <<<'HTML'
 <p class="lead">Gỗ sồi tự nhiên (Oak Wood) với các đường vân núi uyển chuyển và sắc gỗ tươi sáng luôn là "linh hồn vật liệu" trong các thiết kế nội thất Scandinavian cao cấp. Tuy nhiên, để đồ gỗ giữ được vẻ đẹp nguyên bản qua hàng chục năm sử dụng đòi hỏi sự thấu hiểu và chăm sóc đúng cách.</p>
 
 <h2>1. Đặc Tính Vượt Trội Của Gỗ Sồi Tự Nhiên</h2>
@@ -174,21 +174,21 @@ HTML,
 <h2>4. Xử Lý Các Sự Cố Trầy Xước & Vết Ố Nước Thường Gặp</h2>
 <p>Khi bề mặt xuất hiện vết xước nông do cọ xát, hãy dùng giấy nhám siêu mịn (độ nhám P400 - P600) chà thật nhẹ tay theo chiều vân gỗ, sau đó chấm một lượng nhỏ dầu dưỡng gỗ lên vùng xử lý và dùng khăn sạch xoa đều.</p>
 HTML,
-                'faq_schema'       => [
+                'faq_schema' => [
                     [
                         'question' => 'Bao lâu nên lau dầu dưỡng bóng cho bàn ghế gỗ sồi một lần?',
-                        'answer'   => 'Bạn nên thoa dầu lau gỗ chuyên dụng (như dầu lau gốc thực vật Rubio Monocoat hoặc sáp sồi tự nhiên) định kỳ 6 tháng một lần để duy trì độ ẩm và kháng nước.',
+                        'answer' => 'Bạn nên thoa dầu lau gỗ chuyên dụng (như dầu lau gốc thực vật Rubio Monocoat hoặc sáp sồi tự nhiên) định kỳ 6 tháng một lần để duy trì độ ẩm và kháng nước.',
                     ],
                     [
                         'question' => 'Xử lý thế nào khi bề mặt gỗ sồi bị dính vết nước trà hoặc cà phê?',
-                        'answer'   => 'Hãy dùng khăn microfiber ẩm lau ngay lập tức. Nếu có vết ố nhẹ, dùng giấy nhám mịn P400 chà nhẹ theo chiều vân gỗ rồi thoa một lớp dầu bảo dưỡng mỏng.',
+                        'answer' => 'Hãy dùng khăn microfiber ẩm lau ngay lập tức. Nếu có vết ố nhẹ, dùng giấy nhám mịn P400 chà nhẹ theo chiều vân gỗ rồi thoa một lớp dầu bảo dưỡng mỏng.',
                     ],
                     [
                         'question' => 'Có nên đặt bàn ghế gỗ sồi trực tiếp dưới ánh nắng mặt trời gắt không?',
-                        'answer'   => 'Tuyệt đối không nên. Ánh nắng trực tiếp và nhiệt độ cao liên tục có thể làm gỗ bị co ngót, nứt chân chim hoặc biến đổi sắc tố vân gỗ tự nhiên.',
+                        'answer' => 'Tuyệt đối không nên. Ánh nắng trực tiếp và nhiệt độ cao liên tục có thể làm gỗ bị co ngót, nứt chân chim hoặc biến đổi sắc tố vân gỗ tự nhiên.',
                     ],
                 ],
-                'products'         => [
+                'products' => [
                     ['slug' => 'synnes-dining-chair', 'sort_order' => 1],
                     ['slug' => 'copenhague-desk', 'sort_order' => 2],
                     ['slug' => 'around-coffee-table', 'sort_order' => 3],
@@ -197,21 +197,21 @@ HTML,
 
             [
                 'post_category_id' => $createdCategories['phong-cach-song']->id ?? null,
-                'user_id'          => $authorId,
-                'title'            => 'Xu hướng thiết kế nội thất tối giản 2026: Tinh gọn không gian, nâng tầm sống chậm',
-                'slug'             => 'xu-huong-thiet-ke-noi-that-toi-gian-2026',
-                'excerpt'          => 'Xu hướng nội thất 2026 hướng đến sự cân bằng hoàn hảo giữa thẩm mỹ tối giản và công năng sống thông minh. Khám phá cách bài trí không gian sống thanh lọc tâm trí.',
-                'featured_image'   => 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=1200&auto=format&fit=crop&q=80',
-                'banner_image'     => 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=1600&auto=format&fit=crop&q=80',
-                'og_image'         => 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=1200&auto=format&fit=crop&q=80',
-                'status'           => 'published',
-                'published_at'     => Carbon::now()->subDays(6),
-                'is_featured'      => true,
-                'schema_type'      => 'BlogPosting',
-                'seo_title'        => 'Xu Hướng Nội Thất Tối Giản 2026 — Sober Furniture',
-                'seo_description'  => 'Định hình phong cách sống tinh tế với xu hướng nội thất tối giản hiện đại năm 2026: Đề cao giá trị công năng và xúc cảm bình yên.',
-                'meta_keywords'    => 'xu hướng nội thất 2026, thiết kế tối giản, phong cách sống lagom, đồng hồ freakish',
-                'body'             => <<<'HTML'
+                'user_id' => $authorId,
+                'title' => 'Xu hướng thiết kế nội thất tối giản 2026: Tinh gọn không gian, nâng tầm sống chậm',
+                'slug' => 'xu-huong-thiet-ke-noi-that-toi-gian-2026',
+                'excerpt' => 'Xu hướng nội thất 2026 hướng đến sự cân bằng hoàn hảo giữa thẩm mỹ tối giản và công năng sống thông minh. Khám phá cách bài trí không gian sống thanh lọc tâm trí.',
+                'featured_image' => 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=1200&auto=format&fit=crop&q=80',
+                'banner_image' => 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=1600&auto=format&fit=crop&q=80',
+                'og_image' => 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=1200&auto=format&fit=crop&q=80',
+                'status' => 'published',
+                'published_at' => Carbon::now()->subDays(6),
+                'is_featured' => true,
+                'schema_type' => 'BlogPosting',
+                'seo_title' => 'Xu Hướng Nội Thất Tối Giản 2026 — Sober Furniture',
+                'seo_description' => 'Định hình phong cách sống tinh tế với xu hướng nội thất tối giản hiện đại năm 2026: Đề cao giá trị công năng và xúc cảm bình yên.',
+                'meta_keywords' => 'xu hướng nội thất 2026, thiết kế tối giản, phong cách sống lagom, đồng hồ freakish',
+                'body' => <<<'HTML'
 <p class="lead">Bước sang năm 2026, chủ nghĩa tối giản (Minimalism) không còn là sự giản lược lạnh lẽo đến mức kham khổ, mà đã tiến hóa thành phong cách "Warm Minimalism" — sự tinh gọn đầy tính nhân văn, tập trung vào trải nghiệm cảm xúc và sức khỏe tinh thần của con người.</p>
 
 <h2>1. Định Nghĩa Lại Chủ Nghĩa Tối Giản Trong Năm 2026</h2>
@@ -238,17 +238,17 @@ HTML,
 <h2>4. Kết Luận: Sống Đủ Đầy Trong Không Gian Tinh Giản</h2>
 <p>Tối giản không gian chính là cách bạn giải phóng tâm trí khỏi những xao nhãng của cuộc sống hiện đại, để trở về nhà là trở về với sự bình yên đích thực.</p>
 HTML,
-                'faq_schema'       => [
+                'faq_schema' => [
                     [
                         'question' => 'Tối giản (Minimalism) có đồng nghĩa với việc để căn phòng trống trải và lạnh lẽo không?',
-                        'answer'   => 'Không. Phong cách Warm Minimalism hiện đại tập trung vào việc loại bỏ đồ vật dư thừa nhưng vẫn giữ được sự ấm áp nhờ vật liệu gỗ, vải dệt thô và ánh sáng vàng dịu.',
+                        'answer' => 'Không. Phong cách Warm Minimalism hiện đại tập trung vào việc loại bỏ đồ vật dư thừa nhưng vẫn giữ được sự ấm áp nhờ vật liệu gỗ, vải dệt thô và ánh sáng vàng dịu.',
                     ],
                     [
                         'question' => 'Làm thế nào để bắt đầu tinh giản không gian sống gia đình?',
-                        'answer'   => 'Hãy bắt đầu bằng việc dọn dẹp các bề mặt phẳng (mặt bàn, kệ tủ), phân loại đồ dùng theo nguyên tắc công năng và đầu tư vào một số món nội thất chất lượng cao có tính thẩm mỹ vượt thời gian.',
+                        'answer' => 'Hãy bắt đầu bằng việc dọn dẹp các bề mặt phẳng (mặt bàn, kệ tủ), phân loại đồ dùng theo nguyên tắc công năng và đầu tư vào một số món nội thất chất lượng cao có tính thẩm mỹ vượt thời gian.',
                     ],
                 ],
-                'products'         => [
+                'products' => [
                     ['slug' => 'freakish-clock', 'sort_order' => 1],
                     ['slug' => 'bottle-grinders-set', 'sort_order' => 2],
                     ['slug' => 'arte-60-stool', 'sort_order' => 3],
@@ -257,21 +257,21 @@ HTML,
 
             [
                 'post_category_id' => $createdCategories['kien-thuc-noi-that']->id ?? null,
-                'user_id'          => $authorId,
-                'title'            => 'Cách phối hợp màu sắc trung tính và chất liệu thô mộc trong căn hộ hiện đại',
-                'slug'             => 'cach-phoi-hop-mau-sac-trung-tinh-va-chat-lieu-tho-moc',
-                'excerpt'          => 'Quy tắc vàng 60-30-10 trong phối màu nội thất phong cách Scandinavia: Sự hòa quyện giữa tông trắng xám, gỗ mộc và kim loại sơn tĩnh điện hiện đại.',
-                'featured_image'   => 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=1200&auto=format&fit=crop&q=80',
-                'banner_image'     => 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=1600&auto=format&fit=crop&q=80',
-                'og_image'         => 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=1200&auto=format&fit=crop&q=80',
-                'status'           => 'published',
-                'published_at'     => Carbon::now()->subDays(4),
-                'is_featured'      => false,
-                'schema_type'      => 'BlogPosting',
-                'seo_title'        => 'Cách Phối Hợp Màu Sắc Trung Tính & Chất Liệu Thô Mộc — Sober Furniture',
-                'seo_description'  => 'Áp dụng quy tắc phối màu chuẩn Bắc Âu để tạo nên sự cân bằng hoàn hảo giữa nét hiện đại và vẻ đẹp mộc mạc.',
-                'meta_keywords'    => 'phối màu nội thất, màu trung tính scandinavian, bê tông và gỗ, quy tắc 60-30-10',
-                'body'             => <<<'HTML'
+                'user_id' => $authorId,
+                'title' => 'Cách phối hợp màu sắc trung tính và chất liệu thô mộc trong căn hộ hiện đại',
+                'slug' => 'cach-phoi-hop-mau-sac-trung-tinh-va-chat-lieu-tho-moc',
+                'excerpt' => 'Quy tắc vàng 60-30-10 trong phối màu nội thất phong cách Scandinavia: Sự hòa quyện giữa tông trắng xám, gỗ mộc và kim loại sơn tĩnh điện hiện đại.',
+                'featured_image' => 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=1200&auto=format&fit=crop&q=80',
+                'banner_image' => 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=1600&auto=format&fit=crop&q=80',
+                'og_image' => 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=1200&auto=format&fit=crop&q=80',
+                'status' => 'published',
+                'published_at' => Carbon::now()->subDays(4),
+                'is_featured' => false,
+                'schema_type' => 'BlogPosting',
+                'seo_title' => 'Cách Phối Hợp Màu Sắc Trung Tính & Chất Liệu Thô Mộc — Sober Furniture',
+                'seo_description' => 'Áp dụng quy tắc phối màu chuẩn Bắc Âu để tạo nên sự cân bằng hoàn hảo giữa nét hiện đại và vẻ đẹp mộc mạc.',
+                'meta_keywords' => 'phối màu nội thất, màu trung tính scandinavian, bê tông và gỗ, quy tắc 60-30-10',
+                'body' => <<<'HTML'
 <p class="lead">Sử dụng bảng màu trung tính (Neutral Palette) kết hợp cùng các chất liệu mộc mạc như gỗ tự nhiên, bê tông và kim loại sơn mờ là công thức kinh điển để tạo nên một không gian sống thanh lịch và không bao giờ lỗi mốt.</p>
 
 <h2>1. Bảng Màu Trung Tính — Nền Tảng Của Không Gian Bắc Âu</h2>
@@ -303,17 +303,17 @@ HTML,
 <h2>4. Tổng Kết Phối Cảnh Hoàn Chỉnh</h2>
 <p>Khi các yếu tố màu sắc, ánh sáng và chất liệu được kết hợp hài hòa theo tỉ lệ chuẩn mực, tổ ấm của bạn sẽ trở thành một chốn về thư thái, ngập tràn cảm hứng sống mỗi ngày.</p>
 HTML,
-                'faq_schema'       => [
+                'faq_schema' => [
                     [
                         'question' => 'Tỷ lệ phối màu 60-30-10 áp dụng như thế nào trong phòng khách?',
-                        'answer'   => '60% là màu chủ đạo (tường, trần, sàn với màu trắng hoặc be nhạt), 30% là màu bổ trợ (sofa nỉ xám, bàn ghế gỗ sồi), 10% là điểm nhấn (đèn kim loại đen, đồng hồ vàng mù tạt).',
+                        'answer' => '60% là màu chủ đạo (tường, trần, sàn với màu trắng hoặc be nhạt), 30% là màu bổ trợ (sofa nỉ xám, bàn ghế gỗ sồi), 10% là điểm nhấn (đèn kim loại đen, đồng hồ vàng mù tạt).',
                     ],
                     [
                         'question' => 'Chất liệu bê tông đúc có bị thô cứng khi đặt trong phòng ngủ không?',
-                        'answer'   => 'Khi kết hợp với chao đèn vải lanh thô và chi tiết gỗ sồi ấm áp, bê tông tạo nên vẻ đẹp điêu khắc hiện đại, độc đáo và rất yên tĩnh cho góc phòng ngủ.',
+                        'answer' => 'Khi kết hợp với chao đèn vải lanh thô và chi tiết gỗ sồi ấm áp, bê tông tạo nên vẻ đẹp điêu khắc hiện đại, độc đáo và rất yên tĩnh cho góc phòng ngủ.',
                     ],
                 ],
-                'products'         => [
+                'products' => [
                     ['slug' => 'cement-wood-lamp', 'sort_order' => 1],
                     ['slug' => 'ambit-pendant-lamp', 'sort_order' => 2],
                     ['slug' => 'bottle-grinders-set', 'sort_order' => 3],
@@ -322,21 +322,21 @@ HTML,
 
             [
                 'post_category_id' => $createdCategories['phong-cach-song']->id ?? null,
-                'user_id'          => $authorId,
-                'title'            => 'Cẩm nang chọn sofa băng vải bố cao cấp: Kích thước, chất liệu đệm và độ bền',
-                'slug'             => 'cam-nang-chon-sofa-bang-vai-bo-cao-cap',
-                'excerpt'          => 'Sofa là tâm điểm của phòng khách gia đình. Hướng dẫn chọn kích thước sofa băng chuẩn tỉ lệ phòng, độ đàn hồi của mút D40 và ưu điểm của chất liệu vải bố dệt cao cấp.',
-                'featured_image'   => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&auto=format&fit=crop&q=80',
-                'banner_image'     => 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1600&auto=format&fit=crop&q=80',
-                'og_image'         => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&auto=format&fit=crop&q=80',
-                'status'           => 'published',
-                'published_at'     => Carbon::now()->subDays(2),
-                'is_featured'      => false,
-                'schema_type'      => 'Article',
-                'seo_title'        => 'Cẩm Nang Chọn Sofa Băng Vải Bố Cao Cấp — Sober Furniture',
-                'seo_description'  => 'Kinh nghiệm lựa chọn kích thước, kiểm tra khung gỗ và độ bền đệm mút sofa băng phong cách Scandinavian.',
-                'meta_keywords'    => 'sofa băng vải bố, sofa phòng khách, sofa outline nordic, kích thước sofa',
-                'body'             => <<<'HTML'
+                'user_id' => $authorId,
+                'title' => 'Cẩm nang chọn sofa băng vải bố cao cấp: Kích thước, chất liệu đệm và độ bền',
+                'slug' => 'cam-nang-chon-sofa-bang-vai-bo-cao-cap',
+                'excerpt' => 'Sofa là tâm điểm của phòng khách gia đình. Hướng dẫn chọn kích thước sofa băng chuẩn tỉ lệ phòng, độ đàn hồi của mút D40 và ưu điểm của chất liệu vải bố dệt cao cấp.',
+                'featured_image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&auto=format&fit=crop&q=80',
+                'banner_image' => 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1600&auto=format&fit=crop&q=80',
+                'og_image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&auto=format&fit=crop&q=80',
+                'status' => 'published',
+                'published_at' => Carbon::now()->subDays(2),
+                'is_featured' => false,
+                'schema_type' => 'Article',
+                'seo_title' => 'Cẩm Nang Chọn Sofa Băng Vải Bố Cao Cấp — Sober Furniture',
+                'seo_description' => 'Kinh nghiệm lựa chọn kích thước, kiểm tra khung gỗ và độ bền đệm mút sofa băng phong cách Scandinavian.',
+                'meta_keywords' => 'sofa băng vải bố, sofa phòng khách, sofa outline nordic, kích thước sofa',
+                'body' => <<<'HTML'
 <p class="lead">Là món đồ nội thất chiếm diện tích lớn nhất và được sử dụng với tần suất cao nhất trong phòng khách, một chiếc sofa băng chất lượng cao không chỉ nâng tầm đẳng cấp không gian mà còn là nơi gắn kết những phút giây sum họp quý giá của cả gia đình.</p>
 
 <h2>1. Tầm Quan Trọng Của Chiếc Sofa Trong Phòng Khách</h2>
@@ -369,17 +369,17 @@ HTML,
 <h2>4. Ưu Điểm Của Vải Bố Dệt Thô Thoáng Khí</h2>
 <p>Chất liệu vải bố (canvas/polyester blend) cao cấp có ưu điểm vượt trội về độ bền kéo, chống bám bụi và đặc biệt là độ thoáng khí cao, không gây cảm giác nóng bí lưng trong những ngày hè oi bức.</p>
 HTML,
-                'faq_schema'       => [
+                'faq_schema' => [
                     [
                         'question' => 'Mút D40 có ưu điểm gì so với các loại mút thông thường?',
-                        'answer'   => 'Mút D40 có mật độ bọt cao (40kg/m3), độ đàn hồi tối ưu, chống xẹp lún sau nhiều năm sử dụng và tạo cảm giác nâng đỡ cột sống êm ái khi ngồi lâu.',
+                        'answer' => 'Mút D40 có mật độ bọt cao (40kg/m3), độ đàn hồi tối ưu, chống xẹp lún sau nhiều năm sử dụng và tạo cảm giác nâng đỡ cột sống êm ái khi ngồi lâu.',
                     ],
                     [
                         'question' => 'Cách vệ sinh sofa vải bố định kỳ tại nhà?',
-                        'answer'   => 'Hút bụi bề mặt hàng tuần bằng đầu bàn chải mềm. Khi dính vết bẩn cục bộ, dùng bọt xà phòng nhẹ chấm nhẹ và thấm khô bằng khăn giấy, không chà xát mạnh.',
+                        'answer' => 'Hút bụi bề mặt hàng tuần bằng đầu bàn chải mềm. Khi dính vết bẩn cục bộ, dùng bọt xà phòng nhẹ chấm nhẹ và thấm khô bằng khăn giấy, không chà xát mạnh.',
                     ],
                 ],
-                'products'         => [
+                'products' => [
                     ['slug' => 'outline-sofa-nordic', 'sort_order' => 1],
                     ['slug' => 'around-coffee-table', 'sort_order' => 2],
                     ['slug' => 'synnes-dining-chair', 'sort_order' => 3],
@@ -396,7 +396,7 @@ HTML,
                 $pData
             );
 
-            if (!empty($productAttachments)) {
+            if (! empty($productAttachments)) {
                 $syncData = [];
                 foreach ($productAttachments as $item) {
                     $prod = Product::firstWhere('slug', $item['slug']);
@@ -411,15 +411,15 @@ HTML,
         // ── 4. POLICY PAGES ─────────────────────────────────────────────────
         $pagesData = [
             [
-                'title'           => 'Chính Sách Bảo Mật',
-                'slug'            => 'chinh-sach-bao-mat',
-                'template'        => 'policy',
-                'is_published'    => true,
-                'published_at'    => Carbon::now()->subMonths(2),
-                'excerpt'         => 'Cam kết của Sober Furniture về bảo vệ thông tin cá nhân và an toàn dữ liệu khách hàng theo tiêu chuẩn bảo mật cao nhất.',
-                'seo_title'       => 'Chính Sách Bảo Mật Thông Tin — Sober Furniture',
+                'title' => 'Chính Sách Bảo Mật',
+                'slug' => 'chinh-sach-bao-mat',
+                'template' => 'policy',
+                'is_published' => true,
+                'published_at' => Carbon::now()->subMonths(2),
+                'excerpt' => 'Cam kết của Sober Furniture về bảo vệ thông tin cá nhân và an toàn dữ liệu khách hàng theo tiêu chuẩn bảo mật cao nhất.',
+                'seo_title' => 'Chính Sách Bảo Mật Thông Tin — Sober Furniture',
                 'seo_description' => 'Tìm hiểu cách Sober Furniture thu thập, sử dụng và bảo mật dữ liệu cá nhân của quý khách hàng khi mua sắm trực tuyến.',
-                'body'            => <<<'HTML'
+                'body' => <<<'HTML'
 <p class="lead">Sober Furniture (MYSHOP) cam kết tôn trọng và bảo mật tuyệt đối các thông tin mang tính riêng tư của quý khách hàng. Bản Chính Sách Bảo Mật này giải thích cách thức chúng tôi thu thập, sử dụng và bảo vệ dữ liệu cá nhân của quý khách.</p>
 
 <h2>1. Mục Đích Thu Thập Thông Tin Cá Nhân</h2>
@@ -450,28 +450,28 @@ HTML,
     <li><strong>Địa chỉ:</strong> 123 Đường Pasteur, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh</li>
 </ul>
 HTML,
-                'faq_schema'      => [
+                'faq_schema' => [
                     [
                         'question' => 'Sober Furniture có chia sẻ thông tin khách hàng cho bên thứ ba không?',
-                        'answer'   => 'Chúng tôi cam kết tuyệt đối không bán, trao đổi hoặc chia sẻ thông tin cá nhân của quý khách cho bên thứ ba vì mục đích thương mại, ngoại trừ các đơn vị vận chuyển đối tác để thực hiện giao hàng.',
+                        'answer' => 'Chúng tôi cam kết tuyệt đối không bán, trao đổi hoặc chia sẻ thông tin cá nhân của quý khách cho bên thứ ba vì mục đích thương mại, ngoại trừ các đơn vị vận chuyển đối tác để thực hiện giao hàng.',
                     ],
                     [
                         'question' => 'Làm cách nào để yêu cầu chỉnh sửa hoặc xóa dữ liệu cá nhân?',
-                        'answer'   => 'Quý khách có thể gửi email yêu cầu tới privacy@soberfurniture.vn hoặc liên hệ hotline 1900 6868 để được hỗ trợ cập nhật hoặc xóa dữ liệu trong vòng 24 giờ làm việc.',
+                        'answer' => 'Quý khách có thể gửi email yêu cầu tới privacy@soberfurniture.vn hoặc liên hệ hotline 1900 6868 để được hỗ trợ cập nhật hoặc xóa dữ liệu trong vòng 24 giờ làm việc.',
                     ],
                 ],
             ],
 
             [
-                'title'           => 'Điều Khoản Dịch Vụ',
-                'slug'            => 'dieu-khoan-dich-vu',
-                'template'        => 'policy',
-                'is_published'    => true,
-                'published_at'    => Carbon::now()->subMonths(2),
-                'excerpt'         => 'Các điều khoản và quy định điều chỉnh việc sử dụng website và giao dịch mua sắm sản phẩm nội thất tại Sober Furniture.',
-                'seo_title'       => 'Điều Khoản Dịch Vụ & Sử Dụng Website — Sober Furniture',
+                'title' => 'Điều Khoản Dịch Vụ',
+                'slug' => 'dieu-khoan-dich-vu',
+                'template' => 'policy',
+                'is_published' => true,
+                'published_at' => Carbon::now()->subMonths(2),
+                'excerpt' => 'Các điều khoản và quy định điều chỉnh việc sử dụng website và giao dịch mua sắm sản phẩm nội thất tại Sober Furniture.',
+                'seo_title' => 'Điều Khoản Dịch Vụ & Sử Dụng Website — Sober Furniture',
                 'seo_description' => 'Quy định và điều khoản ràng buộc pháp lý giữa khách hàng và Sober Furniture trong quá trình duyệt web và đặt hàng.',
-                'body'            => <<<'HTML'
+                'body' => <<<'HTML'
 <p class="lead">Chào mừng quý khách đến với website thương mại điện tử Sober Furniture. Bằng việc truy cập, duyệt xem hoặc đặt mua sản phẩm trên website, quý khách đồng ý tuân thủ và chịu sự ràng buộc của các Điều Khoản Dịch Vụ dưới đây.</p>
 
 <h2>1. Chấp Thuận Các Điều Khoản Sử Dụng</h2>
@@ -490,28 +490,28 @@ HTML,
 <h2>5. Giới Hạn Trách Nhiệm & Xử Lý Tranh Chấp</h2>
 <p>Mọi tranh chấp phát sinh giữa khách hàng và Sober Furniture trước hết sẽ được ưu tiên giải quyết thông qua thương lượng và hòa giải trên tinh thần tôn trọng quyền lợi của người tiêu dùng.</p>
 HTML,
-                'faq_schema'      => [
+                'faq_schema' => [
                     [
                         'question' => 'Đơn hàng được coi là xác nhận thành công khi nào?',
-                        'answer'   => 'Đơn hàng được xác nhận khi quý khách nhận được email thông báo có mã vận đơn cùng xác nhận từ tổng đài viên chăm sóc khách hàng của Sober Furniture.',
+                        'answer' => 'Đơn hàng được xác nhận khi quý khách nhận được email thông báo có mã vận đơn cùng xác nhận từ tổng đài viên chăm sóc khách hàng của Sober Furniture.',
                     ],
                     [
                         'question' => 'Tôi có thể hủy đơn hàng sau khi đã thanh toán không?',
-                        'answer'   => 'Quý khách có thể hủy đơn hàng miễn phí trong vòng 2 giờ kể từ khi đặt nếu đơn hàng chưa được chuyển giao cho đối tác vận chuyển.',
+                        'answer' => 'Quý khách có thể hủy đơn hàng miễn phí trong vòng 2 giờ kể từ khi đặt nếu đơn hàng chưa được chuyển giao cho đối tác vận chuyển.',
                     ],
                 ],
             ],
 
             [
-                'title'           => 'Chính Sách Vận Chuyển & Đổi Trả',
-                'slug'            => 'chinh-sach-van-chuyen-doi-tra',
-                'template'        => 'policy',
-                'is_published'    => true,
-                'published_at'    => Carbon::now()->subMonths(2),
-                'excerpt'         => 'Chính sách giao hàng tận nơi toàn quốc, hỗ trợ lắp đặt miễn phí tại nội thành và quy trình đổi trả hàng trong 30 ngày.',
-                'seo_title'       => 'Chính Sách Vận Chuyển & Đổi Trả Hàng — Sober Furniture',
+                'title' => 'Chính Sách Vận Chuyển & Đổi Trả',
+                'slug' => 'chinh-sach-van-chuyen-doi-tra',
+                'template' => 'policy',
+                'is_published' => true,
+                'published_at' => Carbon::now()->subMonths(2),
+                'excerpt' => 'Chính sách giao hàng tận nơi toàn quốc, hỗ trợ lắp đặt miễn phí tại nội thành và quy trình đổi trả hàng trong 30 ngày.',
+                'seo_title' => 'Chính Sách Vận Chuyển & Đổi Trả Hàng — Sober Furniture',
                 'seo_description' => 'Chi tiết thời gian giao hàng, phí vận chuyển toàn quốc và điều kiện đổi trả sản phẩm lỗi trong vòng 30 ngày tại Sober Furniture.',
-                'body'            => <<<'HTML'
+                'body' => <<<'HTML'
 <p class="lead">Nhằm mang lại trải nghiệm mua sắm nội thất an tâm và thuận tiện nhất, Sober Furniture áp dụng chính sách giao hàng tận phòng, lắp đặt chuyên nghiệp và đổi trả linh hoạt trong vòng 30 ngày.</p>
 
 <h2>1. Phạm Vi Giao Hàng & Thời Gian Vận Chuyển</h2>
@@ -543,18 +543,18 @@ HTML,
 <h2>5. Thời Gian Hoàn Tiền Cho Khách Hàng</h2>
 <p>Sau khi bộ phận kho vận tiếp nhận và kiểm định hàng trả về hợp lệ, khoản tiền hoàn lại sẽ được chuyển vào tài khoản ngân hàng của quý khách trong vòng <strong>3 - 5 ngày làm việc</strong>.</p>
 HTML,
-                'faq_schema'      => [
+                'faq_schema' => [
                     [
                         'question' => 'Thời gian giao hàng nội thành TP.HCM và Hà Nội là bao lâu?',
-                        'answer'   => 'Đối với khu vực nội thành TP.HCM và Hà Nội, thời gian giao hàng tiêu chuẩn là 24 - 48 giờ làm việc, hỗ trợ giao hỏa tốc trong 4 giờ đối với phụ kiện trang trí có sẵn.',
+                        'answer' => 'Đối với khu vực nội thành TP.HCM và Hà Nội, thời gian giao hàng tiêu chuẩn là 24 - 48 giờ làm việc, hỗ trợ giao hỏa tốc trong 4 giờ đối với phụ kiện trang trí có sẵn.',
                     ],
                     [
                         'question' => 'Sản phẩm đổi trả cần đáp ứng những điều kiện gì?',
-                        'answer'   => 'Sản phẩm phải còn nguyên vẹn bao bì đóng gói, đầy đủ phụ kiện, không có dấu hiệu va đập trầy xước do lỗi người dùng và kèm theo hóa đơn mua hàng.',
+                        'answer' => 'Sản phẩm phải còn nguyên vẹn bao bì đóng gói, đầy đủ phụ kiện, không có dấu hiệu va đập trầy xước do lỗi người dùng và kèm theo hóa đơn mua hàng.',
                     ],
                     [
                         'question' => 'Thời gian hoàn tiền qua tài khoản ngân hàng mất bao lâu?',
-                        'answer'   => 'Sau khi nhân viên kho nhận và kiểm định hàng trả về hợp lệ, tiền sẽ được hoàn trả về tài khoản ngân hàng của quý khách trong vòng 3 - 5 ngày làm việc.',
+                        'answer' => 'Sau khi nhân viên kho nhận và kiểm định hàng trả về hợp lệ, tiền sẽ được hoàn trả về tài khoản ngân hàng của quý khách trong vòng 3 - 5 ngày làm việc.',
                     ],
                 ],
             ],

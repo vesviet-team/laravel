@@ -1,18 +1,19 @@
 <?php
 
-use Spatie\Multitenancy\Jobs\TenantAware;
+use App\Models\SellerProfile;
+use App\Multitenancy\SubdomainTenantFinder;
 use Illuminate\Broadcasting\BroadcastEvent;
 use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
-use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Queue\CallQueuedClosure;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Actions\MigrateTenantAction;
+use Spatie\Multitenancy\Jobs\NotTenantAware;
+use Spatie\Multitenancy\Jobs\TenantAware;
 use Spatie\Multitenancy\Models\Tenant;
-use App\Models\SellerProfile;
 
 return [
     /*
@@ -22,7 +23,7 @@ return [
      * This class should extend `Spatie\Multitenancy\TenantFinder\TenantFinder`
      *
      */
-    'tenant_finder' => \App\Multitenancy\SubdomainTenantFinder::class,
+    'tenant_finder' => SubdomainTenantFinder::class,
 
     /*
      * These fields are used by tenant:artisan command to match one or more tenant.

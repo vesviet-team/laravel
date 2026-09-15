@@ -6,7 +6,7 @@ use App\Models\Banner;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Banner>
+ * @extends Factory<Banner>
  */
 class BannerFactory extends Factory
 {
@@ -20,19 +20,19 @@ class BannerFactory extends Factory
     public function definition(): array
     {
         return [
-            'position'        => Banner::POSITION_HERO_SLIDER,
-            'title'           => fake()->sentence(3),
-            'eyebrow'         => strtoupper(fake()->words(2, true)),
-            'subtitle'        => fake()->paragraph(1),
-            'image'           => 'banners/sample-' . fake()->numberBetween(1, 5) . '.jpg',
-            'link'            => '/catalog',
-            'cta_text'        => 'Khám Phá Ngay',
+            'position' => Banner::POSITION_HERO_SLIDER,
+            'title' => fake()->sentence(3),
+            'eyebrow' => strtoupper(fake()->words(2, true)),
+            'subtitle' => fake()->paragraph(1),
+            'image' => 'banners/sample-'.fake()->numberBetween(1, 5).'.jpg',
+            'link' => '/catalog',
+            'cta_text' => 'Khám Phá Ngay',
             'open_in_new_tab' => false,
-            'status'          => 'active',
-            'starts_at'       => null,
-            'ends_at'         => null,
-            'sort_order'      => fake()->numberBetween(1, 10),
-            'clicks_count'    => fake()->numberBetween(0, 500),
+            'status' => 'active',
+            'starts_at' => null,
+            'ends_at' => null,
+            'sort_order' => fake()->numberBetween(1, 10),
+            'clicks_count' => fake()->numberBetween(0, 500),
         ];
     }
 
@@ -102,9 +102,9 @@ class BannerFactory extends Factory
     public function active(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'    => 'active',
+            'status' => 'active',
             'starts_at' => null,
-            'ends_at'   => null,
+            'ends_at' => null,
         ]);
     }
 
@@ -124,9 +124,9 @@ class BannerFactory extends Factory
     public function scheduledFuture(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'    => 'active',
+            'status' => 'active',
             'starts_at' => now()->addDays(2),
-            'ends_at'   => now()->addDays(10),
+            'ends_at' => now()->addDays(10),
         ]);
     }
 
@@ -136,9 +136,9 @@ class BannerFactory extends Factory
     public function expired(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'    => 'active',
+            'status' => 'active',
             'starts_at' => now()->subDays(10),
-            'ends_at'   => now()->subDays(2),
+            'ends_at' => now()->subDays(2),
         ]);
     }
 }

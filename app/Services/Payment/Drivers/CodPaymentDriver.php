@@ -15,10 +15,10 @@ class CodPaymentDriver implements PaymentGatewayInterface
     public function process(Order $order): array
     {
         return [
-            'status'         => 'pending_cod',
+            'status' => 'pending_cod',
             'payment_method' => 'cod',
-            'instructions'   => 'Thanh toán tiền mặt khi nhân viên giao hàng.',
-            'metadata'       => [
+            'instructions' => 'Thanh toán tiền mặt khi nhân viên giao hàng.',
+            'metadata' => [
                 'collect_amount' => $order->total_amount,
             ],
         ];
@@ -32,10 +32,10 @@ class CodPaymentDriver implements PaymentGatewayInterface
     public function markPaid(Order $order, string $transactionId, array $payload = []): void
     {
         $order->update([
-            'payment_status'         => 'paid',
+            'payment_status' => 'paid',
             'payment_transaction_id' => $transactionId,
-            'paid_at'                => now(),
-            'payment_details'        => array_merge($order->payment_details ?? [], $payload),
+            'paid_at' => now(),
+            'payment_details' => array_merge($order->payment_details ?? [], $payload),
         ]);
     }
 }

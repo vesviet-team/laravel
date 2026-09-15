@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Exceptions\SellerActionException;
+use App\Models\SellerPage;
 use App\Models\SellerProfile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -44,9 +45,7 @@ class UpdateSellerProfileAction
     /**
      * Update the seller profile with validated data and invalidate cache.
      *
-     * @param  SellerProfile  $seller
-     * @param  array          $data  Validated form data from EditSellerProfile.
-     * @return SellerProfile
+     * @param  array  $data  Validated form data from EditSellerProfile.
      *
      * @throws SellerActionException
      */
@@ -68,13 +67,13 @@ class UpdateSellerProfileAction
             });
         } catch (Throwable $e) {
             throw new SellerActionException(
-                'Không thể cập nhật thông tin cửa hàng: ' . $e->getMessage(),
+                'Không thể cập nhật thông tin cửa hàng: '.$e->getMessage(),
                 'seller_profile_update_failed',
                 $e,
             );
         } finally {
             // Invalidate storefront cache — runs even on rollback to prevent stale state.
-            Cache::forget(\App\Models\SellerPage::cacheKeyFor($sellerId));
+            Cache::forget(SellerPage::cacheKeyFor($sellerId));
         }
     }
 }

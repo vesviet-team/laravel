@@ -7,7 +7,6 @@ use App\Services\CartService;
 use App\Services\PromotionEngine;
 use Livewire\Component;
 
-
 class CouponInput extends Component
 {
     public string $couponCode = '';
@@ -40,6 +39,7 @@ class CouponInput extends Component
 
         if (empty($code)) {
             $this->errorMessage = 'Vui lòng nhập mã giảm giá.';
+
             return;
         }
 
@@ -62,7 +62,7 @@ class CouponInput extends Component
                 $this->errorMessage = "Mã giảm giá [{$code}] không tồn tại hoặc đã hết hạn.";
             } elseif ($couponRule->min_order_amount > 0 && $this->subtotal < (float) $couponRule->min_order_amount) {
                 $gap = (float) $couponRule->min_order_amount - $this->subtotal;
-                $this->errorMessage = "Mã [{$code}] yêu cầu đơn tối thiểu " . number_format($couponRule->min_order_amount, 0, ',', '.') . "₫ (Cần thêm " . number_format($gap, 0, ',', '.') . "₫).";
+                $this->errorMessage = "Mã [{$code}] yêu cầu đơn tối thiểu ".number_format($couponRule->min_order_amount, 0, ',', '.').'₫ (Cần thêm '.number_format($gap, 0, ',', '.').'₫).';
             } else {
                 $this->errorMessage = "Mã giảm giá [{$code}] không đủ điều kiện áp dụng.";
             }
@@ -70,6 +70,7 @@ class CouponInput extends Component
             $this->discount = 0.0;
             $this->couponApplied = null;
             session()->forget('coupon');
+
             return;
         }
 

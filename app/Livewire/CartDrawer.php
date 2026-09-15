@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Customer;
 use App\Models\PromotionRule;
 use App\Services\CartService;
 use App\Services\PromotionEngine;
@@ -11,7 +10,6 @@ use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
-
 
 class CartDrawer extends Component
 {
@@ -55,7 +53,6 @@ class CartDrawer extends Component
     {
         $this->loadCart($cartService);
 
-
         $sessionCoupon = session()->get('coupon');
         if ($sessionCoupon) {
             $this->appliedCouponCode = strtoupper(trim($sessionCoupon));
@@ -71,6 +68,7 @@ class CartDrawer extends Component
             if (isset($item['promoted_result']) && is_object($item['promoted_result']) && method_exists($item['promoted_result'], 'toArray')) {
                 $item['promoted_result'] = $item['promoted_result']->toArray();
             }
+
             return $item;
         }, $rawItems);
     }
@@ -140,7 +138,6 @@ class CartDrawer extends Component
         // The nullable fallback is kept for programmatic test calls only.
         $cartService = $cartService ?? app(CartService::class); // acceptable: FormRequest-style context
 
-
         $this->couponError = null;
         $this->couponSuccess = null;
 
@@ -148,11 +145,13 @@ class CartDrawer extends Component
 
         if (empty($targetCode)) {
             $this->couponError = 'Vui lòng nhập mã giảm giá.';
+
             return;
         }
 
         if (empty($this->cartItems)) {
             $this->couponError = 'Giỏ hàng đang trống, không thể áp dụng mã.';
+
             return;
         }
 
@@ -166,6 +165,7 @@ class CartDrawer extends Component
         if (! $couponRule) {
             $this->couponError = "Mã giảm giá [{$targetCode}] không tồn tại hoặc đã hết hạn.";
             $this->dispatch('toast', message: $this->couponError, type: 'error');
+
             return;
         }
 
@@ -192,7 +192,7 @@ class CartDrawer extends Component
         )) {
             if ($couponRule->min_order_amount > 0 && $checkSubtotal < (float) $couponRule->min_order_amount) {
                 $gap = (float) $couponRule->min_order_amount - $checkSubtotal;
-                $this->couponError = "Mã [{$targetCode}] yêu cầu đơn tối thiểu " . number_format($couponRule->min_order_amount, 0, ',', '.') . "₫ (Cần thêm " . number_format($gap, 0, ',', '.') . "₫).";
+                $this->couponError = "Mã [{$targetCode}] yêu cầu đơn tối thiểu ".number_format($couponRule->min_order_amount, 0, ',', '.').'₫ (Cần thêm '.number_format($gap, 0, ',', '.').'₫).';
             } elseif ($couponRule->min_quantity > 0 && $this->totalQuantity < $couponRule->min_quantity) {
                 $gapQty = $couponRule->min_quantity - $this->totalQuantity;
                 $this->couponError = "Mã [{$targetCode}] yêu cầu tối thiểu {$couponRule->min_quantity} sản phẩm (Cần thêm {$gapQty} sản phẩm).";
@@ -201,6 +201,7 @@ class CartDrawer extends Component
             }
 
             $this->dispatch('toast', message: $this->couponError, type: 'error');
+
             return;
         }
 
@@ -217,6 +218,7 @@ class CartDrawer extends Component
         if (! $breakdown->hasCouponApplied() && ! $breakdown->hasDiscount()) {
             $this->couponError = "Mã giảm giá [{$targetCode}] không tạo ra chiết khấu khả dụng.";
             $this->dispatch('toast', message: $this->couponError, type: 'error');
+
             return;
         }
 
@@ -242,7 +244,7 @@ class CartDrawer extends Component
         $this->couponSuccess = null;
 
         $this->dispatch('coupon-removed');
-        $this->dispatch('toast', message: "Đã gỡ mã giảm giá" . ($code ? " [{$code}]" : "") . ".", type: 'info');
+        $this->dispatch('toast', message: 'Đã gỡ mã giảm giá'.($code ? " [{$code}]" : '').'.', type: 'info');
     }
 
     #[Computed]
@@ -318,16 +320,16 @@ class CartDrawer extends Component
                     }
 
                     return [
-                        'type'             => 'free_shipping',
-                        'title'            => 'Miễn Phí Vận Chuyển',
-                        'message'          => '🎉 Tuyệt vời! Đơn hàng của bạn đã đủ điều kiện Freeship toàn quốc!',
+                        'type' => 'free_shipping',
+                        'title' => 'Miễn Phí Vận Chuyển',
+                        'message' => '🎉 Tuyệt vời! Đơn hàng của bạn đã đủ điều kiện Freeship toàn quốc!',
                         'progress_percent' => 100.0,
-                        'gap_amount'       => 0.0,
-                        'gap_quantity'     => 0,
-                        'target_amount'    => $threshold,
-                        'is_completed'     => true,
-                        'icon'             => 'truck',
-                        'badge'            => 'FREESHIP ĐẠT 100%',
+                        'gap_amount' => 0.0,
+                        'gap_quantity' => 0,
+                        'target_amount' => $threshold,
+                        'is_completed' => true,
+                        'icon' => 'truck',
+                        'badge' => 'FREESHIP ĐẠT 100%',
                     ];
                 }
 
@@ -335,16 +337,16 @@ class CartDrawer extends Component
                 $progress = min(100.0, max(0.0, round(($subtotal / $threshold) * 100, 1)));
 
                 return [
-                    'type'             => 'free_shipping',
-                    'title'            => 'Ưu Đãi Vận Chuyển',
-                    'message'          => 'Mua thêm ' . number_format($gap, 0, ',', '.') . '₫ để nhận FREESHIP toàn quốc!',
+                    'type' => 'free_shipping',
+                    'title' => 'Ưu Đãi Vận Chuyển',
+                    'message' => 'Mua thêm '.number_format($gap, 0, ',', '.').'₫ để nhận FREESHIP toàn quốc!',
                     'progress_percent' => $progress,
-                    'gap_amount'       => $gap,
-                    'gap_quantity'     => 0,
-                    'target_amount'    => $threshold,
-                    'is_completed'     => false,
-                    'icon'             => 'truck',
-                    'badge'            => 'CÒN THIẾU ' . number_format($gap, 0, ',', '.') . '₫',
+                    'gap_amount' => $gap,
+                    'gap_quantity' => 0,
+                    'target_amount' => $threshold,
+                    'is_completed' => false,
+                    'icon' => 'truck',
+                    'badge' => 'CÒN THIẾU '.number_format($gap, 0, ',', '.').'₫',
                 ];
             }
         }
@@ -393,6 +395,7 @@ class CartDrawer extends Component
         usort($steps, function ($a, $b) {
             $qtyA = (int) ($a['min_qty'] ?? $a['qty'] ?? 0);
             $qtyB = (int) ($b['min_qty'] ?? $b['qty'] ?? 0);
+
             return $qtyA <=> $qtyB;
         });
 
@@ -406,16 +409,16 @@ class CartDrawer extends Component
                 $progress = min(100.0, max(0.0, round(($currentQty / $minQty) * 100, 1)));
 
                 return [
-                    'type'             => 'tiered_quantity',
-                    'title'            => 'Chiết Khấu Số Lượng',
-                    'message'          => "Thêm {$gapQty} sản phẩm nữa để được GIẢM {$percent}% toàn đơn!",
+                    'type' => 'tiered_quantity',
+                    'title' => 'Chiết Khấu Số Lượng',
+                    'message' => "Thêm {$gapQty} sản phẩm nữa để được GIẢM {$percent}% toàn đơn!",
                     'progress_percent' => $progress,
-                    'gap_amount'       => 0.0,
-                    'gap_quantity'     => $gapQty,
-                    'target_amount'    => 0.0,
-                    'is_completed'     => false,
-                    'icon'             => 'sparkles',
-                    'badge'            => "THÊM {$gapQty} SP → GIẢM {$percent}%",
+                    'gap_amount' => 0.0,
+                    'gap_quantity' => $gapQty,
+                    'target_amount' => 0.0,
+                    'is_completed' => false,
+                    'icon' => 'sparkles',
+                    'badge' => "THÊM {$gapQty} SP → GIẢM {$percent}%",
                 ];
             }
         }
@@ -425,16 +428,16 @@ class CartDrawer extends Component
         $maxPercent = (float) ($lastStep['discount_percent'] ?? $lastStep['percent'] ?? $tieredRule->discount_value);
 
         return [
-            'type'             => 'tiered_quantity',
-            'title'            => 'Chiết Khấu Tối Đa',
-            'message'          => "🎉 Bạn đang nhận mức chiết khấu số lượng cao nhất ({$maxPercent}%)!",
+            'type' => 'tiered_quantity',
+            'title' => 'Chiết Khấu Tối Đa',
+            'message' => "🎉 Bạn đang nhận mức chiết khấu số lượng cao nhất ({$maxPercent}%)!",
             'progress_percent' => 100.0,
-            'gap_amount'       => 0.0,
-            'gap_quantity'     => 0,
-            'target_amount'    => 0.0,
-            'is_completed'     => true,
-            'icon'             => 'sparkles',
-            'badge'            => "ĐẠT MỨC GIẢM {$maxPercent}%",
+            'gap_amount' => 0.0,
+            'gap_quantity' => 0,
+            'target_amount' => 0.0,
+            'is_completed' => true,
+            'icon' => 'sparkles',
+            'badge' => "ĐẠT MỨC GIẢM {$maxPercent}%",
         ];
     }
 
@@ -474,7 +477,7 @@ class CartDrawer extends Component
             if (! $isEligible) {
                 if ($rule->min_order_amount > 0 && $subtotal < (float) $rule->min_order_amount) {
                     $gap = (float) $rule->min_order_amount - $subtotal;
-                    $ineligibleReason = 'Mua thêm ' . number_format($gap, 0, ',', '.') . '₫';
+                    $ineligibleReason = 'Mua thêm '.number_format($gap, 0, ',', '.').'₫';
                 } elseif ($rule->min_quantity > 0 && $totalQty < $rule->min_quantity) {
                     $gapQty = $rule->min_quantity - $totalQty;
                     $ineligibleReason = "Thêm {$gapQty} sản phẩm";
@@ -486,19 +489,19 @@ class CartDrawer extends Component
             }
 
             return (object) [
-                'id'                  => $rule->id,
-                'name'                => $rule->name,
-                'code'                => $rule->code,
-                'action_type'         => $rule->action_type,
-                'discount_value'      => (float) $rule->discount_value,
-                'formatted_discount'  => $rule->formatted_discount,
-                'min_order_amount'    => (float) $rule->min_order_amount,
-                'min_order_formatted' => $rule->min_order_amount > 0 ? 'Đơn tối thiểu ' . number_format($rule->min_order_amount, 0, ',', '.') . '₫' : 'Mọi đơn hàng',
-                'description'         => $rule->conditions['description'] ?? $rule->name,
-                'is_applied'          => $isApplied,
-                'is_eligible'         => $isEligible,
-                'ineligible_reason'   => $ineligibleReason,
-                'ends_at'             => $rule->ends_at ? $rule->ends_at->format('d/m/Y') : null,
+                'id' => $rule->id,
+                'name' => $rule->name,
+                'code' => $rule->code,
+                'action_type' => $rule->action_type,
+                'discount_value' => (float) $rule->discount_value,
+                'formatted_discount' => $rule->formatted_discount,
+                'min_order_amount' => (float) $rule->min_order_amount,
+                'min_order_formatted' => $rule->min_order_amount > 0 ? 'Đơn tối thiểu '.number_format($rule->min_order_amount, 0, ',', '.').'₫' : 'Mọi đơn hàng',
+                'description' => $rule->conditions['description'] ?? $rule->name,
+                'is_applied' => $isApplied,
+                'is_eligible' => $isEligible,
+                'ineligible_reason' => $ineligibleReason,
+                'ends_at' => $rule->ends_at ? $rule->ends_at->format('d/m/Y') : null,
             ];
         });
     }

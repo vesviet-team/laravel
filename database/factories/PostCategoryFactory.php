@@ -16,12 +16,13 @@ class PostCategoryFactory extends Factory
     public function definition(): array
     {
         $name = fake()->words(2, true);
+
         return [
-            'name'        => ucfirst($name),
-            'slug'        => Str::slug($name) . '-' . fake()->unique()->numberBetween(1, 9999),
+            'name' => ucfirst($name),
+            'slug' => Str::slug($name).'-'.fake()->unique()->numberBetween(1, 9999),
             'description' => fake()->sentence(),
-            'is_active'   => true,
-            'sort_order'  => fake()->numberBetween(0, 10),
+            'is_active' => true,
+            'sort_order' => fake()->numberBetween(0, 10),
         ];
     }
 

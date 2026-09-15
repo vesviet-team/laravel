@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderHistory extends Model
 {
-    use HasFactory, BelongsToSeller;
+    use BelongsToSeller, HasFactory;
 
     protected $fillable = [
         'order_id',

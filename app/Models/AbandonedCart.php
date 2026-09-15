@@ -37,6 +37,6 @@ class AbandonedCart extends Model
 
     public function isRecovered(): bool
     {
-        return !is_null($this->recovered_at);
+        return ! is_null($this->recovered_at);
     }
 }

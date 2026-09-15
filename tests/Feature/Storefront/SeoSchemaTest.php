@@ -15,17 +15,17 @@ test('blog show renders complete OpenGraph, Twitter card, and canonical metadata
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Bí Quyết Trang Trí Phòng Ngủ Nhỏ',
-        'slug'             => 'bi-quyet-trang-tri-phong-ngu-nho',
-        'excerpt'          => 'Tối ưu không gian phòng ngủ nhỏ với nội thất thông minh.',
-        'body'             => '<p>Nội dung chi tiết.</p>',
-        'featured_image'   => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc',
-        'seo_title'        => 'Trang Trí Phòng Ngủ Nhỏ Đẹp Chuẩn Bắc Âu | MYSHOP',
-        'seo_description'  => 'Hướng dẫn decor phòng ngủ diện tích hẹp với tông màu sáng và đồ gỗ tối giản.',
-        'canonical_url'    => 'https://myshop.vn/blog/bi-quyet-trang-tri-phong-ngu-nho',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDays(2),
+        'user_id' => $user->id,
+        'title' => 'Bí Quyết Trang Trí Phòng Ngủ Nhỏ',
+        'slug' => 'bi-quyet-trang-tri-phong-ngu-nho',
+        'excerpt' => 'Tối ưu không gian phòng ngủ nhỏ với nội thất thông minh.',
+        'body' => '<p>Nội dung chi tiết.</p>',
+        'featured_image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc',
+        'seo_title' => 'Trang Trí Phòng Ngủ Nhỏ Đẹp Chuẩn Bắc Âu | MYSHOP',
+        'seo_description' => 'Hướng dẫn decor phòng ngủ diện tích hẹp với tông màu sáng và đồ gỗ tối giản.',
+        'canonical_url' => 'https://myshop.vn/blog/bi-quyet-trang-tri-phong-ngu-nho',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDays(2),
     ]);
 
     $response = $this->get(route('blog.show', $post->slug));
@@ -36,7 +36,7 @@ test('blog show renders complete OpenGraph, Twitter card, and canonical metadata
     $response->assertSee('<meta property="og:title" content="Trang Trí Phòng Ngủ Nhỏ Đẹp Chuẩn Bắc Âu | MYSHOP">', false);
     $response->assertSee('<meta property="og:description" content="Hướng dẫn decor phòng ngủ diện tích hẹp với tông màu sáng và đồ gỗ tối giản.">', false);
     $response->assertSee('<meta property="og:type" content="article">', false);
-    $response->assertSee('<meta property="og:url" content="' . url()->current() . '">', false);
+    $response->assertSee('<meta property="og:url" content="'.url()->current().'">', false);
     $response->assertSee('<meta property="og:image" content="https://images.unsplash.com/photo-1555041469-a586c61ea9bc">', false);
     $response->assertSee('<meta property="article:author" content="Trần Đăng">', false);
     $response->assertSee('<meta property="article:section" content="Thiết Kế">', false);
@@ -57,15 +57,15 @@ test('blog show renders valid Article / BlogPosting Schema.org JSON-LD', functio
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Phong Cách Tối Giản Warm Minimalism',
-        'slug'             => 'phong-cach-toi-gian-warm-minimalism',
-        'excerpt'          => 'Tìm hiểu phong cách Warm Minimalism.',
-        'body'             => '<p>Chi tiết Warm Minimalism.</p>',
-        'featured_image'   => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7',
-        'schema_type'      => 'BlogPosting',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Phong Cách Tối Giản Warm Minimalism',
+        'slug' => 'phong-cach-toi-gian-warm-minimalism',
+        'excerpt' => 'Tìm hiểu phong cách Warm Minimalism.',
+        'body' => '<p>Chi tiết Warm Minimalism.</p>',
+        'featured_image' => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7',
+        'schema_type' => 'BlogPosting',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $response = $this->get(route('blog.show', $post->slug));
@@ -93,12 +93,12 @@ test('blog show renders valid BreadcrumbList Schema.org JSON-LD', function () {
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Vệ Sinh Sofa Vải Đúng Cách',
-        'slug'             => 've-sinh-sofa-vai-dung-cach',
-        'body'             => '<p>Nội dung sofa.</p>',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Vệ Sinh Sofa Vải Đúng Cách',
+        'slug' => 've-sinh-sofa-vai-dung-cach',
+        'body' => '<p>Nội dung sofa.</p>',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $response = $this->get(route('blog.show', $post->slug));
@@ -133,23 +133,23 @@ test('blog show conditionally renders FAQPage Schema.org JSON-LD when faq_schema
     $faqData = [
         [
             'question' => 'Nên bảo dưỡng bàn ăn gỗ sồi bao lâu một lần?',
-            'answer'   => 'Nên lau dầu bảo dưỡng định kỳ 6 tháng một lần.',
+            'answer' => 'Nên lau dầu bảo dưỡng định kỳ 6 tháng một lần.',
         ],
         [
             'question' => 'Có nên để đồ nóng trực tiếp lên mặt bàn gỗ?',
-            'answer'   => 'Không nên, hãy luôn sử dụng lót ly hoặc đế lót nhiệt.',
+            'answer' => 'Không nên, hãy luôn sử dụng lót ly hoặc đế lót nhiệt.',
         ],
     ];
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Cách Chăm Sóc Đồ Gỗ',
-        'slug'             => 'cach-cham-soc-do-go',
-        'body'             => '<p>Hướng dẫn bảo quản gỗ.</p>',
-        'faq_schema'       => $faqData,
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Cách Chăm Sóc Đồ Gỗ',
+        'slug' => 'cach-cham-soc-do-go',
+        'body' => '<p>Hướng dẫn bảo quản gỗ.</p>',
+        'faq_schema' => $faqData,
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $response = $this->get(route('blog.show', $post->slug));
@@ -174,13 +174,13 @@ test('blog show omits FAQPage Schema.org JSON-LD when faq_schema is empty or nul
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Bài Viết Không Có FAQ',
-        'slug'             => 'bai-viet-khong-co-faq',
-        'body'             => '<p>Bài viết thông thường không có phần FAQ.</p>',
-        'faq_schema'       => null,
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Bài Viết Không Có FAQ',
+        'slug' => 'bai-viet-khong-co-faq',
+        'body' => '<p>Bài viết thông thường không có phần FAQ.</p>',
+        'faq_schema' => null,
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $response = $this->get(route('blog.show', $post->slug));
@@ -192,14 +192,14 @@ test('blog show omits FAQPage Schema.org JSON-LD when faq_schema is empty or nul
 
 test('static page renders OpenGraph, WebPage and BreadcrumbList JSON-LD metadata', function () {
     $page = Page::create([
-        'title'            => 'Điều Khoản Dịch Vụ',
-        'slug'             => 'dieu-khoan-dich-vu',
-        'excerpt'          => 'Quy định sử dụng dịch vụ tại Sober Furniture.',
-        'body'             => '<p>Điều khoản chi tiết.</p>',
-        'seo_title'        => 'Điều Khoản & Điều Kiện Giao Dịch | MYSHOP',
-        'seo_description'  => 'Các quy định mua hàng, thanh toán và bảo hành tại MYSHOP.',
-        'canonical_url'    => 'https://myshop.vn/dieu-khoan-dich-vu',
-        'is_published'     => true,
+        'title' => 'Điều Khoản Dịch Vụ',
+        'slug' => 'dieu-khoan-dich-vu',
+        'excerpt' => 'Quy định sử dụng dịch vụ tại Sober Furniture.',
+        'body' => '<p>Điều khoản chi tiết.</p>',
+        'seo_title' => 'Điều Khoản & Điều Kiện Giao Dịch | MYSHOP',
+        'seo_description' => 'Các quy định mua hàng, thanh toán và bảo hành tại MYSHOP.',
+        'canonical_url' => 'https://myshop.vn/dieu-khoan-dich-vu',
+        'is_published' => true,
     ]);
 
     $response = $this->get('/dieu-khoan-dich-vu');

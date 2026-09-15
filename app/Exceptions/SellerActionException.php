@@ -91,7 +91,7 @@ class SellerActionException extends RuntimeException
      * Thrown when a requested status transition is not permitted by the state machine.
      *
      * @param  string  $from  Current status value.
-     * @param  string  $to    Requested status value.
+     * @param  string  $to  Requested status value.
      */
     public static function invalidStatusTransition(string $from, string $to): self
     {

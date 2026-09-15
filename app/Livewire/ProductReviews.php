@@ -16,24 +16,27 @@ class ProductReviews extends Component
     public Product $product;
 
     public $rating = 5;
+
     public $comment = '';
+
     public $pros = '';
+
     public $cons = '';
 
     protected $rules = [
-        'rating'  => 'required|integer|min:1|max:5',
+        'rating' => 'required|integer|min:1|max:5',
         'comment' => 'nullable|string|max:2000',
-        'pros'    => 'nullable|string|max:500',
-        'cons'    => 'nullable|string|max:500',
+        'pros' => 'nullable|string|max:500',
+        'cons' => 'nullable|string|max:500',
     ];
 
     protected $messages = [
         'rating.required' => 'Vui lòng chọn số sao đánh giá.',
-        'rating.min'      => 'Đánh giá tối thiểu là 1 sao.',
-        'rating.max'      => 'Đánh giá tối đa là 5 sao.',
-        'comment.max'     => 'Nhận xét không được vượt quá 2000 ký tự.',
-        'pros.max'        => 'Ưu điểm không được vượt quá 500 ký tự.',
-        'cons.max'        => 'Nhược điểm không được vượt quá 500 ký tự.',
+        'rating.min' => 'Đánh giá tối thiểu là 1 sao.',
+        'rating.max' => 'Đánh giá tối đa là 5 sao.',
+        'comment.max' => 'Nhận xét không được vượt quá 2000 ký tự.',
+        'pros.max' => 'Ưu điểm không được vượt quá 500 ký tự.',
+        'cons.max' => 'Nhược điểm không được vượt quá 500 ký tự.',
     ];
 
     public function submitReview()
@@ -42,11 +45,12 @@ class ProductReviews extends Component
 
         if (! Auth::guard('customer')->check()) {
             $this->dispatch('show-login-modal');
+
             return;
         }
 
         $customerId = Auth::guard('customer')->id();
-        $productId  = $this->product->id;
+        $productId = $this->product->id;
 
         // 1. Verified Purchase: customer must have at least one 'delivered' order containing this product.
         $hasPurchased = Order::where('customer_id', $customerId)
@@ -61,6 +65,7 @@ class ProductReviews extends Component
 
         if (! $hasPurchased) {
             $this->addError('purchase_required', 'Bạn cần mua và nhận hàng thành công sản phẩm này trước khi gửi đánh giá.');
+
             return;
         }
 
@@ -71,17 +76,18 @@ class ProductReviews extends Component
 
         if ($existingReview) {
             $this->addError('duplicate_review', 'Bạn đã gửi đánh giá cho sản phẩm này rồi.');
+
             return;
         }
 
         ProductReview::create([
-            'product_id'  => $productId,
+            'product_id' => $productId,
             'customer_id' => $customerId,
-            'rating'      => $this->rating,
-            'comment'     => $this->comment,
-            'pros'        ? $this->pros : null,
-            'cons'        ? $this->cons : null,
-            'status'      => 'pending', // Requires admin approval.
+            'rating' => $this->rating,
+            'comment' => $this->comment,
+            'pros' ? $this->pros : null,
+            'cons' ? $this->cons : null,
+            'status' => 'pending', // Requires admin approval.
         ]);
 
         $this->reset(['rating', 'comment', 'pros', 'cons']);
@@ -93,6 +99,7 @@ class ProductReviews extends Component
     {
         if (! Auth::guard('customer')->check()) {
             $this->dispatch('show-login-modal');
+
             return;
         }
 
@@ -107,6 +114,7 @@ class ProductReviews extends Component
     {
         if (! Auth::guard('customer')->check()) {
             $this->dispatch('show-login-modal');
+
             return;
         }
 
@@ -139,10 +147,10 @@ class ProductReviews extends Component
             : 0;
 
         return view('livewire.product-reviews', [
-            'reviews'      => $reviews,
-            'ratingStats'  => $ratingStats,
+            'reviews' => $reviews,
+            'ratingStats' => $ratingStats,
             'totalReviews' => $totalReviews,
-            'avgRating'    => round($avgRating, 1),
+            'avgRating' => round($avgRating, 1),
         ]);
     }
 }

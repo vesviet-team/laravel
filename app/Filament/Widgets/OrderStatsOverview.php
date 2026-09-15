@@ -47,13 +47,13 @@ class OrderStatsOverview extends BaseWidget
         $shippingCount = Order::where('status', OrderStatus::Shipped->value)->count();
 
         return [
-            Stat::make('Doanh thu hôm nay', number_format($todayRevenue, 0, ',', '.') . '₫')
+            Stat::make('Doanh thu hôm nay', number_format($todayRevenue, 0, ',', '.').'₫')
                 ->description('Đơn đã giao thành công')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('success'),
 
-            Stat::make('Doanh thu tháng ' . now()->month, number_format($monthRevenue, 0, ',', '.') . '₫')
-                ->description('Thực thu tháng ' . now()->format('m/Y'))
+            Stat::make('Doanh thu tháng '.now()->month, number_format($monthRevenue, 0, ',', '.').'₫')
+                ->description('Thực thu tháng '.now()->format('m/Y'))
                 ->descriptionIcon('heroicon-m-chart-bar')
                 ->color('primary'),
 

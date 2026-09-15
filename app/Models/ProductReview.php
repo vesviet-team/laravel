@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class ProductReview extends Model
 {
@@ -28,14 +27,14 @@ class ProductReview extends Model
     ];
 
     protected $casts = [
-        'rating'            => 'integer',
+        'rating' => 'integer',
         'verified_purchase' => 'boolean',
-        'helpful_count'     => 'integer',
+        'helpful_count' => 'integer',
         'not_helpful_count' => 'integer',
-        'images'            => 'array',
-        'pros'              => 'array',
-        'cons'              => 'array',
-        'moderated_at'      => 'datetime',
+        'images' => 'array',
+        'pros' => 'array',
+        'cons' => 'array',
+        'moderated_at' => 'datetime',
         'seller_responded_at' => 'datetime',
     ];
 
@@ -69,11 +68,11 @@ class ProductReview extends Model
     public function getHelpfulPercentageAttribute(): int
     {
         $total = $this->helpful_count + $this->not_helpful_count;
-        
+
         if ($total === 0) {
             return 0;
         }
-        
+
         return (int) round(($this->helpful_count / $total) * 100);
     }
 
@@ -82,7 +81,7 @@ class ProductReview extends Model
      */
     public function getHasSellerResponseAttribute(): bool
     {
-        return !empty($this->seller_response);
+        return ! empty($this->seller_response);
     }
 
     /**
@@ -127,7 +126,7 @@ class ProductReview extends Model
     /**
      * Approve the review.
      */
-    public function approve(int $moderatorId = null): void
+    public function approve(?int $moderatorId = null): void
     {
         $this->update([
             'status' => 'approved',
@@ -139,7 +138,7 @@ class ProductReview extends Model
     /**
      * Reject the review.
      */
-    public function reject(int $moderatorId = null, string $note = null): void
+    public function reject(?int $moderatorId = null, ?string $note = null): void
     {
         $this->update([
             'status' => 'rejected',
@@ -152,7 +151,7 @@ class ProductReview extends Model
     /**
      * Flag the review.
      */
-    public function flag(int $moderatorId = null, string $note = null): void
+    public function flag(?int $moderatorId = null, ?string $note = null): void
     {
         $this->update([
             'status' => 'flagged',
@@ -185,6 +184,7 @@ class ProductReview extends Model
                 'filled' => $i <= $this->rating,
             ];
         }
+
         return $stars;
     }
 
@@ -202,7 +202,7 @@ class ProductReview extends Model
     public function getExcerptAttribute(int $length = 150): string
     {
         return strlen($this->comment) > $length
-            ? substr($this->comment, 0, $length) . '...'
+            ? substr($this->comment, 0, $length).'...'
             : $this->comment;
     }
 }

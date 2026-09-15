@@ -48,7 +48,7 @@ class EditOrder extends EditRecord
                 ->requiresConfirmation()
                 ->visible(fn (): bool => $currentStatus === OrderStatus::Processing)
                 ->action(function (array $data) {
-                    $this->updateStatus(OrderStatus::Shipped, 'Mã vận đơn: ' . $data['waybill_id']);
+                    $this->updateStatus(OrderStatus::Shipped, 'Mã vận đơn: '.$data['waybill_id']);
                 }),
 
             Actions\Action::make('deliver_order')

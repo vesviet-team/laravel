@@ -26,8 +26,7 @@ class TopSellingProducts extends BaseWidget
                         DB::raw('SUM(quantity) as total_sold'),
                         DB::raw('SUM(quantity * price_at_purchase) as total_revenue')
                     )
-                    ->whereHas('order', fn($q) =>
-                        $q->whereIn('status', ['completed', 'delivered'])
+                    ->whereHas('order', fn ($q) => $q->whereIn('status', ['completed', 'delivered'])
                     )
                     ->groupBy('product_id', 'product_name')
                     ->orderByDesc('total_sold')
@@ -45,7 +44,7 @@ class TopSellingProducts extends BaseWidget
 
                 Tables\Columns\TextColumn::make('total_revenue')
                     ->label('Doanh thu')
-                    ->formatStateUsing(fn($state) => number_format($state, 0, ',', '.') . '₫')
+                    ->formatStateUsing(fn ($state) => number_format($state, 0, ',', '.').'₫')
                     ->sortable(),
             ])
             ->heading('Top 10 Sản phẩm bán chạy');

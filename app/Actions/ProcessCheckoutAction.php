@@ -2,20 +2,17 @@
 
 namespace App\Actions;
 
-use App\Enums\OrderStatus;
 use App\Events\OrderPlaced;
 use App\Exceptions\CommerceException;
 use App\Exceptions\EmptyCartException;
-use App\Exceptions\InvalidCouponException;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\PromotionRule;
-use App\Models\PromotionUsage;
 use App\Services\CartService;
 use App\Services\GoshipService;
 use App\Services\OrderService;
-use App\Services\Promotions\DTOs\PromotionDiscountBreakdown;
+use App\Services\Payment\PaymentGatewayManager;
 use App\Services\Promotions\PromotionEngine;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +43,6 @@ class ProcessCheckoutAction
      *
      * @param  array  $customerData  Validated checkout request payload.
      * @param  string|null  $couponCode  Optional coupon code from session/request.
-     * @return Order
      *
      * @throws EmptyCartException|CommerceException|RuntimeException
      */
@@ -58,7 +54,7 @@ class ProcessCheckoutAction
         // Idempotency lock: guard against rapid double-clicks and concurrent submissions
         $lockKey = $customerId
             ? "checkout:lock:customer:{$customerId}"
-            : 'checkout:lock:guest:' . md5(($customerData['phone'] ?? '') . ':' . ($customerData['email'] ?? '') . ':' . session()->getId());
+            : 'checkout:lock:guest:'.md5(($customerData['phone'] ?? '').':'.($customerData['email'] ?? '').':'.session()->getId());
 
         $lock = Cache::lock($lockKey, 15);
 
@@ -242,7 +238,7 @@ class ProcessCheckoutAction
             $this->cartService->clear();
 
             // Initialize payment gateway metadata (e.g. VietQR generation, instructions)
-            app(\App\Services\Payment\PaymentGatewayManager::class)->process($order);
+            app(PaymentGatewayManager::class)->process($order);
 
             // Dispatch domain event post-commit for asynchronous notifications
             OrderPlaced::dispatch($order);
@@ -270,9 +266,9 @@ class ProcessCheckoutAction
 
             $rates = $this->goshipService->getShippingRates(
                 [
-                    'city'     => $customerData['city'] ?? '',
+                    'city' => $customerData['city'] ?? '',
                     'district' => $customerData['district'] ?? '',
-                    'ward'     => $customerData['ward'] ?? '',
+                    'ward' => $customerData['ward'] ?? '',
                 ],
                 ['weight' => $totalWeight]
             );

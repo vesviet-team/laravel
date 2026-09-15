@@ -17,14 +17,14 @@ class SubdomainTenantFinder extends TenantFinder
 {
     public function findForRequest(Request $request): ?Tenant
     {
-        $host    = $request->getHost();
+        $host = $request->getHost();
         $appHost = parse_url(config('app.url'), PHP_URL_HOST) ?? '';
 
-        if (empty($appHost) || ! str_ends_with($host, '.' . $appHost)) {
+        if (empty($appHost) || ! str_ends_with($host, '.'.$appHost)) {
             return null;
         }
 
-        $subdomain = substr($host, 0, strlen($host) - strlen('.' . $appHost));
+        $subdomain = substr($host, 0, strlen($host) - strlen('.'.$appHost));
 
         if (empty($subdomain)) {
             return null;

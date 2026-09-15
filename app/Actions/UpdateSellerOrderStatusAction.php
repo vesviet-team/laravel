@@ -30,13 +30,12 @@ class UpdateSellerOrderStatusAction
     /**
      * Update the order status for a seller, validating the state machine transition.
      *
-     * @param  SellerProfile  $seller      The active seller tenant.
-     * @param  Order          $order       The order to update (must belong to $seller).
-     * @param  OrderStatus    $newStatus   The requested new status.
-     * @param  string|null    $notes       Optional internal notes from the seller.
-     * @return Order
+     * @param  SellerProfile  $seller  The active seller tenant.
+     * @param  Order  $order  The order to update (must belong to $seller).
+     * @param  OrderStatus  $newStatus  The requested new status.
+     * @param  string|null  $notes  Optional internal notes from the seller.
      *
-     * @throws SellerActionException  When the transition is invalid or not owned by the seller.
+     * @throws SellerActionException When the transition is invalid or not owned by the seller.
      */
     public function execute(
         SellerProfile $seller,
@@ -80,7 +79,7 @@ class UpdateSellerOrderStatusAction
             throw $e;
         } catch (Throwable $e) {
             throw new SellerActionException(
-                'Không thể cập nhật trạng thái đơn hàng: ' . $e->getMessage(),
+                'Không thể cập nhật trạng thái đơn hàng: '.$e->getMessage(),
                 'order_status_update_failed',
                 $e,
             );

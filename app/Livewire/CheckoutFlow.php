@@ -10,8 +10,10 @@ use App\Services\CartService;
 use App\Services\GoshipService;
 use App\Services\Promotions\PromotionEngine;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
@@ -91,15 +93,15 @@ class CheckoutFlow extends Component
     {
         // PERF-01: Cache via Cache facade (not Livewire persist) — Livewire persist
         // serializes Eloquent Collections to plain arrays which breaks ->name access in views.
-        // v4 key: cache as plain array of arrays to bypass strict unserialize() restrictions 
+        // v4 key: cache as plain array of arrays to bypass strict unserialize() restrictions
         // that cause __PHP_Incomplete_Class, then cast back to objects for Blade.
-        $cached = \Illuminate\Support\Facades\Cache::remember(
+        $cached = Cache::remember(
             'provinces_list_v4',
             now()->addHours(24),
             fn () => Province::orderBy('name')->get()->toArray()
         );
 
-        return array_map(fn($item) => (object) $item, $cached);
+        return array_map(fn ($item) => (object) $item, $cached);
     }
 
     #[Computed]
@@ -291,7 +293,7 @@ class CheckoutFlow extends Component
      * are needed, add them to the 'shipping' or 'payment' rule sets instead,
      * or validate them explicitly in submitOrder() before calling this method.
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function validateCurrentStep(): bool
     {
@@ -348,7 +350,6 @@ class CheckoutFlow extends Component
 
         return true;
     }
-
 
     #[On('address-changed')]
     public function onAddressChanged(array $address): void

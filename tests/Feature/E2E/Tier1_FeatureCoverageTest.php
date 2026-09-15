@@ -3,7 +3,6 @@
 use App\Livewire\AddToCartButton;
 use App\Livewire\CartCount;
 use App\Livewire\CartDrawer;
-use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
@@ -51,7 +50,7 @@ it('verifies css file declares surface background tokens', function () {
 it('verifies css file declares border and muted typography tokens', function () {
     $css = File::get(resource_path('css/app.css'));
     $hasBorderToken = str_contains($css, '#E5E5E5') || str_contains($css, '#e5e5e5');
-    $hasMutedToken  = str_contains($css, '#888888') || str_contains($css, '#909097');
+    $hasMutedToken = str_contains($css, '#888888') || str_contains($css, '#909097');
 
     expect($hasBorderToken)->toBeTrue()
         ->and($hasMutedToken)->toBeTrue();

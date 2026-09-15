@@ -2,11 +2,13 @@
 
 use App\Actions\CancelOrderAction;
 use App\Enums\OrderStatus;
+use App\Events\OrderPlaced;
 use App\Livewire\CheckoutFlow;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\CartService;
+use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
 
 beforeEach(function () {
@@ -49,7 +51,7 @@ it('provides real-time cart summary and stock validation', function () {
 });
 
 it('executes full checkout process and creates order with deducted inventory and combo discount', function () {
-    \Illuminate\Support\Facades\Event::fake([\App\Events\OrderPlaced::class]);
+    Event::fake([OrderPlaced::class]);
     $cartService = app(CartService::class);
     $cartService->clear();
     $cartService->add($this->product->id, null, 2);

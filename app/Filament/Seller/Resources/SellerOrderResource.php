@@ -81,7 +81,7 @@ class SellerOrderResource extends Resource
                                     ->all();
 
                                 // Prepend current status so the select shows the current state.
-                                return [$record->status->value => '✓ ' . $record->status->label() . ' (hiện tại)'] + $options;
+                                return [$record->status->value => '✓ '.$record->status->label().' (hiện tại)'] + $options;
                             })
                             ->required()
                             ->helperText('Chỉ có thể chuyển sang trạng thái hợp lệ theo quy trình.'),
@@ -96,11 +96,9 @@ class SellerOrderResource extends Resource
     public static function table(Table $table): Table
     {
         // Build color mapping from enum for badge display.
-        $statusColorFn = fn (string $state): string =>
-            OrderStatus::tryFrom($state)?->color() ?? 'gray';
+        $statusColorFn = fn (string $state): string => OrderStatus::tryFrom($state)?->color() ?? 'gray';
 
-        $statusLabelFn = fn (string $state): string =>
-            OrderStatus::tryFrom($state)?->label() ?? $state;
+        $statusLabelFn = fn (string $state): string => OrderStatus::tryFrom($state)?->label() ?? $state;
 
         // Build filter options from enum — DRY, consistent with form.
         $statusFilterOptions = collect(OrderStatus::cases())
@@ -159,8 +157,8 @@ class SellerOrderResource extends Resource
     {
         return [
             'index' => Pages\ListSellerOrders::route('/'),
-            'view'  => Pages\ViewSellerOrder::route('/{record}'),
-            'edit'  => Pages\EditSellerOrder::route('/{record}/edit'),
+            'view' => Pages\ViewSellerOrder::route('/{record}'),
+            'edit' => Pages\EditSellerOrder::route('/{record}/edit'),
         ];
     }
 }

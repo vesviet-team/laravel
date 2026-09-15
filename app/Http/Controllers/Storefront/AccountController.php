@@ -83,15 +83,16 @@ class AccountController extends Controller
             ->where('order_number', $orderNumber)
             ->firstOrFail();
 
-        if (!$order->is_cancellable) {
+        if (! $order->is_cancellable) {
             return back()->with('error', 'Đơn hàng này không thể hủy do đã được xuất kho hoặc đang giao.');
         }
 
         try {
             $cancelOrderAction->execute($order);
-            return back()->with('success', 'Đơn hàng #' . $order->order_number . ' đã được hủy thành công.');
+
+            return back()->with('success', 'Đơn hàng #'.$order->order_number.' đã được hủy thành công.');
         } catch (\Throwable $e) {
-            return back()->with('error', 'Không thể hủy đơn hàng: ' . $e->getMessage());
+            return back()->with('error', 'Không thể hủy đơn hàng: '.$e->getMessage());
         }
     }
 

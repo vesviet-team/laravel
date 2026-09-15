@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\FlashSaleItem;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
 
@@ -23,7 +24,7 @@ class ProductObserver
         // Fix P1: Flash Sale Data Integrity
         // If the product price is lowered below an active flash sale price, the flash sale becomes invalid.
         if ($product->wasChanged('price')) {
-            \App\Models\FlashSaleItem::where('product_id', $product->id)
+            FlashSaleItem::where('product_id', $product->id)
                 ->where('price', '>=', $product->price)
                 ->delete();
         }

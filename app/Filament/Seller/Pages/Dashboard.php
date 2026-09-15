@@ -7,12 +7,12 @@ use Filament\Pages\Dashboard as BaseDashboard;
 class Dashboard extends BaseDashboard
 {
     protected static ?string $navigationIcon = 'heroicon-o-home';
-    
+
     protected static ?string $navigationLabel = 'Tổng quan';
-    
+
     protected static ?string $title = 'Tổng quan cửa hàng';
-    
-    public function getColumns(): int | string | array
+
+    public function getColumns(): int|string|array
     {
         return 1;
     }

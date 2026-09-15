@@ -5,6 +5,7 @@ namespace App\Filament\Seller\Resources;
 use App\Filament\Seller\Resources\SimpleProductResource\Pages;
 use App\Models\Product;
 use App\Policies\SellerProductPolicy;
+use App\Services\AiCopywriterService;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -68,7 +69,7 @@ class SimpleProductResource extends Resource
                             ->imageResizeMode('cover')
                             ->imageResizeTargetWidth('1200')
                             ->imageResizeTargetHeight('1200')
-                            ->directory(fn () => 'sellers/'.(\Filament\Facades\Filament::getTenant()?->id ?? 'default').'/products')
+                            ->directory(fn () => 'sellers/'.(Filament::getTenant()?->id ?? 'default').'/products')
                             ->visibility('public'),
 
                         Forms\Components\RichEditor::make('description')
@@ -83,7 +84,7 @@ class SimpleProductResource extends Resource
                                             return;
                                         }
 
-                                        $service = app(\App\Services\AiCopywriterService::class);
+                                        $service = app(AiCopywriterService::class);
                                         $set('description', $service->generateProductDescription($productName));
                                     })
                             ),
@@ -224,9 +225,9 @@ class SimpleProductResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListSimpleProducts::route('/'),
+            'index' => Pages\ListSimpleProducts::route('/'),
             'create' => Pages\CreateSimpleProduct::route('/create'),
-            'edit'   => Pages\EditSimpleProduct::route('/{record}/edit'),
+            'edit' => Pages\EditSimpleProduct::route('/{record}/edit'),
         ];
     }
 }

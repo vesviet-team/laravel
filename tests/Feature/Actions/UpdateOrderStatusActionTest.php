@@ -4,9 +4,10 @@ use App\Actions\UpdateOrderStatusAction;
 use App\Enums\OrderStatus;
 use App\Events\OrderStatusUpdated;
 use App\Models\Order;
-use App\Models\OrderHistory;
-use App\Models\Product;
 use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\SellerProfile;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 
@@ -15,8 +16,8 @@ uses(RefreshDatabase::class);
 it('updates order status according to state machine and logs history', function () {
     Event::fake([OrderStatusUpdated::class]);
 
-    $user = \App\Models\User::factory()->create();
-    $seller = \App\Models\SellerProfile::create([
+    $user = User::factory()->create();
+    $seller = SellerProfile::create([
         'user_id' => $user->id,
         'shop_name' => 'Test Seller',
         'subdomain' => 'test-seller',
@@ -25,27 +26,27 @@ it('updates order status according to state machine and logs history', function 
     ]);
 
     $order = Order::create([
-        'seller_id'       => $seller->id,
-        'order_number'    => 'ORD-' . uniqid(),
-        'status'          => OrderStatus::Pending,
-        'payment_method'  => 'cod',
-        'customer_name'   => 'Test Customer',
-        'phone'           => '0901234567',
-        'address'         => '123 Test St',
-        'subtotal'        => 400000,
+        'seller_id' => $seller->id,
+        'order_number' => 'ORD-'.uniqid(),
+        'status' => OrderStatus::Pending,
+        'payment_method' => 'cod',
+        'customer_name' => 'Test Customer',
+        'phone' => '0901234567',
+        'address' => '123 Test St',
+        'subtotal' => 400000,
         'discount_amount' => 0,
-        'shipping_fee'    => 0,
-        'total_amount'    => 400000,
+        'shipping_fee' => 0,
+        'total_amount' => 400000,
     ]);
 
     $action = app(UpdateOrderStatusAction::class);
-    
+
     // Test: Pending -> Confirmed
     $result = $action->execute($order, OrderStatus::Confirmed);
-    
+
     expect($result)->toBeTrue()
         ->and($order->fresh()->status)->toBe(OrderStatus::Confirmed);
-        
+
     $history = $order->histories()->latest()->first();
     expect($history)->not->toBeNull()
         ->and($history->old_status)->toBe(OrderStatus::Pending)
@@ -63,7 +64,7 @@ it('updates order status according to state machine and logs history', function 
     // Test: Processing -> Shipped with note
     $waybill = 'WB-123456';
     $action->execute($order, OrderStatus::Shipped, $waybill);
-    
+
     $historyShipped = $order->histories()->latest()->first();
     expect($order->fresh()->status)->toBe(OrderStatus::Shipped)
         ->and($historyShipped->new_status)->toBe(OrderStatus::Shipped)
@@ -71,8 +72,8 @@ it('updates order status according to state machine and logs history', function 
 });
 
 it('rejects invalid state machine transitions', function () {
-    $user = \App\Models\User::factory()->create();
-    $seller = \App\Models\SellerProfile::create([
+    $user = User::factory()->create();
+    $seller = SellerProfile::create([
         'user_id' => $user->id,
         'shop_name' => 'Test Seller',
         'subdomain' => 'test-seller',
@@ -81,36 +82,36 @@ it('rejects invalid state machine transitions', function () {
     ]);
 
     $order = Order::create([
-        'seller_id'       => $seller->id,
-        'order_number'    => 'ORD-' . uniqid(),
-        'status'          => OrderStatus::Pending,
-        'payment_method'  => 'cod',
-        'customer_name'   => 'Test Customer',
-        'phone'           => '0901234567',
-        'address'         => '123 Test St',
-        'subtotal'        => 400000,
+        'seller_id' => $seller->id,
+        'order_number' => 'ORD-'.uniqid(),
+        'status' => OrderStatus::Pending,
+        'payment_method' => 'cod',
+        'customer_name' => 'Test Customer',
+        'phone' => '0901234567',
+        'address' => '123 Test St',
+        'subtotal' => 400000,
         'discount_amount' => 0,
-        'shipping_fee'    => 0,
-        'total_amount'    => 400000,
+        'shipping_fee' => 0,
+        'total_amount' => 400000,
     ]);
 
     $action = app(UpdateOrderStatusAction::class);
-    
+
     // Cannot jump from Pending directly to Delivered
     $action->execute($order, OrderStatus::Delivered);
 })->throws(Exception::class, "Không thể chuyển trạng thái từ 'Chờ xác nhận' sang 'Đã giao hàng'.");
 
 it('handles cancellation and restores stock successfully with logging', function () {
     $product = Product::create([
-        'name'   => 'Test Product',
-        'slug'   => 'test-prod-' . uniqid(),
-        'price'  => 200000,
-        'stock'  => 5,
+        'name' => 'Test Product',
+        'slug' => 'test-prod-'.uniqid(),
+        'price' => 200000,
+        'stock' => 5,
         'status' => 'published',
     ]);
 
-    $user = \App\Models\User::factory()->create();
-    $seller = \App\Models\SellerProfile::create([
+    $user = User::factory()->create();
+    $seller = SellerProfile::create([
         'user_id' => $user->id,
         'shop_name' => 'Test Seller',
         'subdomain' => 'test-seller',
@@ -119,33 +120,33 @@ it('handles cancellation and restores stock successfully with logging', function
     ]);
 
     $order = Order::create([
-        'seller_id'       => $seller->id,
-        'order_number'    => 'ORD-' . uniqid(),
-        'status'          => OrderStatus::Pending,
-        'payment_method'  => 'cod',
-        'customer_name'   => 'Test Customer',
-        'phone'           => '0901234567',
-        'address'         => '123 Test St',
-        'subtotal'        => 400000,
+        'seller_id' => $seller->id,
+        'order_number' => 'ORD-'.uniqid(),
+        'status' => OrderStatus::Pending,
+        'payment_method' => 'cod',
+        'customer_name' => 'Test Customer',
+        'phone' => '0901234567',
+        'address' => '123 Test St',
+        'subtotal' => 400000,
         'discount_amount' => 0,
-        'shipping_fee'    => 0,
-        'total_amount'    => 400000,
+        'shipping_fee' => 0,
+        'total_amount' => 400000,
     ]);
 
     OrderItem::create([
-        'order_id'          => $order->id,
-        'product_id'        => $product->id,
-        'product_name'      => $product->name,
-        'quantity'          => 2,
+        'order_id' => $order->id,
+        'product_id' => $product->id,
+        'product_name' => $product->name,
+        'quantity' => 2,
         'price_at_purchase' => 200000,
-        'subtotal'          => 400000,
+        'subtotal' => 400000,
     ]);
 
     $product->decrement('stock', 2);
     expect($product->fresh()->stock)->toBe(3);
 
     $action = app(UpdateOrderStatusAction::class);
-    $cancelReason = "Khách hàng đổi ý";
+    $cancelReason = 'Khách hàng đổi ý';
     $result = $action->execute($order, OrderStatus::Cancelled, $cancelReason);
 
     expect($result)->toBeTrue()

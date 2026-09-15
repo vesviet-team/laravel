@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\Banner;
-use App\Models\Category;
-use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -15,21 +13,21 @@ beforeEach(function () {
 
 test('homepage renders active hero slider banners from database', function () {
     $hero1 = Banner::factory()->hero()->active()->create([
-        'title'           => 'Bộ Sưu Tập Bắc Âu 2026',
-        'eyebrow'         => 'SCANDINAVIAN MINIMALISM',
-        'subtitle'        => 'Nội thất gỗ sồi cao cấp tinh tế.',
-        'cta_text'        => 'Khám Phá BST',
+        'title' => 'Bộ Sưu Tập Bắc Âu 2026',
+        'eyebrow' => 'SCANDINAVIAN MINIMALISM',
+        'subtitle' => 'Nội thất gỗ sồi cao cấp tinh tế.',
+        'cta_text' => 'Khám Phá BST',
         'open_in_new_tab' => false,
-        'sort_order'      => 1,
+        'sort_order' => 1,
     ]);
 
     $hero2 = Banner::factory()->hero()->active()->create([
-        'title'           => 'Ghế Thư Giãn Hiện Đại',
-        'eyebrow'         => 'NEW ARRIVALS',
-        'subtitle'        => 'Chất liệu nỉ cao cấp nhập khẩu Đan Mạch.',
-        'cta_text'        => 'Xem Chi Tiết',
+        'title' => 'Ghế Thư Giãn Hiện Đại',
+        'eyebrow' => 'NEW ARRIVALS',
+        'subtitle' => 'Chất liệu nỉ cao cấp nhập khẩu Đan Mạch.',
+        'cta_text' => 'Xem Chi Tiết',
         'open_in_new_tab' => true,
-        'sort_order'      => 2,
+        'sort_order' => 2,
     ]);
 
     $response = $this->get(route('home'));
@@ -52,21 +50,21 @@ test('homepage renders active hero slider banners from database', function () {
 
 test('homepage renders active 2-column promo banners from database', function () {
     $promo1 = Banner::factory()->promo2Col()->active()->create([
-        'title'           => 'Đèn Thả Bắc Âu',
-        'eyebrow'         => 'LIGHTING COLLECTION',
-        'subtitle'        => 'Giảm 20% cho toàn bộ đèn trang trí.',
-        'cta_text'        => 'Mua Ngay',
+        'title' => 'Đèn Thả Bắc Âu',
+        'eyebrow' => 'LIGHTING COLLECTION',
+        'subtitle' => 'Giảm 20% cho toàn bộ đèn trang trí.',
+        'cta_text' => 'Mua Ngay',
         'open_in_new_tab' => false,
-        'sort_order'      => 1,
+        'sort_order' => 1,
     ]);
 
     $promo2 = Banner::factory()->promo2Col()->active()->create([
-        'title'           => 'Bàn Ăn Gỗ Tự Nhiên',
-        'eyebrow'         => 'DINING ROOM',
-        'subtitle'        => 'Thiết kế tối giản cho không gian ấm cúng.',
-        'cta_text'        => 'Xem Bàn Ăn',
+        'title' => 'Bàn Ăn Gỗ Tự Nhiên',
+        'eyebrow' => 'DINING ROOM',
+        'subtitle' => 'Thiết kế tối giản cho không gian ấm cúng.',
+        'cta_text' => 'Xem Bàn Ăn',
         'open_in_new_tab' => true,
-        'sort_order'      => 2,
+        'sort_order' => 2,
     ]);
 
     $response = $this->get(route('home'));
@@ -89,26 +87,26 @@ test('homepage renders active 2-column promo banners from database', function ()
 
 test('homepage renders active 3-column collection banners from database', function () {
     $col1 = Banner::factory()->collection3Col()->active()->create([
-        'title'      => 'Phòng Khách Tối Giản',
-        'eyebrow'    => 'LIVING ROOM 01',
-        'subtitle'   => 'Không gian mở thanh lịch.',
-        'cta_text'   => 'XEM PHÒNG KHÁCH',
+        'title' => 'Phòng Khách Tối Giản',
+        'eyebrow' => 'LIVING ROOM 01',
+        'subtitle' => 'Không gian mở thanh lịch.',
+        'cta_text' => 'XEM PHÒNG KHÁCH',
         'sort_order' => 1,
     ]);
 
     $col2 = Banner::factory()->collection3Col()->active()->create([
-        'title'      => 'Phòng Ngủ Ấm Cúng',
-        'eyebrow'    => 'BEDROOM 02',
-        'subtitle'   => 'Giấc ngủ trọn vẹn phong cách Nordic.',
-        'cta_text'   => 'XEM PHÒNG NGỦ',
+        'title' => 'Phòng Ngủ Ấm Cúng',
+        'eyebrow' => 'BEDROOM 02',
+        'subtitle' => 'Giấc ngủ trọn vẹn phong cách Nordic.',
+        'cta_text' => 'XEM PHÒNG NGỦ',
         'sort_order' => 2,
     ]);
 
     $col3 = Banner::factory()->collection3Col()->active()->create([
-        'title'      => 'Phòng Làm Việc Copenhague',
-        'eyebrow'    => 'WORKSPACE 03',
-        'subtitle'   => 'Gọn gàng và tràn đầy cảm hứng.',
-        'cta_text'   => 'XEM WORKSPACE',
+        'title' => 'Phòng Làm Việc Copenhague',
+        'eyebrow' => 'WORKSPACE 03',
+        'subtitle' => 'Gọn gàng và tràn đầy cảm hứng.',
+        'cta_text' => 'XEM WORKSPACE',
         'sort_order' => 3,
     ]);
 
@@ -224,12 +222,12 @@ test('homepage ignores inactive, future-scheduled, and expired banners', functio
 
 test('homepage respects sort_order ordering for all banner positions', function () {
     $bannerB = Banner::factory()->hero()->active()->create([
-        'title'      => 'Banner B (Sort 20)',
+        'title' => 'Banner B (Sort 20)',
         'sort_order' => 20,
     ]);
 
     $bannerA = Banner::factory()->hero()->active()->create([
-        'title'      => 'Banner A (Sort 10)',
+        'title' => 'Banner A (Sort 10)',
         'sort_order' => 10,
     ]);
 
@@ -271,12 +269,12 @@ test('homepage hero slider includes WCAG 2.2 carousel and slide accessibility at
 
 test('homepage banners link to click tracking route and open in new tab when configured', function () {
     $heroNewTab = Banner::factory()->hero()->active()->create([
-        'title'           => 'New Tab Hero Banner',
+        'title' => 'New Tab Hero Banner',
         'open_in_new_tab' => true,
     ]);
 
     $promoNewTab = Banner::factory()->promo2Col()->active()->create([
-        'title'           => 'New Tab Promo Banner',
+        'title' => 'New Tab Promo Banner',
         'open_in_new_tab' => true,
     ]);
 

@@ -68,8 +68,8 @@ class ProvinceSeeder extends Seeder
             ['code' => '38', 'name' => 'Kiên Giang'],            // + Bạc Liêu + Cà Mau
         ];
 
-        $now  = now();
-        $data = array_map(fn($p) => array_merge($p, [
+        $now = now();
+        $data = array_map(fn ($p) => array_merge($p, [
             'created_at' => $now,
             'updated_at' => $now,
         ]), $provinces);

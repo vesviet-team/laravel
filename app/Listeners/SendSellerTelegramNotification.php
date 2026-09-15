@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\SellerOrderPlaced;
+use App\Models\Order;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Http;
@@ -16,7 +17,7 @@ use Spatie\Multitenancy\Jobs\NotTenantAware;
  * payload itself; the listener does not need a current tenant to send
  * a notification to the seller's own Telegram chat.
  */
-class SendSellerTelegramNotification implements ShouldQueue, NotTenantAware
+class SendSellerTelegramNotification implements NotTenantAware, ShouldQueue
 {
     use InteractsWithQueue;
 
@@ -53,7 +54,7 @@ class SendSellerTelegramNotification implements ShouldQueue, NotTenantAware
         }
     }
 
-    private function buildMessage(\App\Models\Order $order): string
+    private function buildMessage(Order $order): string
     {
         $paymentMethod = $order->payment_method === 'vietqr'
             ? __('seller.telegram.payment_vietqr')

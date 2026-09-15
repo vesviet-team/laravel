@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -24,7 +25,7 @@ class GoshipService
     /**
      * Pre-configured HTTP client with auth token, timeout, and retry.
      */
-    protected function http(): \Illuminate\Http\Client\PendingRequest
+    protected function http(): PendingRequest
     {
         return Http::withToken($this->token)
             ->timeout($this->timeout)
@@ -83,8 +84,8 @@ class GoshipService
         // Guard: Prevent creating zero-COD waybill for unpaid online/banking orders
         if ($order->payment_method !== 'cod' && ! $order->isPaid()) {
             Log::warning('Goship create waybill blocked: non-COD order is not paid yet', [
-                'order_id'       => $order->id,
-                'order_number'   => $order->order_number,
+                'order_id' => $order->id,
+                'order_number' => $order->order_number,
                 'payment_method' => $order->payment_method,
                 'payment_status' => $order->payment_status,
             ]);

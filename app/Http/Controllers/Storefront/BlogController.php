@@ -8,7 +8,6 @@ use App\Models\PostCategory;
 use App\Services\ShortcodeService;
 use App\Services\TocService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
 
 class BlogController extends Controller
 {
@@ -51,7 +50,7 @@ class BlogController extends Controller
     public function show(string $slug, TocService $tocService, ShortcodeService $shortcodeService)
     {
         $post = Post::where('slug', $slug)
-            ->when(!auth()->check(), fn ($q) => $q->published())
+            ->when(! auth()->check(), fn ($q) => $q->published())
             ->with([
                 'category',
                 'author',

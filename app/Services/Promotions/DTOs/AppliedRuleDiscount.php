@@ -12,27 +12,34 @@ use App\Models\PromotionRule;
 final readonly class AppliedRuleDiscount
 {
     public int $ruleId;
+
     public string $ruleName;
+
     public ?string $ruleCode;
+
     public string $actionType;
+
     public float $discountAmount;
+
     public string $target;
+
     public string $description;
+
     public bool $isCoupon;
+
     public ?array $freeGift;
+
     public ?PromotionRule $rule;
 
     /**
-     * @param int $ruleId / rule_id
-     * @param string $ruleName / rule_name
-     * @param string|null $ruleCode / rule_code
-     * @param string $actionType / action_type
-     * @param float $discountAmount / discount_amount
-     * @param string $target ('item' | 'shipping' | 'cart')
-     * @param string $description
-     * @param bool $isCoupon / is_coupon
-     * @param array|null $freeGift / free_gift
-     * @param PromotionRule|null $rule
+     * @param  int  $ruleId  / rule_id
+     * @param  string  $ruleName  / rule_name
+     * @param  string|null  $ruleCode  / rule_code
+     * @param  string  $actionType  / action_type
+     * @param  float  $discountAmount  / discount_amount
+     * @param  string  $target  ('item' | 'shipping' | 'cart')
+     * @param  bool  $isCoupon  / is_coupon
+     * @param  array|null  $freeGift  / free_gift
      */
     public function __construct(
         int $ruleId = 0,
@@ -69,14 +76,14 @@ final readonly class AppliedRuleDiscount
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'rule_id'         => $this->ruleId,
-            'rule_name'       => $this->ruleName,
-            'rule_code'       => $this->ruleCode,
-            'action_type'     => $this->actionType,
+            'rule_id' => $this->ruleId,
+            'rule_name' => $this->ruleName,
+            'rule_code' => $this->ruleCode,
+            'action_type' => $this->actionType,
             'discount_amount' => $this->discountAmount,
-            'is_coupon'       => $this->isCoupon,
-            'free_gift'       => $this->freeGift,
-            default           => null,
+            'is_coupon' => $this->isCoupon,
+            'free_gift' => $this->freeGift,
+            default => null,
         };
     }
 
@@ -92,7 +99,7 @@ final readonly class AppliedRuleDiscount
 
     public function formattedDiscountAmount(): string
     {
-        return number_format($this->discountAmount, 0, ',', '.') . '₫';
+        return number_format($this->discountAmount, 0, ',', '.').'₫';
     }
 
     public function getFormattedDiscountAttribute(): string
@@ -103,15 +110,15 @@ final readonly class AppliedRuleDiscount
     public function toArray(): array
     {
         return [
-            'rule_id'         => $this->ruleId,
-            'rule_name'       => $this->ruleName,
-            'rule_code'       => $this->ruleCode,
-            'action_type'     => $this->actionType,
+            'rule_id' => $this->ruleId,
+            'rule_name' => $this->ruleName,
+            'rule_code' => $this->ruleCode,
+            'action_type' => $this->actionType,
             'discount_amount' => $this->discountAmount,
-            'target'          => $this->target,
-            'description'     => $this->description,
-            'is_coupon'       => $this->isCoupon,
-            'free_gift'       => $this->freeGift,
+            'target' => $this->target,
+            'description' => $this->description,
+            'is_coupon' => $this->isCoupon,
+            'free_gift' => $this->freeGift,
         ];
     }
 }

@@ -53,7 +53,7 @@ return new class extends Migration
             $table->dropIndex('categories_parent_sort_idx');
             $table->dropIndex('categories_visible_level_idx');
             $table->dropIndex('categories_path_idx');
-            
+
             $table->dropColumn([
                 'image_path',
                 'sort_order',

@@ -60,7 +60,7 @@ return new class extends Migration
             $table->dropIndex('reviews_product_status_verified_idx');
             $table->dropIndex('reviews_customer_product_idx');
             $table->dropIndex('reviews_helpful_idx');
-            
+
             $table->dropColumn([
                 'verified_purchase',
                 'helpful_count',

@@ -19,12 +19,12 @@ class OrderSummary extends Component
 
     public bool $showShipping = true;
 
-    public string $theme = "light";
+    public string $theme = 'light';
 
     protected $listeners = [
-        "coupon-applied" => "onCouponApplied",
-        "coupon-removed" => "onCouponRemoved",
-        "shipping-calculated" => "onShippingCalculated",
+        'coupon-applied' => 'onCouponApplied',
+        'coupon-removed' => 'onCouponRemoved',
+        'shipping-calculated' => 'onShippingCalculated',
     ];
 
     public function mount(
@@ -34,7 +34,7 @@ class OrderSummary extends Component
         bool $showFreeGifts = true,
         bool $showPromotions = true,
         bool $showShipping = true,
-        string $theme = "light"
+        string $theme = 'light'
     ): void {
         $this->breakdown = $breakdown instanceof PromotionDiscountBreakdown ? $breakdown->toArray() : $breakdown;
         $this->subtotal = $subtotal;
@@ -47,22 +47,22 @@ class OrderSummary extends Component
 
     public function onCouponApplied(array $event): void
     {
-        $this->dispatch("refresh-summary", subtotal: $this->subtotal, shippingFee: $this->shippingFee);
+        $this->dispatch('refresh-summary', subtotal: $this->subtotal, shippingFee: $this->shippingFee);
     }
 
     public function onCouponRemoved(): void
     {
-        $this->dispatch("refresh-summary", subtotal: $this->subtotal, shippingFee: $this->shippingFee);
+        $this->dispatch('refresh-summary', subtotal: $this->subtotal, shippingFee: $this->shippingFee);
     }
 
     public function onShippingCalculated(float $shippingFee): void
     {
         $this->shippingFee = $shippingFee;
-        $this->dispatch("refresh-summary", subtotal: $this->subtotal, shippingFee: $shippingFee);
+        $this->dispatch('refresh-summary', subtotal: $this->subtotal, shippingFee: $shippingFee);
     }
 
     public function render()
     {
-        return view("livewire.order-summary");
+        return view('livewire.order-summary');
     }
 }

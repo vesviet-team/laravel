@@ -17,7 +17,7 @@ class SubscribeToNewsletterAction
     {
         try {
             NewsletterSubscriber::create([
-                'email'      => strtolower(trim($email)),
+                'email' => strtolower(trim($email)),
                 'ip_address' => $ipAddress,
             ]);
 

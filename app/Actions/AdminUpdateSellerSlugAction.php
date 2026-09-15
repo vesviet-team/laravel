@@ -35,9 +35,8 @@ class AdminUpdateSellerSlugAction
     /**
      * Update the shop_slug for a seller and invalidate their storefront cache.
      *
-     * @param  SellerProfile  $seller   The seller whose slug will be renamed.
-     * @param  string         $newSlug  The new slug value (must be [a-z0-9-]+).
-     * @return SellerProfile
+     * @param  SellerProfile  $seller  The seller whose slug will be renamed.
+     * @param  string  $newSlug  The new slug value (must be [a-z0-9-]+).
      *
      * @throws SellerActionException
      */

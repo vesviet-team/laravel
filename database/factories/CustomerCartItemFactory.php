@@ -14,11 +14,11 @@ class CustomerCartItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'customer_id'        => Customer::factory(),
-            'product_id'         => Product::factory(),
+            'customer_id' => Customer::factory(),
+            'product_id' => Product::factory(),
             'product_variant_id' => null,
-            'quantity'           => fake()->numberBetween(1, 5),
-            'updated_at'         => now(),
+            'quantity' => fake()->numberBetween(1, 5),
+            'updated_at' => now(),
         ];
     }
 }

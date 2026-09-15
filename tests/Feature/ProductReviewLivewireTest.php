@@ -13,10 +13,10 @@ uses(RefreshDatabase::class);
 
 it('redirects guest to login when attempting to submit review', function () {
     $product = Product::create([
-        'name'   => 'Review Product',
-        'slug'   => 'review-product-' . time(),
-        'price'  => 100000,
-        'stock'  => 10,
+        'name' => 'Review Product',
+        'slug' => 'review-product-'.time(),
+        'price' => 100000,
+        'stock' => 10,
         'status' => 'published',
     ]);
 
@@ -29,16 +29,16 @@ it('redirects guest to login when attempting to submit review', function () {
 
 it('rejects review if customer has not purchased and received the product', function () {
     $customer = Customer::create([
-        'name'     => 'Jane Doe',
-        'email'    => 'jane@example.com',
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
         'password' => bcrypt('password'),
     ]);
 
     $product = Product::create([
-        'name'   => 'Review Product',
-        'slug'   => 'review-product-' . time(),
-        'price'  => 100000,
-        'stock'  => 10,
+        'name' => 'Review Product',
+        'slug' => 'review-product-'.time(),
+        'price' => 100000,
+        'stock' => 10,
         'status' => 'published',
     ]);
 
@@ -51,47 +51,47 @@ it('rejects review if customer has not purchased and received the product', func
 
     $this->assertDatabaseMissing('product_reviews', [
         'customer_id' => $customer->id,
-        'product_id'  => $product->id,
+        'product_id' => $product->id,
     ]);
 });
 
 it('allows customer with delivered order to submit review and rejects duplicate review', function () {
     $customer = Customer::create([
-        'name'     => 'Jane Doe',
-        'email'    => 'jane@example.com',
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
         'password' => bcrypt('password'),
     ]);
 
     $product = Product::create([
-        'name'   => 'Review Product',
-        'slug'   => 'review-product-' . time(),
-        'price'  => 100000,
-        'stock'  => 10,
+        'name' => 'Review Product',
+        'slug' => 'review-product-'.time(),
+        'price' => 100000,
+        'stock' => 10,
         'status' => 'published',
     ]);
 
     // Create a delivered order with this product
     $order = Order::create([
-        'customer_id'     => $customer->id,
-        'order_number'    => 'ORD-20260819-TEST',
-        'status'          => OrderStatus::Delivered,
-        'payment_method'  => 'cod',
-        'customer_name'   => $customer->name,
-        'phone'           => '0901234567',
-        'address'         => '123 Test St',
-        'subtotal'        => 100000,
+        'customer_id' => $customer->id,
+        'order_number' => 'ORD-20260819-TEST',
+        'status' => OrderStatus::Delivered,
+        'payment_method' => 'cod',
+        'customer_name' => $customer->name,
+        'phone' => '0901234567',
+        'address' => '123 Test St',
+        'subtotal' => 100000,
         'discount_amount' => 0,
-        'shipping_fee'    => 0,
-        'total_amount'    => 100000,
+        'shipping_fee' => 0,
+        'total_amount' => 100000,
     ]);
 
     OrderItem::create([
-        'order_id'          => $order->id,
-        'product_id'        => $product->id,
-        'product_name'      => $product->name,
-        'quantity'          => 1,
+        'order_id' => $order->id,
+        'product_id' => $product->id,
+        'product_name' => $product->name,
+        'quantity' => 1,
         'price_at_purchase' => 100000,
-        'subtotal'          => 100000,
+        'subtotal' => 100000,
     ]);
 
     // First review submission: SUCCESS
@@ -105,10 +105,10 @@ it('allows customer with delivered order to submit review and rejects duplicate 
 
     $this->assertDatabaseHas('product_reviews', [
         'customer_id' => $customer->id,
-        'product_id'  => $product->id,
-        'rating'      => 5,
-        'comment'     => 'Awesome product!',
-        'status'      => 'pending',
+        'product_id' => $product->id,
+        'rating' => 5,
+        'comment' => 'Awesome product!',
+        'status' => 'pending',
     ]);
 
     // Second review submission: REJECTED AS DUPLICATE

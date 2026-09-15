@@ -1,8 +1,7 @@
 <?php
 
 use App\Models\Banner;
-use App\Models\Product;
-use App\Observers\BannerObserver;
+use Database\Seeders\BannerSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -152,7 +151,7 @@ test('vector 2e: underpopulated positions - single collection card (1 instead of
 test('vector 3a: click tracking atomic increment updates clicks_count accurately across multiple rapid clicks', function () {
     $banner = Banner::factory()->hero()->active()->create([
         'clicks_count' => 0,
-        'link'         => '/products',
+        'link' => '/products',
     ]);
 
     // Simulate 25 sequential rapid clicks
@@ -168,7 +167,7 @@ test('vector 3a: click tracking atomic increment updates clicks_count accurately
 test('vector 3b: click tracking does NOT trigger BannerObserver and preserves home_banners cache', function () {
     $banner = Banner::factory()->hero()->active()->create([
         'title' => 'Cached Hero Slide',
-        'link'  => '/catalog',
+        'link' => '/catalog',
     ]);
 
     // Seed cache
@@ -262,15 +261,15 @@ test('vector 4e: security - XSS injection in banner text attributes is safely es
     $xssCta = '<b>Click</b><script>alert(1)</script>';
 
     Banner::factory()->promo2Col()->active()->create([
-        'title'    => $xssTitle,
-        'eyebrow'  => $xssEyebrow,
+        'title' => $xssTitle,
+        'eyebrow' => $xssEyebrow,
         'subtitle' => $xssSubtitle,
         'cta_text' => $xssCta,
     ]);
 
     Banner::factory()->collection3Col()->active()->create([
-        'title'    => $xssTitle,
-        'eyebrow'  => $xssEyebrow,
+        'title' => $xssTitle,
+        'eyebrow' => $xssEyebrow,
         'subtitle' => $xssSubtitle,
         'cta_text' => $xssCta,
     ]);
@@ -296,7 +295,7 @@ test('vector 4e: security - XSS injection in banner text attributes is safely es
 */
 
 test('vector 5: BannerSeeder is 100% idempotent across 5 consecutive runs with exact count and position distribution', function () {
-    $seeder = new \Database\Seeders\BannerSeeder();
+    $seeder = new BannerSeeder;
 
     for ($run = 1; $run <= 5; $run++) {
         $seeder->run();
@@ -320,30 +319,30 @@ test('vector 6: Model scopes handle boundary datetime conditions and composite i
 
     // Exact now starts_at -> Active
     $bExactStart = Banner::factory()->hero()->active()->create([
-        'title'     => 'Starts Exact Now',
+        'title' => 'Starts Exact Now',
         'starts_at' => $baseTime,
-        'ends_at'   => null,
+        'ends_at' => null,
     ]);
 
     // Exact now ends_at -> Active
     $bExactEnd = Banner::factory()->hero()->active()->create([
-        'title'     => 'Ends Exact Now',
+        'title' => 'Ends Exact Now',
         'starts_at' => null,
-        'ends_at'   => $baseTime,
+        'ends_at' => $baseTime,
     ]);
 
     // 1 second in future starts_at -> Inactive
     $bFutureStart = Banner::factory()->hero()->active()->create([
-        'title'     => 'Starts Future',
+        'title' => 'Starts Future',
         'starts_at' => $baseTime->copy()->addSecond(),
-        'ends_at'   => null,
+        'ends_at' => null,
     ]);
 
     // 1 second in past ends_at -> Inactive
     $bPastEnd = Banner::factory()->hero()->active()->create([
-        'title'     => 'Ends Past',
+        'title' => 'Ends Past',
         'starts_at' => null,
-        'ends_at'   => $baseTime->copy()->subSecond(),
+        'ends_at' => $baseTime->copy()->subSecond(),
     ]);
 
     $activeBanners = Banner::active()->pluck('title')->all();

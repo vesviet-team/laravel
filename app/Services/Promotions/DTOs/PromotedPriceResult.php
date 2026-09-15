@@ -12,24 +12,31 @@ use App\Models\PromotionRule;
 final readonly class PromotedPriceResult
 {
     public float $originalPrice;
+
     public float $promotedPrice;
+
     public float $discountPercentage;
+
     public float $discountPercent;
+
     public float $discountAmount;
+
     public string $badgeLabel;
+
     public int $ruleId;
+
     public string $ruleName;
+
     public ?PromotionRule $rule;
 
     /**
-     * @param float|int $originalPrice / original_price
-     * @param float|int $promotedPrice / promoted_price
-     * @param float|int $discountPercentage / discount_percentage / discountPercent / discount_percent
-     * @param float|null $discountAmount / discount_amount / save_amount
-     * @param string $badgeLabel / badge_label
-     * @param int $ruleId / rule_id
-     * @param string $ruleName / rule_name
-     * @param PromotionRule|null $rule
+     * @param  float|int  $originalPrice  / original_price
+     * @param  float|int  $promotedPrice  / promoted_price
+     * @param  float|int  $discountPercentage  / discount_percentage / discountPercent / discount_percent
+     * @param  float|null  $discountAmount  / discount_amount / save_amount
+     * @param  string  $badgeLabel  / badge_label
+     * @param  int  $ruleId  / rule_id
+     * @param  string  $ruleName  / rule_name
      */
     public function __construct(
         float|int $originalPrice = 0.0,
@@ -71,16 +78,16 @@ final readonly class PromotedPriceResult
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'original_price'      => $this->originalPrice,
-            'promoted_price'      => $this->promotedPrice,
-            'discount_percent'    => $this->discountPercent,
+            'original_price' => $this->originalPrice,
+            'promoted_price' => $this->promotedPrice,
+            'discount_percent' => $this->discountPercent,
             'discount_percentage' => $this->discountPercentage,
-            'discount_amount'     => $this->discountAmount,
-            'save_amount'         => $this->discountAmount,
-            'badge_label'         => $this->badgeLabel,
-            'rule_id'             => $this->ruleId,
-            'rule_name'           => $this->ruleName,
-            default               => null,
+            'discount_amount' => $this->discountAmount,
+            'save_amount' => $this->discountAmount,
+            'badge_label' => $this->badgeLabel,
+            'rule_id' => $this->ruleId,
+            'rule_name' => $this->ruleName,
+            default => null,
         };
     }
 
@@ -94,7 +101,7 @@ final readonly class PromotedPriceResult
 
     public function formattedOriginalPrice(): string
     {
-        return number_format($this->originalPrice, 0, ',', '.') . '₫';
+        return number_format($this->originalPrice, 0, ',', '.').'₫';
     }
 
     public function getFormattedOriginalPrice(): string
@@ -104,7 +111,7 @@ final readonly class PromotedPriceResult
 
     public function formattedPromotedPrice(): string
     {
-        return number_format($this->promotedPrice, 0, ',', '.') . '₫';
+        return number_format($this->promotedPrice, 0, ',', '.').'₫';
     }
 
     public function getFormattedPromotedPrice(): string
@@ -114,7 +121,7 @@ final readonly class PromotedPriceResult
 
     public function formattedDiscountAmount(): string
     {
-        return number_format($this->discountAmount, 0, ',', '.') . '₫';
+        return number_format($this->discountAmount, 0, ',', '.').'₫';
     }
 
     /**
@@ -123,14 +130,14 @@ final readonly class PromotedPriceResult
     public function toArray(): array
     {
         return [
-            'original_price'      => $this->originalPrice,
-            'promoted_price'      => $this->promotedPrice,
+            'original_price' => $this->originalPrice,
+            'promoted_price' => $this->promotedPrice,
             'discount_percentage' => $this->discountPercentage,
-            'discount_amount'     => $this->discountAmount,
-            'badge_label'         => $this->badgeLabel,
-            'rule_id'             => $this->ruleId,
-            'rule_name'           => $this->ruleName,
-            'save_amount'         => $this->getSaveAmount(),
+            'discount_amount' => $this->discountAmount,
+            'badge_label' => $this->badgeLabel,
+            'rule_id' => $this->ruleId,
+            'rule_name' => $this->ruleName,
+            'save_amount' => $this->getSaveAmount(),
         ];
     }
 }

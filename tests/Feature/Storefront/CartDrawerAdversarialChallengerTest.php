@@ -9,8 +9,6 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\PromotionRule;
-use App\Models\PromotionUsage;
-use App\Services\CartService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
@@ -22,41 +20,41 @@ beforeEach(function () {
     Cache::flush();
 
     $this->category = Category::create([
-        'name'      => 'Nội Thất Bắc Âu',
-        'slug'      => 'noi-that-bac-au',
+        'name' => 'Nội Thất Bắc Âu',
+        'slug' => 'noi-that-bac-au',
         'is_active' => true,
     ]);
 
     $this->productSingleVnd = Product::create([
-        'name'        => 'Đinh Ốc Nhỏ',
-        'slug'        => 'dinh-oc-nho',
-        'sku'         => 'SCREW-001',
-        'price'       => 1, // 1 VND for exact boundary testing
-        'stock'       => 1000000,
+        'name' => 'Đinh Ốc Nhỏ',
+        'slug' => 'dinh-oc-nho',
+        'sku' => 'SCREW-001',
+        'price' => 1, // 1 VND for exact boundary testing
+        'stock' => 1000000,
         'category_id' => $this->category->id,
-        'status'      => 'published',
+        'status' => 'published',
         'is_featured' => false,
     ]);
 
     $this->productA = Product::create([
-        'name'        => 'Ghế Gỗ Sồi Armchair',
-        'slug'        => 'ghe-go-soi-armchair',
-        'sku'         => 'CHR-ARM-01',
-        'price'       => 250000,
-        'stock'       => 50,
+        'name' => 'Ghế Gỗ Sồi Armchair',
+        'slug' => 'ghe-go-soi-armchair',
+        'sku' => 'CHR-ARM-01',
+        'price' => 250000,
+        'stock' => 50,
         'category_id' => $this->category->id,
-        'status'      => 'published',
+        'status' => 'published',
         'is_featured' => false,
     ]);
 
     $this->productB = Product::create([
-        'name'        => 'Bàn Cafe Tròn Scandinavian',
-        'slug'        => 'ban-cafe-tron-scandinavian',
-        'sku'         => 'TBL-COF-01',
-        'price'       => 500000,
-        'stock'       => 20,
+        'name' => 'Bàn Cafe Tròn Scandinavian',
+        'slug' => 'ban-cafe-tron-scandinavian',
+        'sku' => 'TBL-COF-01',
+        'price' => 500000,
+        'stock' => 20,
         'category_id' => $this->category->id,
-        'status'      => 'published',
+        'status' => 'published',
         'is_featured' => true,
     ]);
 });
@@ -65,19 +63,19 @@ beforeEach(function () {
 function createTestOrder(Customer $customer, int $amount, OrderStatus $status = OrderStatus::Confirmed): Order
 {
     return Order::create([
-        'customer_id'     => $customer->id,
-        'order_number'    => 'ORD-' . uniqid(),
-        'customer_name'   => $customer->name,
-        'phone'           => '0901234567',
-        'email'           => $customer->email,
-        'address'         => '123 Đường Pasteur',
-        'city'            => 'Hồ Chí Minh',
-        'district'        => 'Quận 1',
-        'ward'            => 'Phường Bến Nghé',
-        'status'          => $status,
-        'subtotal'        => $amount,
-        'total_amount'    => $amount,
-        'shipping_fee'    => 0,
+        'customer_id' => $customer->id,
+        'order_number' => 'ORD-'.uniqid(),
+        'customer_name' => $customer->name,
+        'phone' => '0901234567',
+        'email' => $customer->email,
+        'address' => '123 Đường Pasteur',
+        'city' => 'Hồ Chí Minh',
+        'district' => 'Quận 1',
+        'ward' => 'Phường Bến Nghé',
+        'status' => $status,
+        'subtotal' => $amount,
+        'total_amount' => $amount,
+        'shipping_fee' => 0,
         'discount_amount' => 0,
     ]);
 }
@@ -88,13 +86,13 @@ function createTestOrder(Customer $customer, int $amount, OrderStatus $status = 
 
 test('Adversarial 1.1: Free Shipping Nudge with 0 items in cart returns null without division by zero', function () {
     PromotionRule::create([
-        'name'             => 'Freeship 500K',
-        'rule_type'        => PromotionRule::RULE_TYPE_CART,
-        'action_type'      => PromotionRule::ACTION_FREE_SHIPPING,
-        'discount_value'   => 0.0,
+        'name' => 'Freeship 500K',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
+        'discount_value' => 0.0,
         'min_order_amount' => 500000.0,
-        'priority'         => 1,
-        'is_active'        => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     Session::put('cart', []);
@@ -108,21 +106,21 @@ test('Adversarial 1.1: Free Shipping Nudge with 0 items in cart returns null wit
 
 test('Adversarial 1.2: Free Shipping Nudge at exactly 1 VND below threshold (499,999đ / 500,000đ)', function () {
     PromotionRule::create([
-        'name'             => 'Freeship 500K',
-        'rule_type'        => PromotionRule::RULE_TYPE_CART,
-        'action_type'      => PromotionRule::ACTION_FREE_SHIPPING,
-        'discount_value'   => 0.0,
+        'name' => 'Freeship 500K',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
+        'discount_value' => 0.0,
         'min_order_amount' => 500000.0,
-        'priority'         => 1,
-        'is_active'        => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // Construct cart totaling 499,999 VND
     Session::put('cart', [
         "{$this->productSingleVnd->id}_0" => [
-            'product_id'         => $this->productSingleVnd->id,
+            'product_id' => $this->productSingleVnd->id,
             'product_variant_id' => null,
-            'quantity'           => 499999, // 499,999 * 1 = 499,999đ
+            'quantity' => 499999, // 499,999 * 1 = 499,999đ
         ],
     ]);
 
@@ -141,21 +139,21 @@ test('Adversarial 1.2: Free Shipping Nudge at exactly 1 VND below threshold (499
 
 test('Adversarial 1.3: Free Shipping Nudge at exactly threshold (500,000đ / 500,000đ)', function () {
     PromotionRule::create([
-        'name'             => 'Freeship 500K',
-        'rule_type'        => PromotionRule::RULE_TYPE_CART,
-        'action_type'      => PromotionRule::ACTION_FREE_SHIPPING,
-        'discount_value'   => 0.0,
+        'name' => 'Freeship 500K',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
+        'discount_value' => 0.0,
         'min_order_amount' => 500000.0,
-        'priority'         => 1,
-        'is_active'        => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // Exactly 500,000 VND
     Session::put('cart', [
         "{$this->productB->id}_0" => [
-            'product_id'         => $this->productB->id,
+            'product_id' => $this->productB->id,
             'product_variant_id' => null,
-            'quantity'           => 1, // 1 * 500,000 = 500,000đ
+            'quantity' => 1, // 1 * 500,000 = 500,000đ
         ],
     ]);
 
@@ -173,26 +171,26 @@ test('Adversarial 1.3: Free Shipping Nudge at exactly threshold (500,000đ / 500
 
 test('Adversarial 1.4: Free Shipping Nudge at exactly 1 VND above threshold (500,001đ / 500,000đ)', function () {
     PromotionRule::create([
-        'name'             => 'Freeship 500K',
-        'rule_type'        => PromotionRule::RULE_TYPE_CART,
-        'action_type'      => PromotionRule::ACTION_FREE_SHIPPING,
-        'discount_value'   => 0.0,
+        'name' => 'Freeship 500K',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
+        'discount_value' => 0.0,
         'min_order_amount' => 500000.0,
-        'priority'         => 1,
-        'is_active'        => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // 500,000 + 1 = 500,001 VND
     Session::put('cart', [
         "{$this->productB->id}_0" => [
-            'product_id'         => $this->productB->id,
+            'product_id' => $this->productB->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
         "{$this->productSingleVnd->id}_0" => [
-            'product_id'         => $this->productSingleVnd->id,
+            'product_id' => $this->productSingleVnd->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ]);
 
@@ -214,19 +212,19 @@ test('Adversarial 1.4: Free Shipping Nudge at exactly 1 VND above threshold (500
 test('Adversarial 2.1: Tiered Quantity Step Transitions across full matrix (1 to 7 items)', function () {
     // Rule with 3 tiers: 2 items -> 5%, 4 items -> 10%, 6 items -> 15%
     PromotionRule::create([
-        'name'           => 'Chiết Khấu Bậc Thang',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_TIERED_QUANTITY,
+        'name' => 'Chiết Khấu Bậc Thang',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_TIERED_QUANTITY,
         'discount_value' => 5.0,
-        'conditions'     => [
+        'conditions' => [
             'tiered_steps' => [
                 ['min_qty' => 2, 'discount_percent' => 5],
                 ['min_qty' => 4, 'discount_percent' => 10],
                 ['min_qty' => 6, 'discount_percent' => 15],
             ],
         ],
-        'priority'       => 1,
-        'is_active'      => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // Test matrix of item quantities
@@ -243,9 +241,9 @@ test('Adversarial 2.1: Tiered Quantity Step Transitions across full matrix (1 to
     foreach ($testScenarios as $qty => $expected) {
         Session::put('cart', [
             "{$this->productA->id}_0" => [
-                'product_id'         => $this->productA->id,
+                'product_id' => $this->productA->id,
                 'product_variant_id' => null,
-                'quantity'           => $qty,
+                'quantity' => $qty,
             ],
         ]);
 
@@ -268,45 +266,45 @@ test('Adversarial 2.1: Tiered Quantity Step Transitions across full matrix (1 to
 test('Adversarial 3.1: Guest customer eligibility across various tier rules', function () {
     // Rule for ALL
     PromotionRule::create([
-        'name'                 => 'Mã Mọi Khách Hàng',
-        'code'                 => 'ALL10',
-        'rule_type'            => PromotionRule::RULE_TYPE_CART,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-        'discount_value'       => 10.0,
+        'name' => 'Mã Mọi Khách Hàng',
+        'code' => 'ALL10',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
+        'discount_value' => 10.0,
         'target_customer_tier' => PromotionRule::TIER_ALL,
-        'priority'             => 1,
-        'is_active'            => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // Rule for GOLD
     PromotionRule::create([
-        'name'                 => 'Mã VIP Gold',
-        'code'                 => 'GOLD20',
-        'rule_type'            => PromotionRule::RULE_TYPE_CART,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-        'discount_value'       => 20.0,
+        'name' => 'Mã VIP Gold',
+        'code' => 'GOLD20',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
+        'discount_value' => 20.0,
         'target_customer_tier' => PromotionRule::TIER_GOLD,
-        'priority'             => 2,
-        'is_active'            => true,
+        'priority' => 2,
+        'is_active' => true,
     ]);
 
     // Rule for FIRST_TIME
     PromotionRule::create([
-        'name'                 => 'Mã Khách Mới',
-        'code'                 => 'FIRST15',
-        'rule_type'            => PromotionRule::RULE_TYPE_CART,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-        'discount_value'       => 15.0,
+        'name' => 'Mã Khách Mới',
+        'code' => 'FIRST15',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
+        'discount_value' => 15.0,
         'target_customer_tier' => PromotionRule::TIER_FIRST_TIME,
-        'priority'             => 3,
-        'is_active'            => true,
+        'priority' => 3,
+        'is_active' => true,
     ]);
 
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ]);
 
@@ -328,39 +326,39 @@ test('Adversarial 3.1: Guest customer eligibility across various tier rules', fu
 
 test('Adversarial 3.2: Bronze vs Gold authenticated customer tier segregation', function () {
     PromotionRule::create([
-        'name'                 => 'Mã VIP Gold 20%',
-        'code'                 => 'GOLD20',
-        'rule_type'            => PromotionRule::RULE_TYPE_CART,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-        'discount_value'       => 20.0,
+        'name' => 'Mã VIP Gold 20%',
+        'code' => 'GOLD20',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
+        'discount_value' => 20.0,
         'target_customer_tier' => PromotionRule::TIER_GOLD,
-        'priority'             => 1,
-        'is_active'            => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     PromotionRule::create([
-        'name'                 => 'Mã Hạng Bronze 5%',
-        'code'                 => 'BRONZE5',
-        'rule_type'            => PromotionRule::RULE_TYPE_CART,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-        'discount_value'       => 5.0,
+        'name' => 'Mã Hạng Bronze 5%',
+        'code' => 'BRONZE5',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
+        'discount_value' => 5.0,
         'target_customer_tier' => PromotionRule::TIER_BRONZE,
-        'priority'             => 2,
-        'is_active'            => true,
+        'priority' => 2,
+        'is_active' => true,
     ]);
 
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ]);
 
     // 1. Test as Bronze Customer (1,000,000 VND spend < 20M)
     $bronzeCustomer = Customer::create([
-        'name'     => 'Khách Bronze',
-        'email'    => 'bronze@example.com',
+        'name' => 'Khách Bronze',
+        'email' => 'bronze@example.com',
         'password' => bcrypt('secret123'),
     ]);
     createTestOrder($bronzeCustomer, 1000000);
@@ -379,8 +377,8 @@ test('Adversarial 3.2: Bronze vs Gold authenticated customer tier segregation', 
 
     // 2. Test as Gold Customer (25,000,000 VND spend >= 20M)
     $goldCustomer = Customer::create([
-        'name'     => 'Khách VIP Gold',
-        'email'    => 'gold@example.com',
+        'name' => 'Khách VIP Gold',
+        'email' => 'gold@example.com',
         'password' => bcrypt('secret123'),
     ]);
     createTestOrder($goldCustomer, 25000000);
@@ -396,28 +394,28 @@ test('Adversarial 3.2: Bronze vs Gold authenticated customer tier segregation', 
 
 test('Adversarial 3.3: First-time customer tier with and without prior orders', function () {
     PromotionRule::create([
-        'name'                 => 'Mã Đơn Đầu Tiên',
-        'code'                 => 'FIRST10',
-        'rule_type'            => PromotionRule::RULE_TYPE_CART,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-        'discount_value'       => 10.0,
+        'name' => 'Mã Đơn Đầu Tiên',
+        'code' => 'FIRST10',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
+        'discount_value' => 10.0,
         'target_customer_tier' => PromotionRule::TIER_FIRST_TIME,
-        'priority'             => 1,
-        'is_active'            => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ]);
 
     // Customer with 0 orders
     $newCustomer = Customer::create([
-        'name'     => 'Khách Mới Chưa Mua',
-        'email'    => 'new@example.com',
+        'name' => 'Khách Mới Chưa Mua',
+        'email' => 'new@example.com',
         'password' => bcrypt('secret123'),
     ]);
 
@@ -428,8 +426,8 @@ test('Adversarial 3.3: First-time customer tier with and without prior orders', 
 
     // Customer with existing confirmed order
     $returningCustomer = Customer::create([
-        'name'     => 'Khách Đã Từng Mua',
-        'email'    => 'returning@example.com',
+        'name' => 'Khách Đã Từng Mua',
+        'email' => 'returning@example.com',
         'password' => bcrypt('secret123'),
     ]);
     createTestOrder($returningCustomer, 500000);
@@ -448,22 +446,22 @@ test('Adversarial 3.3: First-time customer tier with and without prior orders', 
 
 test('Adversarial 4.1: Min Order Threshold near-miss calculation in availableCoupons tray and applyCoupon error', function () {
     PromotionRule::create([
-        'name'             => 'Giảm 100K Đơn 1 Triệu',
-        'code'             => 'MIN1M',
-        'rule_type'        => PromotionRule::RULE_TYPE_CART,
-        'action_type'      => PromotionRule::ACTION_FIXED_AMOUNT,
-        'discount_value'   => 100000.0,
+        'name' => 'Giảm 100K Đơn 1 Triệu',
+        'code' => 'MIN1M',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
+        'discount_value' => 100000.0,
         'min_order_amount' => 1000000.0,
-        'priority'         => 1,
-        'is_active'        => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // Cart subtotal: 250,000 VND (Gap: 750,000 VND)
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 1,
+            'quantity' => 1,
         ],
     ]);
 
@@ -481,22 +479,22 @@ test('Adversarial 4.1: Min Order Threshold near-miss calculation in availableCou
 
 test('Adversarial 4.2: Min Quantity Threshold near-miss calculation in availableCoupons tray and applyCoupon error', function () {
     PromotionRule::create([
-        'name'           => 'Giảm 50K Khi Mua Từ 5 SP',
-        'code'           => 'QTY5',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_FIXED_AMOUNT,
+        'name' => 'Giảm 50K Khi Mua Từ 5 SP',
+        'code' => 'QTY5',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
         'discount_value' => 50000.0,
-        'min_quantity'   => 5,
-        'priority'       => 1,
-        'is_active'      => true,
+        'min_quantity' => 5,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     // Cart has 2 items (Gap: 3 items)
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 2,
+            'quantity' => 2,
         ],
     ]);
 
@@ -518,31 +516,31 @@ test('Adversarial 4.2: Min Quantity Threshold near-miss calculation in available
 
 test('Adversarial 5.1: 1-Click Apply and Remove toggling state cycle test', function () {
     PromotionRule::create([
-        'name'           => 'Giảm 10% Coupon A',
-        'code'           => 'COUPON10',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Giảm 10% Coupon A',
+        'code' => 'COUPON10',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10.0,
-        'priority'       => 1,
-        'is_active'      => true,
+        'priority' => 1,
+        'is_active' => true,
     ]);
 
     PromotionRule::create([
-        'name'           => 'Giảm 20% Coupon B',
-        'code'           => 'COUPON20',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Giảm 20% Coupon B',
+        'code' => 'COUPON20',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 20.0,
-        'priority'       => 2,
-        'is_active'      => true,
+        'priority' => 2,
+        'is_active' => true,
     ]);
 
     // 2x Product A = 500,000 VND
     Session::put('cart', [
         "{$this->productA->id}_0" => [
-            'product_id'         => $this->productA->id,
+            'product_id' => $this->productA->id,
             'product_variant_id' => null,
-            'quantity'           => 2,
+            'quantity' => 2,
         ],
     ]);
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class Page extends Model
 {
@@ -40,7 +41,7 @@ class Page extends Model
         return [
             'is_published' => 'boolean',
             'published_at' => 'datetime',
-            'faq_schema'   => 'array',
+            'faq_schema' => 'array',
         ];
     }
 
@@ -68,7 +69,7 @@ class Page extends Model
         return $query->where('is_published', true)
             ->where(function ($q) {
                 $q->whereNull('published_at')
-                  ->orWhere('published_at', '<=', Carbon::now());
+                    ->orWhere('published_at', '<=', Carbon::now());
             });
     }
 
@@ -109,8 +110,8 @@ class Page extends Model
 
         return $query->where(function ($q) use ($term) {
             $q->where('title', 'like', "%{$term}%")
-              ->orWhere('excerpt', 'like', "%{$term}%")
-              ->orWhere('body', 'like', "%{$term}%");
+                ->orWhere('excerpt', 'like', "%{$term}%")
+                ->orWhere('body', 'like', "%{$term}%");
         });
     }
 
@@ -127,7 +128,7 @@ class Page extends Model
                 '@id' => $url,
             ],
             'name' => $this->title,
-            'description' => $this->seo_description ?: ($this->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($this->body), 160)),
+            'description' => $this->seo_description ?: ($this->excerpt ?: Str::limit(strip_tags($this->body), 160)),
             'datePublished' => $this->published_at?->toIso8601String(),
             'dateModified' => $this->updated_at->toIso8601String(),
         ];

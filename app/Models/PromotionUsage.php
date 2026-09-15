@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $email
  * @property float $discount_amount
  * @property Carbon $created_at
- *
  * @property-read PromotionRule $promotionRule
  * @property-read Customer|null $customer
  * @property-read User|null $user
@@ -45,7 +44,7 @@ class PromotionUsage extends Model
 
     protected $casts = [
         'discount_amount' => 'float',
-        'created_at'      => 'datetime',
+        'created_at' => 'datetime',
     ];
 
     /**
@@ -101,7 +100,7 @@ class PromotionUsage extends Model
      */
     public function getFormattedDiscountAmountAttribute(): string
     {
-        return number_format($this->discount_amount, 0, ',', '.') . '₫';
+        return number_format($this->discount_amount, 0, ',', '.').'₫';
     }
 
     /**

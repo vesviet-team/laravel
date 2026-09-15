@@ -9,14 +9,13 @@ class TocService
     /**
      * Extract Table of Contents and inject anchor IDs into HTML headings (h2 and h3).
      *
-     * @param string|null $html
      * @return array{toc: array<int, array{id: string, title: string, level: int}>, html: string}
      */
     public function generate(?string $html): array
     {
-        if (empty($html) || !is_string($html)) {
+        if (empty($html) || ! is_string($html)) {
             return [
-                'toc'  => [],
+                'toc' => [],
                 'html' => $html ?? '',
             ];
         }
@@ -54,23 +53,23 @@ class TocService
             $usedSlugs[$slug] = true;
 
             $toc[] = [
-                'id'    => $slug,
+                'id' => $slug,
                 'title' => $title,
                 'level' => $level,
             ];
 
             // If an id attribute already exists, replace it with the clean slug; otherwise prepend it
             if (preg_match('/\bid=["\'][^"\']*["\']/i', $attrs)) {
-                $attrs = preg_replace('/\bid=["\'][^"\']*["\']/i', 'id="' . $slug . '"', $attrs);
+                $attrs = preg_replace('/\bid=["\'][^"\']*["\']/i', 'id="'.$slug.'"', $attrs);
             } else {
-                $attrs = ' id="' . $slug . '"' . $attrs;
+                $attrs = ' id="'.$slug.'"'.$attrs;
             }
 
             return "<{$tag}{$attrs}>{$innerHtml}</{$tag}>";
         }, $html);
 
         return [
-            'toc'  => $toc,
+            'toc' => $toc,
             'html' => $modifiedHtml ?? $html,
         ];
     }

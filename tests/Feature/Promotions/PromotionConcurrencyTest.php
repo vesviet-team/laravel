@@ -1,40 +1,40 @@
 <?php
 
 use App\Actions\ProcessCheckoutAction;
+use App\Events\OrderPlaced;
 use App\Exceptions\InsufficientStockException;
 use App\Models\Customer;
-use App\Models\Order;
 use App\Models\Product;
 use App\Models\PromotionRule;
 use App\Models\PromotionUsage;
-use App\Services\CartService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Session;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    \Illuminate\Support\Facades\Event::fake([\App\Events\OrderPlaced::class]);
+    Event::fake([OrderPlaced::class]);
 });
 
 test('pessimistic concurrency lock prevents over-redemption on global usage limit', function () {
     $product = Product::create([
-        'name'        => 'Concurrency Test Product',
-        'slug'        => 'concurrency-test-product',
-        'price'       => 500000,
-        'stock'       => 50,
-        'status'      => 'published',
+        'name' => 'Concurrency Test Product',
+        'slug' => 'concurrency-test-product',
+        'price' => 500000,
+        'stock' => 50,
+        'status' => 'published',
     ]);
 
     $rule = PromotionRule::create([
-        'name'           => 'Limited Flash Coupon 50k',
-        'code'           => 'FLASH50K',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_FIXED_AMOUNT,
+        'name' => 'Limited Flash Coupon 50k',
+        'code' => 'FLASH50K',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
         'discount_value' => 50000.0,
-        'usage_limit'    => 2,
-        'used_count'     => 0,
-        'is_active'      => true,
+        'usage_limit' => 2,
+        'used_count' => 0,
+        'is_active' => true,
     ]);
 
     $action = app(ProcessCheckoutAction::class);
@@ -44,17 +44,17 @@ test('pessimistic concurrency lock prevents over-redemption on global usage limi
     for ($i = 1; $i <= 5; $i++) {
         Session::put('cart', [
             "{$product->id}_0" => [
-                'product_id'         => $product->id,
+                'product_id' => $product->id,
                 'product_variant_id' => null,
-                'quantity'           => 1,
+                'quantity' => 1,
             ],
         ]);
 
         $customerData = [
-            'customer_name'  => "Shopper {$i}",
-            'phone'          => "090123456{$i}",
-            'email'          => "shopper{$i}@example.com",
-            'address'        => "{$i} Concurrency Road",
+            'customer_name' => "Shopper {$i}",
+            'phone' => "090123456{$i}",
+            'email' => "shopper{$i}@example.com",
+            'address' => "{$i} Concurrency Road",
             'payment_method' => 'cod',
         ];
 
@@ -78,26 +78,26 @@ test('pessimistic concurrency lock prevents over-redemption on global usage limi
 
 test('per-customer usage limit is strictly enforced under repeated checkout attempts', function () {
     $product = Product::create([
-        'name'        => 'Test Chair',
-        'slug'        => 'test-chair',
-        'price'       => 1000000,
-        'stock'       => 20,
-        'status'      => 'published',
+        'name' => 'Test Chair',
+        'slug' => 'test-chair',
+        'price' => 1000000,
+        'stock' => 20,
+        'status' => 'published',
     ]);
 
     $rule = PromotionRule::create([
-        'name'                 => 'One Time 10%',
-        'code'                 => 'ONETIME10',
-        'rule_type'            => PromotionRule::RULE_TYPE_CART,
-        'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-        'discount_value'       => 10.0,
+        'name' => 'One Time 10%',
+        'code' => 'ONETIME10',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
+        'discount_value' => 10.0,
         'usage_limit_per_user' => 1,
-        'is_active'            => true,
+        'is_active' => true,
     ]);
 
     $customer = Customer::create([
-        'name'     => 'Same Customer',
-        'email'    => 'same@example.com',
+        'name' => 'Same Customer',
+        'email' => 'same@example.com',
         'password' => bcrypt('secret123'),
     ]);
 
@@ -107,18 +107,18 @@ test('per-customer usage limit is strictly enforced under repeated checkout atte
     for ($i = 1; $i <= 3; $i++) {
         Session::put('cart', [
             "{$product->id}_0" => [
-                'product_id'         => $product->id,
+                'product_id' => $product->id,
                 'product_variant_id' => null,
-                'quantity'           => 1,
+                'quantity' => 1,
             ],
         ]);
 
         $customerData = [
-            'customer_id'    => $customer->id,
-            'customer_name'  => $customer->name,
-            'phone'          => '0909999999',
-            'email'          => $customer->email,
-            'address'        => '123 Customer St',
+            'customer_id' => $customer->id,
+            'customer_name' => $customer->name,
+            'phone' => '0909999999',
+            'email' => $customer->email,
+            'address' => '123 Customer St',
             'payment_method' => 'cod',
         ];
 
@@ -134,22 +134,22 @@ test('per-customer usage limit is strictly enforced under repeated checkout atte
 
 test('transaction rollback on inventory shortfall prevents promo usage leakage', function () {
     $product = Product::create([
-        'name'        => 'Scarce Product',
-        'slug'        => 'scarce-product',
-        'price'       => 500000,
-        'stock'       => 1, // Only 1 in stock
-        'status'      => 'published',
+        'name' => 'Scarce Product',
+        'slug' => 'scarce-product',
+        'price' => 500000,
+        'stock' => 1, // Only 1 in stock
+        'status' => 'published',
     ]);
 
     $rule = PromotionRule::create([
-        'name'           => 'Promo 10%',
-        'code'           => 'PROMO10',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Promo 10%',
+        'code' => 'PROMO10',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10.0,
-        'usage_limit'    => 5,
-        'used_count'     => 0,
-        'is_active'      => true,
+        'usage_limit' => 5,
+        'used_count' => 0,
+        'is_active' => true,
     ]);
 
     $action = app(ProcessCheckoutAction::class);

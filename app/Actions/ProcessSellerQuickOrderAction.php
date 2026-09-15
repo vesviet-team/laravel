@@ -2,8 +2,8 @@
 
 namespace App\Actions;
 
-use App\Exceptions\SellerActionException;
 use App\Events\SellerOrderPlaced;
+use App\Exceptions\SellerActionException;
 use App\Models\Order;
 use App\Models\SellerProfile;
 use App\Services\SellerOrderService;
@@ -22,7 +22,6 @@ class ProcessSellerQuickOrderAction
      * The SellerOrderPlaced event is dispatched AFTER the transaction commits
      * to prevent listeners from observing uncommitted state.
      *
-     * @param  array  $data
      *
      * @throws SellerActionException
      */

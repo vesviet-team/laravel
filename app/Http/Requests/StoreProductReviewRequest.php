@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use App\Models\Order;
 use App\Models\ProductReview;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductReviewRequest extends FormRequest
@@ -33,7 +35,7 @@ class StoreProductReviewRequest extends FormRequest
             ->exists();
 
         if (! $hasPurchased) {
-            throw new \Illuminate\Auth\Access\AuthorizationException('You must purchase and receive this product before reviewing.');
+            throw new AuthorizationException('You must purchase and receive this product before reviewing.');
         }
 
         // Prevent duplicate reviews per product per customer.
@@ -42,7 +44,7 @@ class StoreProductReviewRequest extends FormRequest
             ->exists();
 
         if ($existingReview) {
-            throw new \Illuminate\Auth\Access\AuthorizationException('You have already reviewed this product.');
+            throw new AuthorizationException('You have already reviewed this product.');
         }
 
         return true;
@@ -51,7 +53,7 @@ class StoreProductReviewRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {

@@ -40,38 +40,38 @@ class OrderService
         $paymentExpiresAt = ($paymentMethod !== 'cod') ? now()->addMinutes(15) : null;
 
         $order = Order::create([
-            'customer_id'        => $customerData['customer_id'] ?? null,
-            'order_number'       => $this->generateOrderNumber(),
-            'status'             => OrderStatus::Pending,
-            'payment_method'     => $paymentMethod,
-            'payment_status'     => $paymentStatus,
+            'customer_id' => $customerData['customer_id'] ?? null,
+            'order_number' => $this->generateOrderNumber(),
+            'status' => OrderStatus::Pending,
+            'payment_method' => $paymentMethod,
+            'payment_status' => $paymentStatus,
             'payment_expires_at' => $paymentExpiresAt,
-            'customer_name'      => $customerData['customer_name'],
-            'phone'              => $customerData['phone'],
-            'email'              => $customerData['email'] ?? null,
-            'address'            => $customerData['address'],
-            'city'               => $customerData['city'] ?? null,
-            'district'           => $customerData['district'] ?? null,
-            'ward'               => $customerData['ward'] ?? null,
-            'notes'              => $customerData['notes'] ?? null,
-            'subtotal'           => $subtotal,
-            'discount_amount'    => $discountAmount,
-            'shipping_fee'       => $shippingFee,
-            'total_amount'       => $totalAmount,
+            'customer_name' => $customerData['customer_name'],
+            'phone' => $customerData['phone'],
+            'email' => $customerData['email'] ?? null,
+            'address' => $customerData['address'],
+            'city' => $customerData['city'] ?? null,
+            'district' => $customerData['district'] ?? null,
+            'ward' => $customerData['ward'] ?? null,
+            'notes' => $customerData['notes'] ?? null,
+            'subtotal' => $subtotal,
+            'discount_amount' => $discountAmount,
+            'shipping_fee' => $shippingFee,
+            'total_amount' => $totalAmount,
         ]);
 
         foreach ($cartItems as $item) {
             OrderItem::create([
-                'order_id'           => $order->id,
-                'product_id'         => $item['product_id'],
+                'order_id' => $order->id,
+                'product_id' => $item['product_id'],
                 'product_variant_id' => $item['product_variant_id'] ?? null,
-                'product_name'       => $item['product_name'],
-                'variant_name'       => $item['variant_name'] ?? null,
-                'sku'                => $item['sku'] ?? null,
-                'price_at_purchase'  => $item['price'],
-                'quantity'           => $item['quantity'],
-                'subtotal'           => $item['price'] * $item['quantity'],
-                'is_flash_sale'      => ! empty($item['is_flash_sale']),
+                'product_name' => $item['product_name'],
+                'variant_name' => $item['variant_name'] ?? null,
+                'sku' => $item['sku'] ?? null,
+                'price_at_purchase' => $item['price'],
+                'quantity' => $item['quantity'],
+                'subtotal' => $item['price'] * $item['quantity'],
+                'is_flash_sale' => ! empty($item['is_flash_sale']),
             ]);
         }
 
@@ -92,7 +92,7 @@ class OrderService
     protected function generateOrderNumber(): string
     {
         // microsecond timestamp + random suffix gives astronomically low collision chance
-        $ts     = now()->format('Ymd');
+        $ts = now()->format('Ymd');
         $random = strtoupper(Str::random(6));
 
         return "ORD-{$ts}-{$random}";

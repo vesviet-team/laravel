@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\CustomerTier;
+use App\Services\CustomerTierResolver;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,8 +35,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $is_active
  * @property Carbon $created_at
  * @property Carbon $updated_at
- *
- * @property-read \Illuminate\Database\Eloquent\Collection<int, PromotionUsage> $usages
+ * @property-read Collection<int, PromotionUsage> $usages
  */
 class PromotionRule extends Model
 {
@@ -41,21 +43,31 @@ class PromotionRule extends Model
 
     // Rule Types Constants
     public const RULE_TYPE_CATALOG = 'catalog_rule';
-    public const RULE_TYPE_CART    = 'cart_rule';
+
+    public const RULE_TYPE_CART = 'cart_rule';
 
     // Action Types Constants
-    public const ACTION_PERCENTAGE      = 'percentage';
-    public const ACTION_FIXED_AMOUNT    = 'fixed_amount';
-    public const ACTION_BUY_X_GET_Y     = 'buy_x_get_y';
+    public const ACTION_PERCENTAGE = 'percentage';
+
+    public const ACTION_FIXED_AMOUNT = 'fixed_amount';
+
+    public const ACTION_BUY_X_GET_Y = 'buy_x_get_y';
+
     public const ACTION_TIERED_QUANTITY = 'tiered_quantity';
-    public const ACTION_FREE_SHIPPING   = 'free_shipping';
+
+    public const ACTION_FREE_SHIPPING = 'free_shipping';
 
     // Target Customer Tiers Constants
-    public const TIER_ALL        = 'all';
-    public const TIER_BRONZE     = 'bronze';
-    public const TIER_SILVER     = 'silver';
-    public const TIER_GOLD       = 'gold';
-    public const TIER_PLATINUM   = 'platinum';
+    public const TIER_ALL = 'all';
+
+    public const TIER_BRONZE = 'bronze';
+
+    public const TIER_SILVER = 'silver';
+
+    public const TIER_GOLD = 'gold';
+
+    public const TIER_PLATINUM = 'platinum';
+
     public const TIER_FIRST_TIME = 'first_time';
 
     protected $fillable = [
@@ -80,32 +92,32 @@ class PromotionRule extends Model
     ];
 
     protected $attributes = [
-        'rule_type'            => self::RULE_TYPE_CART,
-        'discount_value'       => 0.0,
-        'min_order_amount'     => 0.0,
-        'min_quantity'         => 0,
+        'rule_type' => self::RULE_TYPE_CART,
+        'discount_value' => 0.0,
+        'min_order_amount' => 0.0,
+        'min_quantity' => 0,
         'target_customer_tier' => self::TIER_ALL,
         'usage_limit_per_user' => 1,
-        'used_count'           => 0,
-        'priority'             => 0,
-        'stop_further_rules'   => false,
-        'is_active'            => true,
+        'used_count' => 0,
+        'priority' => 0,
+        'stop_further_rules' => false,
+        'is_active' => true,
     ];
 
     protected $casts = [
-        'discount_value'       => 'float',
-        'max_discount_amount'  => 'float',
-        'min_order_amount'     => 'float',
-        'min_quantity'         => 'integer',
-        'conditions'           => 'array',
-        'usage_limit'          => 'integer',
+        'discount_value' => 'float',
+        'max_discount_amount' => 'float',
+        'min_order_amount' => 'float',
+        'min_quantity' => 'integer',
+        'conditions' => 'array',
+        'usage_limit' => 'integer',
         'usage_limit_per_user' => 'integer',
-        'used_count'           => 'integer',
-        'priority'             => 'integer',
-        'stop_further_rules'   => 'boolean',
-        'starts_at'            => 'datetime',
-        'ends_at'              => 'datetime',
-        'is_active'            => 'boolean',
+        'used_count' => 'integer',
+        'priority' => 'integer',
+        'stop_further_rules' => 'boolean',
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
+        'is_active' => 'boolean',
     ];
 
     /**
@@ -130,15 +142,15 @@ class PromotionRule extends Model
         return $query->where('is_active', true)
             ->where(function (Builder $q) use ($now) {
                 $q->whereNull('starts_at')
-                  ->orWhere('starts_at', '<=', $now);
+                    ->orWhere('starts_at', '<=', $now);
             })
             ->where(function (Builder $q) use ($now) {
                 $q->whereNull('ends_at')
-                  ->orWhere('ends_at', '>=', $now);
+                    ->orWhere('ends_at', '>=', $now);
             })
             ->where(function (Builder $q) {
                 $q->whereNull('usage_limit')
-                  ->orWhereColumn('used_count', '<', 'usage_limit');
+                    ->orWhereColumn('used_count', '<', 'usage_limit');
             });
     }
 
@@ -189,13 +201,8 @@ class PromotionRule extends Model
     /**
      * Determine if this promotion rule is applicable to a given customer, order subtotal, item volume, and items.
      *
-     * @param Customer|null $customer
-     * @param float $subtotal
-     * @param int $itemCount
-     * @param array<int> $categoryIds
-     * @param string $email
-     * @param array<int> $productIds
-     * @return bool
+     * @param  array<int>  $categoryIds
+     * @param  array<int>  $productIds
      */
     public function isApplicableToCustomer(
         ?Customer $customer,
@@ -275,8 +282,9 @@ class PromotionRule extends Model
 
         // 'first_time' check — uses CustomerTierResolver to evaluate order history
         if ($targetTier === self::TIER_FIRST_TIME) {
-            /** @var \App\Services\CustomerTierResolver $resolver */
-            $resolver = app(\App\Services\CustomerTierResolver::class);
+            /** @var CustomerTierResolver $resolver */
+            $resolver = app(CustomerTierResolver::class);
+
             return $resolver->isFirstTime($customer, $email);
         }
 
@@ -286,18 +294,18 @@ class PromotionRule extends Model
         }
 
         // Resolve to typed enum via CustomerTierResolver — no str_contains heuristics
-        /** @var \App\Services\CustomerTierResolver $resolver */
-        $resolver = app(\App\Services\CustomerTierResolver::class);
+        /** @var CustomerTierResolver $resolver */
+        $resolver = app(CustomerTierResolver::class);
         $customerTier = $resolver->resolve($customer);
 
         // Map the string target tier constant to the typed enum
         $requiredTier = match ($targetTier) {
-            self::TIER_BRONZE   => \App\Enums\CustomerTier::Bronze,
-            self::TIER_SILVER   => \App\Enums\CustomerTier::Silver,
+            self::TIER_BRONZE => CustomerTier::Bronze,
+            self::TIER_SILVER => CustomerTier::Silver,
             self::TIER_GOLD,
-            'vip_gold'          => \App\Enums\CustomerTier::Gold,
-            self::TIER_PLATINUM => \App\Enums\CustomerTier::Platinum,
-            default             => null,
+            'vip_gold' => CustomerTier::Gold,
+            self::TIER_PLATINUM => CustomerTier::Platinum,
+            default => null,
         };
 
         if ($requiredTier === null) {
@@ -309,13 +317,11 @@ class PromotionRule extends Model
         return $customerTier->satisfies($requiredTier);
     }
 
-
     /**
      * Check if category/product IDs in cart/catalog match JSON condition rules.
      *
-     * @param array<int> $categoryIds
-     * @param array<int> $productIds
-     * @return bool
+     * @param  array<int>  $categoryIds
+     * @param  array<int>  $productIds
      */
     protected function matchesConditions(array $categoryIds, array $productIds): bool
     {
@@ -373,7 +379,7 @@ class PromotionRule extends Model
         $usageQuery->where(function (Builder $q) use ($customer, $effectiveEmail) {
             if ($customer !== null) {
                 $q->where('customer_id', $customer->id)
-                  ->orWhere('user_id', $customer->id);
+                    ->orWhere('user_id', $customer->id);
             }
             if (! empty($effectiveEmail)) {
                 $q->orWhere('email', $effectiveEmail);
@@ -387,12 +393,6 @@ class PromotionRule extends Model
 
     /**
      * Atomically record a usage instance for this promotion rule and increment used_count.
-     *
-     * @param int|null $customerId
-     * @param int|null $orderId
-     * @param string $email
-     * @param float $discountAmount
-     * @return PromotionUsage
      */
     public function recordUsage(
         ?int $customerId,
@@ -406,12 +406,12 @@ class PromotionRule extends Model
         });
 
         return $this->usages()->create([
-            'customer_id'     => $customerId,
-            'user_id'         => null,
-            'order_id'        => $orderId,
-            'email'           => trim($email),
+            'customer_id' => $customerId,
+            'user_id' => null,
+            'order_id' => $orderId,
+            'email' => trim($email),
             'discount_amount' => $discountAmount,
-            'created_at'      => now(),
+            'created_at' => now(),
         ]);
     }
 
@@ -445,12 +445,12 @@ class PromotionRule extends Model
     public function getFormattedDiscountAttribute(): string
     {
         return match ($this->action_type) {
-            self::ACTION_PERCENTAGE      => (float) $this->discount_value . '%',
-            self::ACTION_FIXED_AMOUNT    => number_format($this->discount_value, 0, ',', '.') . '₫',
-            self::ACTION_FREE_SHIPPING   => 'Freeship',
-            self::ACTION_BUY_X_GET_Y     => 'BXGY Tặng Quà',
-            self::ACTION_TIERED_QUANTITY => 'Bậc Thang ' . (float) $this->discount_value . '%',
-            default                      => (string) $this->discount_value,
+            self::ACTION_PERCENTAGE => (float) $this->discount_value.'%',
+            self::ACTION_FIXED_AMOUNT => number_format($this->discount_value, 0, ',', '.').'₫',
+            self::ACTION_FREE_SHIPPING => 'Freeship',
+            self::ACTION_BUY_X_GET_Y => 'BXGY Tặng Quà',
+            self::ACTION_TIERED_QUANTITY => 'Bậc Thang '.(float) $this->discount_value.'%',
+            default => (string) $this->discount_value,
         };
     }
 
@@ -461,8 +461,8 @@ class PromotionRule extends Model
     {
         return match ($this->rule_type) {
             self::RULE_TYPE_CATALOG => 'Khuyến Mãi Danh Mục / Giá',
-            self::RULE_TYPE_CART    => 'Khuyến Mãi Giỏ Hàng & Coupon',
-            default                 => $this->rule_type,
+            self::RULE_TYPE_CART => 'Khuyến Mãi Giỏ Hàng & Coupon',
+            default => $this->rule_type,
         };
     }
 
@@ -472,12 +472,12 @@ class PromotionRule extends Model
     public function getActionTypeLabelAttribute(): string
     {
         return match ($this->action_type) {
-            self::ACTION_PERCENTAGE      => 'Giảm phần trăm (%)',
-            self::ACTION_FIXED_AMOUNT    => 'Giảm số tiền cố định (₫)',
-            self::ACTION_BUY_X_GET_Y     => 'Mua X Tặng Y (BXGY)',
+            self::ACTION_PERCENTAGE => 'Giảm phần trăm (%)',
+            self::ACTION_FIXED_AMOUNT => 'Giảm số tiền cố định (₫)',
+            self::ACTION_BUY_X_GET_Y => 'Mua X Tặng Y (BXGY)',
             self::ACTION_TIERED_QUANTITY => 'Chiết khấu bậc thang số lượng',
-            self::ACTION_FREE_SHIPPING   => 'Miễn phí vận chuyển (Freeship)',
-            default                      => $this->action_type,
+            self::ACTION_FREE_SHIPPING => 'Miễn phí vận chuyển (Freeship)',
+            default => $this->action_type,
         };
     }
 
@@ -487,13 +487,13 @@ class PromotionRule extends Model
     public function getTargetCustomerTierLabelAttribute(): string
     {
         return match ($this->target_customer_tier) {
-            self::TIER_ALL        => 'Tất cả khách hàng',
+            self::TIER_ALL => 'Tất cả khách hàng',
             self::TIER_FIRST_TIME => 'Khách hàng mới (Đơn đầu tiên)',
-            self::TIER_BRONZE     => 'Hạng Đồng (Bronze)',
-            self::TIER_SILVER     => 'Hạng Bạc (Silver)',
-            self::TIER_GOLD       => 'Hạng Vàng (Gold / VIP)',
-            self::TIER_PLATINUM   => 'Hạng Bạch Kim (Platinum)',
-            default               => ucfirst($this->target_customer_tier),
+            self::TIER_BRONZE => 'Hạng Đồng (Bronze)',
+            self::TIER_SILVER => 'Hạng Bạc (Silver)',
+            self::TIER_GOLD => 'Hạng Vàng (Gold / VIP)',
+            self::TIER_PLATINUM => 'Hạng Bạch Kim (Platinum)',
+            default => ucfirst($this->target_customer_tier),
         };
     }
 }

@@ -11,13 +11,11 @@ class SyncSpatieTenantWithFilament
 {
     /**
      * Handle an incoming request.
-     * 
+     *
      * Ensures that the Filament active tenant is also set as the current
      * Spatie Multitenancy tenant. This allows shared scopes (like TenantSellerScope)
      * and actions to work transparently within the Filament panel.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)

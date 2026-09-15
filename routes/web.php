@@ -18,10 +18,13 @@ use App\Http\Controllers\Storefront\PageController;
 use App\Http\Controllers\Storefront\PrivacyController;
 use App\Http\Controllers\Storefront\ProfileController;
 use App\Http\Controllers\Storefront\ReferralController;
+use App\Http\Controllers\Storefront\SellerStorefrontController;
 use App\Http\Controllers\Storefront\SessionController;
+use App\Http\Middleware\EnsureSellerTenantForgotten;
 use App\Livewire\CheckoutFlow;
 use App\Livewire\WishlistPage;
 use Illuminate\Support\Facades\Route;
+use Spatie\Multitenancy\Http\Middleware\NeedsTenant;
 
 $appDomain = parse_url(config('app.url'), PHP_URL_HOST) ?? 'localhost';
 
@@ -32,28 +35,27 @@ $appDomain = parse_url(config('app.url'), PHP_URL_HOST) ?? 'localhost';
 // Path-based (canonical / primary) — works in ALL environments (local, staging, production)
 // ADR-SC1: ->where constraint is MANDATORY — prevents path traversal and XSS.
 // EnsureSellerTenantForgotten::terminate() cleans up Spatie tenant context after response.
-Route::get('/shop/{shop_slug}', [\App\Http\Controllers\Storefront\SellerStorefrontController::class, 'shopPath'])
+Route::get('/shop/{shop_slug}', [SellerStorefrontController::class, 'shopPath'])
     ->name('seller.storefront.shop')
     ->where('shop_slug', '[a-z0-9\-]+')
-    ->middleware([\App\Http\Middleware\EnsureSellerTenantForgotten::class]);
+    ->middleware([EnsureSellerTenantForgotten::class]);
 
 // Subdomain-based (secondary) — only works on production with wildcard DNS.
 // 301 redirect to /shop canonical. Stateless — no render, no cache.
-Route::domain('{seller_subdomain}.' . $appDomain)
-    ->middleware([\Spatie\Multitenancy\Http\Middleware\NeedsTenant::class])
+Route::domain('{seller_subdomain}.'.$appDomain)
+    ->middleware([NeedsTenant::class])
     ->group(function () {
-        Route::get('/', [\App\Http\Controllers\Storefront\SellerStorefrontController::class, 'subdomainRedirect'])->name('seller.storefront.index');
+        Route::get('/', [SellerStorefrontController::class, 'subdomainRedirect'])->name('seller.storefront.index');
     });
 
 // Seller Storefront Preview Route (For Filament Iframe)
-Route::get('/seller/preview/page', [\App\Http\Controllers\Storefront\SellerStorefrontController::class, 'preview'])
+Route::get('/seller/preview/page', [SellerStorefrontController::class, 'preview'])
     ->middleware(['web', 'auth'])
     ->name('seller.storefront.preview');
 
 Route::get('/', [HomepageController::class, 'index'])->name('home');
 Route::view('/about', 'storefront.pages.about')->name('about');
 Route::view('/contact', 'storefront.pages.contact')->name('contact');
-
 
 // Fallback login route for auth middleware
 Route::get('/login', fn () => redirect()->route('account.login'))->name('login');

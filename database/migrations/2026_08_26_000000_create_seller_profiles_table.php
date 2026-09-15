@@ -17,20 +17,20 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('status')->default('active'); // active, pending, suspended
             $table->string('telegram_chat_id')->nullable();
-            
+
             // Payment (VietQR)
             $table->string('bank_code')->nullable();
             $table->string('bank_account_no')->nullable();
             $table->string('bank_account_name')->nullable();
-            
+
             // Shipping
             $table->string('shipping_type')->default('freeship'); // freeship, flat_rate
             $table->bigInteger('shipping_fee')->default(0); // VND
-            
+
             // Meta
             $table->text('bio')->nullable();
             $table->string('logo_url')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

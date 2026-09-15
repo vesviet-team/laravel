@@ -2,13 +2,15 @@
 
 namespace Tests\Feature\Services;
 
+use App\Models\FlashSale;
+use App\Models\FlashSaleItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Services\InventoryService;
-use Illuminate\Support\Str;
 use Exception;
+use Illuminate\Support\Str;
 
 beforeEach(function () {
     $this->inventoryService = new InventoryService;
@@ -88,8 +90,8 @@ it('throws exception when stock is insufficient', function () {
 
 it('deducts and restores flash sale stock correctly', function () {
     $product = Product::create(['name' => 'Flash P', 'slug' => Str::random(10), 'price' => 10, 'stock' => 10]);
-    $flashSale = \App\Models\FlashSale::create(['name' => 'FS', 'status' => 'active', 'start_time' => now()->subDay(), 'end_time' => now()->addDay()]);
-    $flashSaleItem = \App\Models\FlashSaleItem::create(['flash_sale_id' => $flashSale->id, 'product_id' => $product->id, 'price' => 5, 'quantity' => 5, 'sold_quantity' => 0]);
+    $flashSale = FlashSale::create(['name' => 'FS', 'status' => 'active', 'start_time' => now()->subDay(), 'end_time' => now()->addDay()]);
+    $flashSaleItem = FlashSaleItem::create(['flash_sale_id' => $flashSale->id, 'product_id' => $product->id, 'price' => 5, 'quantity' => 5, 'sold_quantity' => 0]);
 
     $order = Order::create(['customer_name' => 'Test', 'phone' => '123', 'address' => 'Addr', 'order_number' => Str::random(10), 'payment_method' => 'cod', 'subtotal' => 10, 'total_amount' => 10]);
     OrderItem::create([

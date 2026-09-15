@@ -34,7 +34,9 @@ class LandingOrderForm extends Component
 
     // Result state
     public bool $isSubmitting = false;
+
     public ?array $successData = null;
+
     public string $errorMsg = '';
 
     public function mount(LandingPage $landingPage): void
@@ -58,6 +60,7 @@ class LandingOrderForm extends Component
         // Honeypot check — bots fill this field
         if (! empty($this->website)) {
             $this->errorMsg = 'Có lỗi xảy ra, vui lòng thử lại.';
+
             return;
         }
 
@@ -68,10 +71,10 @@ class LandingOrderForm extends Component
 
         try {
             $order = $action->execute($this->landingPage, [
-                'name'            => $this->name,
-                'phone'           => $this->phone,
-                'address'         => $this->address,
-                'note'            => $this->note,
+                'name' => $this->name,
+                'phone' => $this->phone,
+                'address' => $this->address,
+                'note' => $this->note,
                 'selectedComboId' => $this->selectedComboId,
             ]);
 
@@ -79,28 +82,28 @@ class LandingOrderForm extends Component
                 ->firstWhere('id', $this->selectedComboId);
 
             $this->successData = [
-                'order_reference'    => $order->order_number,
-                'payment_method'     => 'cod',
+                'order_reference' => $order->order_number,
+                'payment_method' => 'cod',
                 'estimated_delivery' => '2-3 ngày làm việc',
-                'total_amount'       => $order->total_amount,
-                'combo_name'         => $combo['name'] ?? null,
+                'total_amount' => $order->total_amount,
+                'combo_name' => $combo['name'] ?? null,
             ];
 
             // Fire tracking events to the browser for pixel integration
             $this->dispatch('order-placed', [
-                'value'             => $order->total_amount,
-                'currency'          => 'VND',
+                'value' => $order->total_amount,
+                'currency' => 'VND',
                 'facebook_pixel_id' => $this->landingPage->facebook_pixel_id,
-                'tiktok_pixel_id'   => $this->landingPage->tiktok_pixel_id,
+                'tiktok_pixel_id' => $this->landingPage->tiktok_pixel_id,
             ]);
 
             // Reset form fields
-            $this->name    = '';
-            $this->phone   = '';
+            $this->name = '';
+            $this->phone = '';
             $this->address = '';
-            $this->note    = '';
+            $this->note = '';
 
-        } catch (CommerceException | \RuntimeException $e) {
+        } catch (CommerceException|\RuntimeException $e) {
             $this->errorMsg = $e->getMessage();
         } catch (\Throwable $e) {
             $this->errorMsg = 'Lỗi hệ thống, vui lòng thử lại hoặc liên hệ hỗ trợ.';

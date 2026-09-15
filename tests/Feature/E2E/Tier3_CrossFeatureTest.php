@@ -1,14 +1,17 @@
 <?php
 
+use App\Enums\OrderStatus;
 use App\Livewire\AddToCartButton;
 use App\Livewire\CartCount;
 use App\Livewire\CartDrawer;
 use App\Livewire\ProductReviews;
 use App\Livewire\WishlistButton;
+use App\Livewire\WishlistPage;
 use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Wishlist;
@@ -242,7 +245,7 @@ it('verifies customer authentication alters header navigation and enables wishli
 
     // 3. Test Wishlist page component renders the added product
     Livewire::actingAs($customer, 'customer')
-        ->test(\App\Livewire\WishlistPage::class)
+        ->test(WishlistPage::class)
         ->assertSee('Wishlist Favorite Lounge');
 });
 
@@ -502,27 +505,27 @@ it('verifies customer product review submission pipeline', function () {
         'status' => 'published',
     ]);
 
-    $order = \App\Models\Order::create([
-        'customer_id'     => $customer->id,
-        'order_number'    => 'ORD-VERIFIED-REVIEW',
-        'status'          => \App\Enums\OrderStatus::Delivered,
-        'payment_method'  => 'cod',
-        'customer_name'   => $customer->name,
-        'phone'           => '0901234567',
-        'address'         => '123 Verified St',
-        'subtotal'        => 950000,
+    $order = Order::create([
+        'customer_id' => $customer->id,
+        'order_number' => 'ORD-VERIFIED-REVIEW',
+        'status' => OrderStatus::Delivered,
+        'payment_method' => 'cod',
+        'customer_name' => $customer->name,
+        'phone' => '0901234567',
+        'address' => '123 Verified St',
+        'subtotal' => 950000,
         'discount_amount' => 0,
-        'shipping_fee'    => 0,
-        'total_amount'    => 950000,
+        'shipping_fee' => 0,
+        'total_amount' => 950000,
     ]);
 
-    \App\Models\OrderItem::create([
-        'order_id'          => $order->id,
-        'product_id'        => $product->id,
-        'product_name'      => $product->name,
-        'quantity'          => 1,
+    OrderItem::create([
+        'order_id' => $order->id,
+        'product_id' => $product->id,
+        'product_name' => $product->name,
+        'quantity' => 1,
         'price_at_purchase' => 950000,
-        'subtotal'          => 950000,
+        'subtotal' => 950000,
     ]);
 
     Livewire::actingAs($customer, 'customer')

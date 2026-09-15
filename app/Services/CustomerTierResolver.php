@@ -35,7 +35,7 @@ class CustomerTierResolver
      *   - >= 20,000,000       → Gold (VIP Diamond)
      *   - >= 50,000,000       → Platinum
      *
-     * @param Customer $customer Authenticated customer model.
+     * @param  Customer  $customer  Authenticated customer model.
      * @return CustomerTier Resolved tier enum value.
      */
     public function resolve(Customer $customer): CustomerTier
@@ -61,8 +61,8 @@ class CustomerTierResolver
      * Determine if a customer is a first-time buyer (zero confirmed orders).
      * Checked against both customer account and email to handle guest orders.
      *
-     * @param Customer|null $customer Authenticated customer (nullable for guests).
-     * @param string $email Email for guest order lookup.
+     * @param  Customer|null  $customer  Authenticated customer (nullable for guests).
+     * @param  string  $email  Email for guest order lookup.
      * @return bool True if this is the customer's first purchase.
      */
     public function isFirstTime(?Customer $customer, string $email = ''): bool
@@ -85,7 +85,7 @@ class CustomerTierResolver
         }
 
         $effectiveEmail = trim($email ?: ($customer?->email ?? ''));
-        if (!empty($effectiveEmail)) {
+        if (! empty($effectiveEmail)) {
             $hasPriorEmailOrders = Order::where('email', $effectiveEmail)
                 ->whereIn('status', $confirmedStatuses)
                 ->exists();
@@ -102,7 +102,6 @@ class CustomerTierResolver
      * Compute lifetime spend for a customer from confirmed/active orders.
      * Uses a single aggregation query — does not trigger accessor N+1.
      *
-     * @param Customer $customer
      * @return float Total spend in VND.
      */
     private function computeLifetimeSpend(Customer $customer): float

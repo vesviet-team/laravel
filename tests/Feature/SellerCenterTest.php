@@ -4,11 +4,14 @@ use App\Actions\ProcessSellerQuickOrderAction;
 use App\Events\SellerOrderPlaced;
 use App\Exceptions\SellerActionException;
 use App\Models\Product;
-use App\Models\SellerProfile;
 use App\Models\SellerPage;
+use App\Models\SellerProfile;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
@@ -29,7 +32,7 @@ test('tenant isolation correctly scopes products', function () {
 });
 
 test('concurrent stock lock prevents overselling', function () {
-    \Illuminate\Support\Facades\Event::fake([SellerOrderPlaced::class]);
+    Event::fake([SellerOrderPlaced::class]);
 
     $seller = SellerProfile::factory()->create();
     $seller->makeCurrent();
@@ -112,12 +115,12 @@ test('SellerProfile hasCompleteBankInfo requires all three fields', function () 
 });
 
 test('User canAccessPanel differentiates seller vs admin panels', function () {
-    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+    Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
 
     $user = User::factory()->create();
 
-    $sellerPanel = \Filament\Facades\Filament::getPanel('seller');
-    $adminPanel = \Filament\Facades\Filament::getPanel('admin');
+    $sellerPanel = Filament::getPanel('seller');
+    $adminPanel = Filament::getPanel('admin');
 
     expect($user->canAccessPanel($sellerPanel))->toBeFalse();
 

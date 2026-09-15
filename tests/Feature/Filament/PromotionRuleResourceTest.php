@@ -1,6 +1,5 @@
 <?php
 
-use App\Filament\Resources\PromotionRuleResource;
 use App\Filament\Resources\PromotionRuleResource\Pages\CreatePromotionRule;
 use App\Filament\Resources\PromotionRuleResource\Pages\EditPromotionRule;
 use App\Filament\Resources\PromotionRuleResource\Pages\ListPromotionRules;
@@ -48,13 +47,13 @@ beforeEach(function () {
 
 test('can render promotion rule list page and see records in table', function () {
     $rule = PromotionRule::create([
-        'name'           => 'Giảm 10% Chào Bạn Mới',
-        'code'           => 'WELCOME10',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Giảm 10% Chào Bạn Mới',
+        'code' => 'WELCOME10',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10,
-        'is_active'      => true,
-        'priority'       => 1,
+        'is_active' => true,
+        'priority' => 1,
     ]);
 
     Livewire::test(ListPromotionRules::class)
@@ -64,39 +63,39 @@ test('can render promotion rule list page and see records in table', function ()
 
 test('can filter promotion rules by 5 navigation tabs', function () {
     $cartRule = PromotionRule::create([
-        'name'           => 'Khuyến Mãi Giỏ Hàng Tự Động',
-        'code'           => null,
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Khuyến Mãi Giỏ Hàng Tự Động',
+        'code' => null,
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 5,
-        'is_active'      => true,
+        'is_active' => true,
     ]);
 
     $catalogRule = PromotionRule::create([
-        'name'           => 'Giảm Giá Danh Mục Đèn',
-        'code'           => null,
-        'rule_type'      => PromotionRule::RULE_TYPE_CATALOG,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Giảm Giá Danh Mục Đèn',
+        'code' => null,
+        'rule_type' => PromotionRule::RULE_TYPE_CATALOG,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 15,
-        'is_active'      => true,
+        'is_active' => true,
     ]);
 
     $couponRule = PromotionRule::create([
-        'name'           => 'Mã Giảm Giá VIP',
-        'code'           => 'VIPGOLD20',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Mã Giảm Giá VIP',
+        'code' => 'VIPGOLD20',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 20,
-        'is_active'      => true,
+        'is_active' => true,
     ]);
 
     $bxgyRule = PromotionRule::create([
-        'name'           => 'Mua Bàn Tặng Ghế',
-        'code'           => null,
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_BUY_X_GET_Y,
+        'name' => 'Mua Bàn Tặng Ghế',
+        'code' => null,
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_BUY_X_GET_Y,
         'discount_value' => 100,
-        'is_active'      => true,
+        'is_active' => true,
     ]);
 
     // Tab 'all' sees all 4
@@ -131,18 +130,18 @@ test('can filter promotion rules by 5 navigation tabs', function () {
 
 test('can search promotion rules by name and coupon code in table', function () {
     $rule1 = PromotionRule::create([
-        'name'           => 'Flash Sale Cuối Tuần',
-        'code'           => 'WEEKEND50',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_FIXED_AMOUNT,
+        'name' => 'Flash Sale Cuối Tuần',
+        'code' => 'WEEKEND50',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
         'discount_value' => 50000,
     ]);
 
     $rule2 = PromotionRule::create([
-        'name'           => 'Khuyến Mãi Mùa Thu',
-        'code'           => 'AUTUMN10',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Khuyến Mãi Mùa Thu',
+        'code' => 'AUTUMN10',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10,
     ]);
 
@@ -164,34 +163,34 @@ test('can search promotion rules by name and coupon code in table', function () 
 test('can create a percentage cart rule with max cap and min order subtotal via filament form', function () {
     Livewire::test(CreatePromotionRule::class)
         ->fillForm([
-            'name'                 => 'Giảm 15% Tối Đa 300K Cho Đơn Từ 2 Triệu',
-            'code'                 => 'SALE15CAP',
-            'rule_type'            => PromotionRule::RULE_TYPE_CART,
-            'action_type'          => PromotionRule::ACTION_PERCENTAGE,
-            'discount_value'       => 15,
-            'max_discount_amount'  => 300000,
-            'min_order_amount'     => 2000000,
-            'min_quantity'         => 1,
+            'name' => 'Giảm 15% Tối Đa 300K Cho Đơn Từ 2 Triệu',
+            'code' => 'SALE15CAP',
+            'rule_type' => PromotionRule::RULE_TYPE_CART,
+            'action_type' => PromotionRule::ACTION_PERCENTAGE,
+            'discount_value' => 15,
+            'max_discount_amount' => 300000,
+            'min_order_amount' => 2000000,
+            'min_quantity' => 1,
             'target_customer_tier' => 'all',
-            'usage_limit'          => 100,
+            'usage_limit' => 100,
             'usage_limit_per_user' => 1,
-            'priority'             => 5,
-            'stop_further_rules'   => true,
-            'is_active'            => true,
+            'priority' => 5,
+            'stop_further_rules' => true,
+            'is_active' => true,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
 
     $this->assertDatabaseHas('promotion_rules', [
-        'name'                => 'Giảm 15% Tối Đa 300K Cho Đơn Từ 2 Triệu',
-        'code'                => 'SALE15CAP',
-        'rule_type'           => PromotionRule::RULE_TYPE_CART,
-        'action_type'         => PromotionRule::ACTION_PERCENTAGE,
-        'discount_value'      => 15.00,
+        'name' => 'Giảm 15% Tối Đa 300K Cho Đơn Từ 2 Triệu',
+        'code' => 'SALE15CAP',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
+        'discount_value' => 15.00,
         'max_discount_amount' => 300000.00,
-        'min_order_amount'    => 2000000.00,
-        'usage_limit'         => 100,
-        'stop_further_rules'  => true,
+        'min_order_amount' => 2000000.00,
+        'usage_limit' => 100,
+        'stop_further_rules' => true,
     ]);
 });
 
@@ -203,16 +202,16 @@ test('can create a catalog price rule with category conditions', function () {
 
     Livewire::test(CreatePromotionRule::class)
         ->fillForm([
-            'name'           => 'Giảm 10% Toàn Bộ Danh Mục Sofa',
-            'code'           => null,
-            'rule_type'      => PromotionRule::RULE_TYPE_CATALOG,
-            'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+            'name' => 'Giảm 10% Toàn Bộ Danh Mục Sofa',
+            'code' => null,
+            'rule_type' => PromotionRule::RULE_TYPE_CATALOG,
+            'action_type' => PromotionRule::ACTION_PERCENTAGE,
             'discount_value' => 10,
-            'conditions'     => [
+            'conditions' => [
                 'category_ids' => [$category->id],
             ],
-            'is_active'      => true,
-            'priority'       => 1,
+            'is_active' => true,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -225,37 +224,37 @@ test('can create a catalog price rule with category conditions', function () {
 
 test('can create a buy x get y promotion rule with nested bxgy config', function () {
     $productX = Product::create([
-        'name'  => 'Bàn Làm Việc Bắc Âu',
-        'slug'  => 'ban-lam-viec-bac-au',
-        'sku'   => 'DSK-001',
+        'name' => 'Bàn Làm Việc Bắc Âu',
+        'slug' => 'ban-lam-viec-bac-au',
+        'sku' => 'DSK-001',
         'price' => 2500000,
         'stock' => 10,
     ]);
 
     $productY = Product::create([
-        'name'  => 'Ghế Xoay Ergonomic',
-        'slug'  => 'ghe-xoay-ergonomic',
-        'sku'   => 'CHR-001',
+        'name' => 'Ghế Xoay Ergonomic',
+        'slug' => 'ghe-xoay-ergonomic',
+        'sku' => 'CHR-001',
         'price' => 800000,
         'stock' => 20,
     ]);
 
     Livewire::test(CreatePromotionRule::class)
         ->fillForm([
-            'name'           => 'Mua 2 Bàn Làm Việc Tặng 1 Ghế Xoay',
-            'code'           => 'BUY2GET1',
-            'rule_type'      => PromotionRule::RULE_TYPE_CART,
-            'action_type'    => PromotionRule::ACTION_BUY_X_GET_Y,
-            'conditions'     => [
+            'name' => 'Mua 2 Bàn Làm Việc Tặng 1 Ghế Xoay',
+            'code' => 'BUY2GET1',
+            'rule_type' => PromotionRule::RULE_TYPE_CART,
+            'action_type' => PromotionRule::ACTION_BUY_X_GET_Y,
+            'conditions' => [
                 'bxgy_config' => [
                     'buy_product_id' => $productX->id,
-                    'buy_quantity'   => 2,
+                    'buy_quantity' => 2,
                     'get_product_id' => $productY->id,
-                    'get_quantity'   => 1,
-                    'is_free'        => true,
+                    'get_quantity' => 1,
+                    'is_free' => true,
                 ],
             ],
-            'is_active'      => true,
+            'is_active' => true,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -270,19 +269,19 @@ test('can create a buy x get y promotion rule with nested bxgy config', function
 test('can create a tiered quantity rule with stepped volume tiers', function () {
     Livewire::test(CreatePromotionRule::class)
         ->fillForm([
-            'name'           => 'Chiết Khấu Số Lượng Đèn Bàn',
-            'code'           => null,
-            'rule_type'      => PromotionRule::RULE_TYPE_CART,
-            'action_type'    => PromotionRule::ACTION_TIERED_QUANTITY,
+            'name' => 'Chiết Khấu Số Lượng Đèn Bàn',
+            'code' => null,
+            'rule_type' => PromotionRule::RULE_TYPE_CART,
+            'action_type' => PromotionRule::ACTION_TIERED_QUANTITY,
             'discount_value' => 0,
-            'conditions'     => [
+            'conditions' => [
                 'tiered_steps' => [
                     ['min_qty' => 2, 'discount_percent' => 5],
                     ['min_qty' => 4, 'discount_percent' => 10],
                     ['min_qty' => 6, 'discount_percent' => 15],
                 ],
             ],
-            'is_active'      => true,
+            'is_active' => true,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -297,20 +296,20 @@ test('can create a tiered quantity rule with stepped volume tiers', function () 
 test('can create a free shipping promotion rule', function () {
     Livewire::test(CreatePromotionRule::class)
         ->fillForm([
-            'name'             => 'Freeship Toàn Quốc Đơn Từ 500K',
-            'code'             => 'FREESHIP500',
-            'rule_type'        => PromotionRule::RULE_TYPE_CART,
-            'action_type'      => PromotionRule::ACTION_FREE_SHIPPING,
-            'discount_value'   => 0,
+            'name' => 'Freeship Toàn Quốc Đơn Từ 500K',
+            'code' => 'FREESHIP500',
+            'rule_type' => PromotionRule::RULE_TYPE_CART,
+            'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
+            'discount_value' => 0,
             'min_order_amount' => 500000,
-            'is_active'        => true,
+            'is_active' => true,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
 
     $this->assertDatabaseHas('promotion_rules', [
-        'code'             => 'FREESHIP500',
-        'action_type'      => PromotionRule::ACTION_FREE_SHIPPING,
+        'code' => 'FREESHIP500',
+        'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
         'min_order_amount' => 500000.00,
     ]);
 });
@@ -318,7 +317,7 @@ test('can create a free shipping promotion rule', function () {
 test('validates required fields on create promotion rule form', function () {
     Livewire::test(CreatePromotionRule::class)
         ->fillForm([
-            'name'           => null,
+            'name' => null,
             'discount_value' => null,
         ])
         ->call('create')
@@ -329,19 +328,19 @@ test('validates required fields on create promotion rule form', function () {
 
 test('rejects duplicate coupon code on create promotion rule', function () {
     PromotionRule::create([
-        'name'           => 'Khuyến Mãi Ban Đầu',
-        'code'           => 'DUPLICATE_CODE',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Khuyến Mãi Ban Đầu',
+        'code' => 'DUPLICATE_CODE',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10,
     ]);
 
     Livewire::test(CreatePromotionRule::class)
         ->fillForm([
-            'name'           => 'Khuyến Mãi Trùng Mã',
-            'code'           => 'DUPLICATE_CODE',
-            'rule_type'      => PromotionRule::RULE_TYPE_CART,
-            'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+            'name' => 'Khuyến Mãi Trùng Mã',
+            'code' => 'DUPLICATE_CODE',
+            'rule_type' => PromotionRule::RULE_TYPE_CART,
+            'action_type' => PromotionRule::ACTION_PERCENTAGE,
             'discount_value' => 15,
         ])
         ->call('create')
@@ -354,23 +353,23 @@ test('rejects duplicate coupon code on create promotion rule', function () {
 
 test('can edit an existing promotion rule and update values and conditions', function () {
     $rule = PromotionRule::create([
-        'name'           => 'Rule Ban Đầu',
-        'code'           => 'OLDCODE',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Rule Ban Đầu',
+        'code' => 'OLDCODE',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10,
-        'priority'       => 10,
-        'is_active'      => false,
+        'priority' => 10,
+        'is_active' => false,
     ]);
 
     Livewire::test(EditPromotionRule::class, ['record' => $rule->getKey()])
         ->fillForm([
-            'name'           => 'Rule Đã Cập Nhật',
-            'code'           => 'NEWCODE',
+            'name' => 'Rule Đã Cập Nhật',
+            'code' => 'NEWCODE',
             'discount_value' => 25,
-            'priority'       => 1,
-            'is_active'      => true,
-            'conditions'     => [
+            'priority' => 1,
+            'is_active' => true,
+            'conditions' => [
                 'category_ids' => [5, 6],
             ],
         ])
@@ -388,10 +387,10 @@ test('can edit an existing promotion rule and update values and conditions', fun
 
 test('can delete a promotion rule via table delete action', function () {
     $rule = PromotionRule::create([
-        'name'           => 'Rule Cần Xóa',
-        'code'           => 'DELETE_ME',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Rule Cần Xóa',
+        'code' => 'DELETE_ME',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10,
     ]);
 
@@ -406,18 +405,18 @@ test('can delete a promotion rule via table delete action', function () {
 
 test('can bulk delete promotion rules via table bulk action', function () {
     $rule1 = PromotionRule::create([
-        'name'           => 'Bulk Delete 1',
-        'code'           => 'BULK1',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Bulk Delete 1',
+        'code' => 'BULK1',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10,
     ]);
 
     $rule2 = PromotionRule::create([
-        'name'           => 'Bulk Delete 2',
-        'code'           => 'BULK2',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Bulk Delete 2',
+        'code' => 'BULK2',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 15,
     ]);
 
@@ -435,46 +434,46 @@ test('can bulk delete promotion rules via table bulk action', function () {
 
 test('can render promotion usages relation manager on edit page and see usage logs', function () {
     $rule = PromotionRule::create([
-        'name'           => 'Mã Khuyến Mãi Đã Dùng',
-        'code'           => 'USED_PROMO',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Mã Khuyến Mãi Đã Dùng',
+        'code' => 'USED_PROMO',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10,
     ]);
 
     $customer = Customer::create([
-        'name'     => 'Nguyễn Văn An',
-        'email'    => 'an.nguyen@example.com',
+        'name' => 'Nguyễn Văn An',
+        'email' => 'an.nguyen@example.com',
         'password' => 'password123',
     ]);
 
     $order = Order::create([
-        'customer_id'     => $customer->id,
-        'order_number'    => 'ORD-2026-001',
-        'customer_name'   => 'Nguyễn Văn An',
-        'email'           => 'an.nguyen@example.com',
-        'phone'           => '0901234567',
-        'address'         => '123 Lê Lợi',
-        'city'            => 'Hồ Chí Minh',
-        'district'        => 'Quận 1',
-        'ward'            => 'Bến Nghé',
-        'subtotal'        => 1000000,
+        'customer_id' => $customer->id,
+        'order_number' => 'ORD-2026-001',
+        'customer_name' => 'Nguyễn Văn An',
+        'email' => 'an.nguyen@example.com',
+        'phone' => '0901234567',
+        'address' => '123 Lê Lợi',
+        'city' => 'Hồ Chí Minh',
+        'district' => 'Quận 1',
+        'ward' => 'Bến Nghé',
+        'subtotal' => 1000000,
         'discount_amount' => 100000,
-        'shipping_fee'    => 30000,
-        'total_amount'    => 930000,
+        'shipping_fee' => 30000,
+        'total_amount' => 930000,
     ]);
 
     $usage = PromotionUsage::create([
         'promotion_rule_id' => $rule->id,
-        'customer_id'       => $customer->id,
-        'order_id'          => $order->id,
-        'email'             => 'an.nguyen@example.com',
-        'discount_amount'   => 100000,
+        'customer_id' => $customer->id,
+        'order_id' => $order->id,
+        'email' => 'an.nguyen@example.com',
+        'discount_amount' => 100000,
     ]);
 
     Livewire::test(PromotionUsagesRelationManager::class, [
         'ownerRecord' => $rule,
-        'pageClass'   => EditPromotionRule::class,
+        'pageClass' => EditPromotionRule::class,
     ])
         ->assertSuccessful()
         ->assertCanSeeTableRecords([$usage]);
@@ -482,28 +481,28 @@ test('can render promotion usages relation manager on edit page and see usage lo
 
 test('can search usage records in relation manager by email', function () {
     $rule = PromotionRule::create([
-        'name'           => 'Rule Đa Lượt Dùng',
-        'code'           => 'MULTI_USE',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Rule Đa Lượt Dùng',
+        'code' => 'MULTI_USE',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10,
     ]);
 
     $usage1 = PromotionUsage::create([
         'promotion_rule_id' => $rule->id,
-        'email'             => 'customer.alpha@example.com',
-        'discount_amount'   => 50000,
+        'email' => 'customer.alpha@example.com',
+        'discount_amount' => 50000,
     ]);
 
     $usage2 = PromotionUsage::create([
         'promotion_rule_id' => $rule->id,
-        'email'             => 'customer.beta@example.com',
-        'discount_amount'   => 80000,
+        'email' => 'customer.beta@example.com',
+        'discount_amount' => 80000,
     ]);
 
     Livewire::test(PromotionUsagesRelationManager::class, [
         'ownerRecord' => $rule,
-        'pageClass'   => EditPromotionRule::class,
+        'pageClass' => EditPromotionRule::class,
     ])
         ->searchTable('customer.alpha@example.com')
         ->assertCanSeeTableRecords([$usage1])
@@ -512,16 +511,16 @@ test('can search usage records in relation manager by email', function () {
 
 test('promotion usages relation manager is strictly read only without create or delete actions', function () {
     $rule = PromotionRule::create([
-        'name'           => 'Rule Kiểm Tra Read Only',
-        'code'           => 'READONLY_TEST',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Rule Kiểm Tra Read Only',
+        'code' => 'READONLY_TEST',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 10,
     ]);
 
     Livewire::test(PromotionUsagesRelationManager::class, [
         'ownerRecord' => $rule,
-        'pageClass'   => EditPromotionRule::class,
+        'pageClass' => EditPromotionRule::class,
     ])
         ->assertTableActionDoesNotExist('create')
         ->assertTableActionDoesNotExist('delete');
@@ -570,10 +569,10 @@ test('super_admin bypasses all permission gates without explicit permissions', f
     $this->actingAs($superAdmin);
 
     $rule = PromotionRule::create([
-        'name'           => 'Super Admin Promo',
-        'code'           => 'SUPER_ADMIN_CODE',
-        'rule_type'      => PromotionRule::RULE_TYPE_CART,
-        'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+        'name' => 'Super Admin Promo',
+        'code' => 'SUPER_ADMIN_CODE',
+        'rule_type' => PromotionRule::RULE_TYPE_CART,
+        'action_type' => PromotionRule::ACTION_PERCENTAGE,
         'discount_value' => 50,
     ]);
 

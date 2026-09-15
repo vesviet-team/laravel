@@ -2,18 +2,18 @@
 
 use App\Models\Post;
 
-describe("Post::calculateReadingTime Adversarial & Empirical Stress Tests", function () {
+describe('Post::calculateReadingTime Adversarial & Empirical Stress Tests', function () {
 
     // =========================================================================
     // Category 1: Boundary and Null/Empty/Whitespace Inputs
     // =========================================================================
-    test("Category 1: Boundary inputs return minimum 1 minute", function () {
+    test('Category 1: Boundary inputs return minimum 1 minute', function () {
         // Null and empty strings
         expect(Post::calculateReadingTime(null))->toBe(1);
-        expect(Post::calculateReadingTime(""))->toBe(1);
+        expect(Post::calculateReadingTime(''))->toBe(1);
 
         // Standard whitespace sequences
-        expect(Post::calculateReadingTime("   "))->toBe(1);
+        expect(Post::calculateReadingTime('   '))->toBe(1);
         expect(Post::calculateReadingTime("\t\r\n   \n\r\t"))->toBe(1);
 
         // Zero-width and control characters (U+200B, U+200C, U+200D, U+FEFF, Null bytes)
@@ -21,7 +21,7 @@ describe("Post::calculateReadingTime Adversarial & Empirical Stress Tests", func
         expect(Post::calculateReadingTime($zeroWidthOnly))->toBe(1);
 
         // Whitespace surrounding empty or self-closing tags
-        $emptyTags = "   <p></p>  <div> </div> <br> <hr/> <span></span>   ";
+        $emptyTags = '   <p></p>  <div> </div> <br> <hr/> <span></span>   ';
         expect(Post::calculateReadingTime($emptyTags))->toBe(1);
 
         // Only HTML comments
@@ -29,76 +29,76 @@ describe("Post::calculateReadingTime Adversarial & Empirical Stress Tests", func
         expect(Post::calculateReadingTime($onlyComments))->toBe(1);
 
         // Only script and style blocks
-        $onlyCode = "<script>var a = 1; var b = 2; function test() { return 42; }</script><style>body { color: red; margin: 0; }</style>";
+        $onlyCode = '<script>var a = 1; var b = 2; function test() { return 42; }</script><style>body { color: red; margin: 0; }</style>';
         expect(Post::calculateReadingTime($onlyCode))->toBe(1);
 
         // Only HTML entities of whitespace
-        $onlyEntities = "&nbsp;&nbsp;&nbsp;&#160;&#xA0;&ensp;&emsp;&thinsp;";
+        $onlyEntities = '&nbsp;&nbsp;&nbsp;&#160;&#xA0;&ensp;&emsp;&thinsp;';
         expect(Post::calculateReadingTime($onlyEntities))->toBe(1);
     });
 
     // =========================================================================
     // Category 2: Tag-Boundary Tokenization (No Inter-tag Spaces)
     // =========================================================================
-    test("Category 2: Preserves word boundaries for adjacent HTML tags without inter-tag whitespace", function () {
+    test('Category 2: Preserves word boundaries for adjacent HTML tags without inter-tag whitespace', function () {
         // Adjacent block elements
-        $adjacentBlocks = "<p>Hello</p><p>World</p>";
+        $adjacentBlocks = '<p>Hello</p><p>World</p>';
         expect(Post::calculateReadingTime($adjacentBlocks))->toBe(1);
 
         // Adjacent inline elements
-        $adjacentInline = "<b>Alpha</b><i>Beta</i><u>Gamma</u>";
+        $adjacentInline = '<b>Alpha</b><i>Beta</i><u>Gamma</u>';
         expect(Post::calculateReadingTime($adjacentInline))->toBe(1);
 
         // Deeply nested mixed tags
-        $nestedTags = "<div><section><h1>Header</h1><p>Body <span>text</span></p></section></div>";
+        $nestedTags = '<div><section><h1>Header</h1><p>Body <span>text</span></p></section></div>';
         expect(Post::calculateReadingTime($nestedTags))->toBe(1);
 
         // Minified table structure
-        $minifiedTable = "<table><tr><th>Col1</th><th>Col2</th></tr><tr><td>Val1</td><td>Val2</td></tr></table>";
+        $minifiedTable = '<table><tr><th>Col1</th><th>Col2</th></tr><tr><td>Val1</td><td>Val2</td></tr></table>';
         expect(Post::calculateReadingTime($minifiedTable))->toBe(1);
 
         // Self-closing tags between words
-        $selfClosing = "First<br/>Second<hr/>Third<img src=\"x.jpg\"/>Fourth";
+        $selfClosing = 'First<br/>Second<hr/>Third<img src="x.jpg"/>Fourth';
         expect(Post::calculateReadingTime($selfClosing))->toBe(1);
 
         // 450 words in minified <p> tags without inter-tag spaces -> 450 / 200 = 2.25 -> 3 minutes
-        $minified450 = implode("", array_fill(0, 450, "<p>furniture</p>"));
+        $minified450 = implode('', array_fill(0, 450, '<p>furniture</p>'));
         expect(Post::calculateReadingTime($minified450))->toBe(3);
 
         // 2,250 words in minified <div><p>...</p></div> -> 2,250 / 200 = 11.25 -> 12 minutes
-        $minified2250 = "<div>" . implode("</div><div>", array_fill(0, 450, "<p>ghế gỗ sồi cao cấp</p>")) . "</div>";
+        $minified2250 = '<div>'.implode('</div><div>', array_fill(0, 450, '<p>ghế gỗ sồi cao cấp</p>')).'</div>';
         expect(Post::calculateReadingTime($minified2250))->toBe(12);
     });
 
     // =========================================================================
     // Category 3: Script, Style, and Comment Stripping with Malicious & Complex Payloads
     // =========================================================================
-    test("Category 3: Completely strips script, style, and comments without counting inner text", function () {
+    test('Category 3: Completely strips script, style, and comments without counting inner text', function () {
         // Case-insensitive script tag with 500 fake words inside
-        $fakeScriptWords = implode(" ", array_fill(0, 500, "fakeWordInsideScript"));
-        $mixedCaseScript = "<SCRIPT type=\"text/javascript\" id=\"test\">var x = \"" . $fakeScriptWords . "\";</SCRIPT><p>Visible Article Content</p>";
+        $fakeScriptWords = implode(' ', array_fill(0, 500, 'fakeWordInsideScript'));
+        $mixedCaseScript = '<SCRIPT type="text/javascript" id="test">var x = "'.$fakeScriptWords.'";</SCRIPT><p>Visible Article Content</p>';
         // Real words: "Visible", "Article", "Content" (3 words) -> 1 min
         expect(Post::calculateReadingTime($mixedCaseScript))->toBe(1);
 
         // Style block with CSS rules and generated content text
-        $fakeStyleWords = implode(" ", array_fill(0, 400, "color-blue-style-token"));
-        $complexStyle = "<STYLE>@media screen and (min-width: 768px) { body::before { content: \"" . $fakeStyleWords . "\"; } }</STYLE><p>Modern Scandinavian Chair</p>";
+        $fakeStyleWords = implode(' ', array_fill(0, 400, 'color-blue-style-token'));
+        $complexStyle = '<STYLE>@media screen and (min-width: 768px) { body::before { content: "'.$fakeStyleWords.'"; } }</STYLE><p>Modern Scandinavian Chair</p>';
         // Real words: 3 words -> 1 min
         expect(Post::calculateReadingTime($complexStyle))->toBe(1);
 
         // HTML comments with 1000 draft words
-        $fakeCommentWords = implode(" ", array_fill(0, 1000, "draftNotesNotForPublishing"));
-        $commentPayload = "<!-- <div><p>" . $fakeCommentWords . "</p></div> --><p>Clean Published Paragraph</p>";
+        $fakeCommentWords = implode(' ', array_fill(0, 1000, 'draftNotesNotForPublishing'));
+        $commentPayload = '<!-- <div><p>'.$fakeCommentWords.'</p></div> --><p>Clean Published Paragraph</p>';
         // Real words: 3 words -> 1 min
         expect(Post::calculateReadingTime($commentPayload))->toBe(1);
 
         // Scripts containing HTML strings and angle brackets
-        $scriptWithAngleBrackets = "<script>if (1 < 2 && 3 > 0) { let html = \"<p>not a real paragraph</p>\"; }</script><p>Actual post body</p>";
+        $scriptWithAngleBrackets = '<script>if (1 < 2 && 3 > 0) { let html = "<p>not a real paragraph</p>"; }</script><p>Actual post body</p>';
         // Real words: 3 words -> 1 min
         expect(Post::calculateReadingTime($scriptWithAngleBrackets))->toBe(1);
 
         // Multiple interleaved scripts, styles, and comments
-        $interleaved = "<script>console.log(1);</script><p>WordA</p><style>.x{}</style><!-- c1 --><p>WordB</p><script>console.log(2);</script><p>WordC</p>";
+        $interleaved = '<script>console.log(1);</script><p>WordA</p><style>.x{}</style><!-- c1 --><p>WordB</p><script>console.log(2);</script><p>WordC</p>';
         // Real words: 3 words -> 1 min
         expect(Post::calculateReadingTime($interleaved))->toBe(1);
     });
@@ -106,17 +106,17 @@ describe("Post::calculateReadingTime Adversarial & Empirical Stress Tests", func
     // =========================================================================
     // Category 4: HTML Entities, Special Characters, and Unicode Spaces
     // =========================================================================
-    test("Category 4: Accurately decodes HTML entities and normalizes all Unicode whitespace categories", function () {
+    test('Category 4: Accurately decodes HTML entities and normalizes all Unicode whitespace categories', function () {
         // Named entities
-        $namedEntities = "<p>&quot;Sober&quot; &amp; &apos;Furniture&apos; &copy; 2026</p>";
+        $namedEntities = '<p>&quot;Sober&quot; &amp; &apos;Furniture&apos; &copy; 2026</p>';
         expect(Post::calculateReadingTime($namedEntities))->toBe(1);
 
         // Multiple non-breaking spaces between words
-        $nbspSequence = "<p>Sản&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phẩm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mới</p>";
+        $nbspSequence = '<p>Sản&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phẩm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mới</p>';
         expect(Post::calculateReadingTime($nbspSequence))->toBe(1);
 
         // Numeric and hex entities (NBSP, em dash, quotes)
-        $numericEntities = "<p>Bàn&#160;ăn&#x00A0;gỗ&#8212;sồi&#8220;Bắc&#8221;Âu</p>";
+        $numericEntities = '<p>Bàn&#160;ăn&#x00A0;gỗ&#8212;sồi&#8220;Bắc&#8221;Âu</p>';
         expect(Post::calculateReadingTime($numericEntities))->toBe(1);
 
         // Full Unicode space spectrum: U+2000 through U+200A, U+202F, U+205F, U+3000
@@ -131,33 +131,33 @@ describe("Post::calculateReadingTime Adversarial & Empirical Stress Tests", func
     // =========================================================================
     // Category 5: Multi-language & Diacritic Stress-Testing
     // =========================================================================
-    test("Category 5: Correctly tokenizes multi-byte UTF-8, Vietnamese diacritics, CJK, Cyrillic, and Emoji", function () {
+    test('Category 5: Correctly tokenizes multi-byte UTF-8, Vietnamese diacritics, CJK, Cyrillic, and Emoji', function () {
         // Vietnamese standard paragraph (20 words)
-        $vnParagraph = "Không gian sống Scandinavian luôn đề cao tính tối giản, công năng tiện ích cùng vẻ đẹp ấm áp từ chất liệu gỗ tự nhiên.";
+        $vnParagraph = 'Không gian sống Scandinavian luôn đề cao tính tối giản, công năng tiện ích cùng vẻ đẹp ấm áp từ chất liệu gỗ tự nhiên.';
         expect(Post::calculateReadingTime($vnParagraph))->toBe(1);
 
         // 400 Vietnamese words -> 400 / 200 = 2 minutes
-        $vn400 = implode(" ", array_fill(0, 400, "bàn-ghế-gỗ"));
+        $vn400 = implode(' ', array_fill(0, 400, 'bàn-ghế-gỗ'));
         expect(Post::calculateReadingTime($vn400))->toBe(2);
 
         // CJK / Japanese text with spacing
-        $cjkText = "北欧 家具 ミニマリズム デザイン 空間 設計 職人 技";
+        $cjkText = '北欧 家具 ミニマリズム デザイン 空間 設計 職人 技';
         expect(Post::calculateReadingTime($cjkText))->toBe(1);
 
         // Cyrillic
-        $cyrillic = "Скандинавский дизайн интерьера и мебели для современного дома";
+        $cyrillic = 'Скандинавский дизайн интерьера и мебели для современного дома';
         expect(Post::calculateReadingTime($cyrillic))->toBe(1);
 
         // Emoji words
-        $emojiText = "Nội thất 🛋️ bàn ghế 🪑 phòng ngủ 🛏️ ánh sáng 💡 tối giản ✨";
+        $emojiText = 'Nội thất 🛋️ bàn ghế 🪑 phòng ngủ 🛏️ ánh sáng 💡 tối giản ✨';
         expect(Post::calculateReadingTime($emojiText))->toBe(1);
     });
 
     // =========================================================================
     // Category 6: Exact Ceil() Mathematical Boundary Truth Table
     // =========================================================================
-    test("Category 6: Mathematical ceil() boundary truth table verification", function () {
-        $generateWords = fn(int $count) => implode(" ", array_fill(0, $count, "word"));
+    test('Category 6: Mathematical ceil() boundary truth table verification', function () {
+        $generateWords = fn (int $count) => implode(' ', array_fill(0, $count, 'word'));
 
         // 1 word -> 1 min
         expect(Post::calculateReadingTime($generateWords(1)))->toBe(1);
@@ -199,9 +199,9 @@ describe("Post::calculateReadingTime Adversarial & Empirical Stress Tests", func
     // =========================================================================
     // Category 7: High Volume, Memory Safety & ReDoS Catastrophic Backtracking Stress-Testing
     // =========================================================================
-    test("Category 7: Extreme payload size, high volume, and ReDoS resistance", function () {
+    test('Category 7: Extreme payload size, high volume, and ReDoS resistance', function () {
         // 1. 50,000 words large article (~400 KB)
-        $largeText = "<article>" . implode(" ", array_fill(0, 50000, "scandinavian-furniture-item")) . "</article>";
+        $largeText = '<article>'.implode(' ', array_fill(0, 50000, 'scandinavian-furniture-item')).'</article>';
         $startTime = microtime(true);
         $result = Post::calculateReadingTime($largeText);
         $duration = microtime(true) - $startTime;
@@ -210,7 +210,7 @@ describe("Post::calculateReadingTime Adversarial & Empirical Stress Tests", func
         expect($duration)->toBeLessThan(0.5); // Under 500ms
 
         // 2. 5,000 nested HTML tags
-        $nestedHtml = str_repeat("<div><section><p><span>", 1000) . "Deeply Nested Content" . str_repeat("</span></p></section></div>", 1000);
+        $nestedHtml = str_repeat('<div><section><p><span>', 1000).'Deeply Nested Content'.str_repeat('</span></p></section></div>', 1000);
         $startNested = microtime(true);
         $nestedResult = Post::calculateReadingTime($nestedHtml);
         $nestedDuration = microtime(true) - $startNested;
@@ -219,7 +219,7 @@ describe("Post::calculateReadingTime Adversarial & Empirical Stress Tests", func
         expect($nestedDuration)->toBeLessThan(0.2);
 
         // 3. 1,000 script and comment blocks
-        $manyScripts = str_repeat("<script>var a = 1;</script><!-- comment --><style>.c{}</style>", 1000) . "<p>Single paragraph with ten distinct vocabulary words for testing</p>";
+        $manyScripts = str_repeat('<script>var a = 1;</script><!-- comment --><style>.c{}</style>', 1000).'<p>Single paragraph with ten distinct vocabulary words for testing</p>';
         $startScripts = microtime(true);
         $scriptResult = Post::calculateReadingTime($manyScripts);
         $scriptDuration = microtime(true) - $startScripts;
@@ -228,7 +228,7 @@ describe("Post::calculateReadingTime Adversarial & Empirical Stress Tests", func
         expect($scriptDuration)->toBeLessThan(0.2);
 
         // 4. ReDoS attack vector: unclosed script tags & repeated malformed angle brackets
-        $malformedTags = str_repeat("<script a=\"1\" ", 2000) . "word " . str_repeat("<<<<>>>>", 1000);
+        $malformedTags = str_repeat('<script a="1" ', 2000).'word '.str_repeat('<<<<>>>>', 1000);
         $startReDoS = microtime(true);
         $redoResult = Post::calculateReadingTime($malformedTags);
         $redoDuration = microtime(true) - $startReDoS;

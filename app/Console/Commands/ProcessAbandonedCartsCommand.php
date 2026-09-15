@@ -49,12 +49,13 @@ class ProcessAbandonedCartsCommand extends Command
                     $q->orWhere('customer_id', $cart->customer_id);
                 }
             })
-            ->where('created_at', '>=', $cart->created_at->subMinutes(5))
-            ->first();
+                ->where('created_at', '>=', $cart->created_at->subMinutes(5))
+                ->first();
 
             if ($existingOrder) {
                 $cart->update(['recovered_at' => now()]);
                 $this->line("Cart ID {$cart->id} ({$cart->email}) already converted to order #{$existingOrder->order_number}. Marked as recovered.");
+
                 continue;
             }
 
@@ -64,12 +65,13 @@ class ProcessAbandonedCartsCommand extends Command
                 $cart->update(['step_1_sent_at' => now()]);
                 $this->info("Step 1 email dispatched for Cart ID {$cart->id} ({$cart->email}).");
                 $processedCount++;
+
                 continue;
             }
 
             // Step 2: Incentive 5% Coupon after 24 Hours
-            if (!is_null($cart->step_1_sent_at) && is_null($cart->step_2_sent_at) && $cart->step_1_sent_at <= now()->subHours(23)) {
-                $couponCode = 'REC' . strtoupper(substr(md5(uniqid((string) $cart->id, true)), 0, 6));
+            if (! is_null($cart->step_1_sent_at) && is_null($cart->step_2_sent_at) && $cart->step_1_sent_at <= now()->subHours(23)) {
+                $couponCode = 'REC'.strtoupper(substr(md5(uniqid((string) $cart->id, true)), 0, 6));
 
                 Coupon::create([
                     'code' => $couponCode,
@@ -129,9 +131,9 @@ class ProcessAbandonedCartsCommand extends Command
                         }
 
                         $itemsJson = $items->map(fn ($i) => [
-                            'product_id'         => $i->product_id,
+                            'product_id' => $i->product_id,
                             'product_variant_id' => $i->product_variant_id,
-                            'quantity'           => $i->quantity,
+                            'quantity' => $i->quantity,
                         ])->all();
 
                         $subtotal = 0; // price enrichment handled by email template
@@ -139,16 +141,16 @@ class ProcessAbandonedCartsCommand extends Command
                         AbandonedCart::updateOrCreate(
                             ['customer_id' => $customer->id, 'recovered_at' => null],
                             [
-                                'email'       => $customer->email,
-                                'cart_token'  => Str::random(32),
-                                'items_json'  => $itemsJson,
-                                'subtotal'    => $subtotal,
+                                'email' => $customer->email,
+                                'cart_token' => Str::random(32),
+                                'items_json' => $itemsJson,
+                                'subtotal' => $subtotal,
                             ]
                         );
                     } catch (\Throwable $e) {
                         Log::warning('ProcessAbandonedCartsCommand: snapshot failed for customer.', [
                             'customer_id' => $customer->id,
-                            'error'       => $e->getMessage(),
+                            'error' => $e->getMessage(),
                         ]);
                     }
                 }

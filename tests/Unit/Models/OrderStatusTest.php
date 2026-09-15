@@ -127,11 +127,11 @@ it('has correct string values for all cases', function () {
 });
 
 it('does not have a completed case', function () {
-    $values = array_map(fn($s) => $s->value, OrderStatus::cases());
+    $values = array_map(fn ($s) => $s->value, OrderStatus::cases());
     expect($values)->not->toContain('completed');
 });
 
 it('does not have a shipping case', function () {
-    $values = array_map(fn($s) => $s->value, OrderStatus::cases());
+    $values = array_map(fn ($s) => $s->value, OrderStatus::cases());
     expect($values)->not->toContain('shipping');
 });

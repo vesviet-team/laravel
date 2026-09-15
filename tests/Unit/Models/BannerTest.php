@@ -4,7 +4,6 @@ use App\Models\Banner;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
@@ -34,19 +33,19 @@ test('can create and persist banner with full fillable attributes and casts', fu
     $endsAt = (clone $now)->addDays(7);
 
     $banner = Banner::create([
-        'position'        => Banner::POSITION_HERO_SLIDER,
-        'title'           => 'Bộ Sưu Tập Bắc Âu 2026',
-        'eyebrow'         => 'SCANDINAVIAN MINIMALISM',
-        'subtitle'        => 'Tinh hoa nội thất gỗ sồi tự nhiên cho không gian sống hiện đại.',
-        'image'           => 'banners/hero-nordic.webp',
-        'link'            => '/catalog?category=living-room',
-        'cta_text'        => 'Khám Phá Ngay',
+        'position' => Banner::POSITION_HERO_SLIDER,
+        'title' => 'Bộ Sưu Tập Bắc Âu 2026',
+        'eyebrow' => 'SCANDINAVIAN MINIMALISM',
+        'subtitle' => 'Tinh hoa nội thất gỗ sồi tự nhiên cho không gian sống hiện đại.',
+        'image' => 'banners/hero-nordic.webp',
+        'link' => '/catalog?category=living-room',
+        'cta_text' => 'Khám Phá Ngay',
         'open_in_new_tab' => 1,
-        'status'          => 'active',
-        'starts_at'       => $startsAt,
-        'ends_at'         => $endsAt,
-        'sort_order'      => '5',
-        'clicks_count'    => '42',
+        'status' => 'active',
+        'starts_at' => $startsAt,
+        'ends_at' => $endsAt,
+        'sort_order' => '5',
+        'clicks_count' => '42',
     ]);
 
     expect($banner->exists)->toBeTrue();
@@ -69,10 +68,10 @@ test('can create and persist banner with full fillable attributes and casts', fu
     expect($banner->ends_at->toDateTimeString())->toBe($endsAt->toDateTimeString());
 
     $this->assertDatabaseHas('banners', [
-        'id'           => $banner->id,
-        'position'     => 'hero_slider',
-        'title'        => 'Bộ Sưu Tập Bắc Âu 2026',
-        'sort_order'   => 5,
+        'id' => $banner->id,
+        'position' => 'hero_slider',
+        'title' => 'Bộ Sưu Tập Bắc Âu 2026',
+        'sort_order' => 5,
         'clicks_count' => 42,
     ]);
 });
@@ -82,74 +81,74 @@ test('scopeActive accurately filters banners by status and scheduling time windo
 
     // 1. Active with no scheduling boundaries (Always Active)
     $activeIndefinite = Banner::create([
-        'title'     => 'Active Indefinite',
-        'image'     => 'banners/1.jpg',
-        'status'    => 'active',
+        'title' => 'Active Indefinite',
+        'image' => 'banners/1.jpg',
+        'status' => 'active',
         'starts_at' => null,
-        'ends_at'   => null,
+        'ends_at' => null,
     ]);
 
     // 2. Active with past start date and null end date (Currently Running)
     $activePastStart = Banner::create([
-        'title'     => 'Active Past Start',
-        'image'     => 'banners/2.jpg',
-        'status'    => 'active',
+        'title' => 'Active Past Start',
+        'image' => 'banners/2.jpg',
+        'status' => 'active',
         'starts_at' => Carbon::parse('2026-08-15 00:00:00'),
-        'ends_at'   => null,
+        'ends_at' => null,
     ]);
 
     // 3. Active with null start date and future end date (Currently Running)
     $activeFutureEnd = Banner::create([
-        'title'     => 'Active Future End',
-        'image'     => 'banners/3.jpg',
-        'status'    => 'active',
+        'title' => 'Active Future End',
+        'image' => 'banners/3.jpg',
+        'status' => 'active',
         'starts_at' => null,
-        'ends_at'   => Carbon::parse('2026-08-25 00:00:00'),
+        'ends_at' => Carbon::parse('2026-08-25 00:00:00'),
     ]);
 
     // 4. Active with valid bounded window covering current time
     $activeWindow = Banner::create([
-        'title'     => 'Active Window',
-        'image'     => 'banners/4.jpg',
-        'status'    => 'active',
+        'title' => 'Active Window',
+        'image' => 'banners/4.jpg',
+        'status' => 'active',
         'starts_at' => Carbon::parse('2026-08-19 00:00:00'),
-        'ends_at'   => Carbon::parse('2026-08-21 00:00:00'),
+        'ends_at' => Carbon::parse('2026-08-21 00:00:00'),
     ]);
 
     // 5. Inactive status with null dates (Should be excluded)
     $inactive = Banner::create([
-        'title'     => 'Inactive Banner',
-        'image'     => 'banners/5.jpg',
-        'status'    => 'inactive',
+        'title' => 'Inactive Banner',
+        'image' => 'banners/5.jpg',
+        'status' => 'inactive',
         'starts_at' => null,
-        'ends_at'   => null,
+        'ends_at' => null,
     ]);
 
     // 6. Inactive status within valid time window (Should be excluded)
     $inactiveInWindow = Banner::create([
-        'title'     => 'Inactive In Window',
-        'image'     => 'banners/6.jpg',
-        'status'    => 'inactive',
+        'title' => 'Inactive In Window',
+        'image' => 'banners/6.jpg',
+        'status' => 'inactive',
         'starts_at' => Carbon::parse('2026-08-19 00:00:00'),
-        'ends_at'   => Carbon::parse('2026-08-21 00:00:00'),
+        'ends_at' => Carbon::parse('2026-08-21 00:00:00'),
     ]);
 
     // 7. Active status but scheduled for the future (Should be excluded)
     $futureScheduled = Banner::create([
-        'title'     => 'Future Scheduled',
-        'image'     => 'banners/7.jpg',
-        'status'    => 'active',
+        'title' => 'Future Scheduled',
+        'image' => 'banners/7.jpg',
+        'status' => 'active',
         'starts_at' => Carbon::parse('2026-08-21 00:00:00'),
-        'ends_at'   => Carbon::parse('2026-08-30 00:00:00'),
+        'ends_at' => Carbon::parse('2026-08-30 00:00:00'),
     ]);
 
     // 8. Active status but already expired in past (Should be excluded)
     $expired = Banner::create([
-        'title'     => 'Expired Banner',
-        'image'     => 'banners/8.jpg',
-        'status'    => 'active',
+        'title' => 'Expired Banner',
+        'image' => 'banners/8.jpg',
+        'status' => 'active',
         'starts_at' => Carbon::parse('2026-08-01 00:00:00'),
-        'ends_at'   => Carbon::parse('2026-08-19 23:59:59'),
+        'ends_at' => Carbon::parse('2026-08-19 23:59:59'),
     ]);
 
     $activeBanners = Banner::active()->get();
@@ -177,20 +176,20 @@ test('scopeActive accurately filters banners by status and scheduling time windo
 test('scopePosition filters banners by exact position', function () {
     $hero = Banner::create([
         'position' => Banner::POSITION_HERO_SLIDER,
-        'title'    => 'Hero 1',
-        'image'    => 'banners/hero1.jpg',
+        'title' => 'Hero 1',
+        'image' => 'banners/hero1.jpg',
     ]);
 
     $promo = Banner::create([
         'position' => Banner::POSITION_HOME_PROMO_2COL,
-        'title'    => 'Promo 1',
-        'image'    => 'banners/promo1.jpg',
+        'title' => 'Promo 1',
+        'image' => 'banners/promo1.jpg',
     ]);
 
     $collection = Banner::create([
         'position' => Banner::POSITION_HOME_COLLECTION_3COL,
-        'title'    => 'Collection 1',
-        'image'    => 'banners/col1.jpg',
+        'title' => 'Collection 1',
+        'image' => 'banners/col1.jpg',
     ]);
 
     $heroResults = Banner::position(Banner::POSITION_HERO_SLIDER)->get();
@@ -208,20 +207,20 @@ test('scopePosition filters banners by exact position', function () {
 
 test('scopeOrdered sorts banners by sort_order ascending', function () {
     $banner3 = Banner::create([
-        'title'      => 'Third',
-        'image'      => 'banners/3.jpg',
+        'title' => 'Third',
+        'image' => 'banners/3.jpg',
         'sort_order' => 30,
     ]);
 
     $banner1 = Banner::create([
-        'title'      => 'First',
-        'image'      => 'banners/1.jpg',
+        'title' => 'First',
+        'image' => 'banners/1.jpg',
         'sort_order' => 10,
     ]);
 
     $banner2 = Banner::create([
-        'title'      => 'Second',
-        'image'      => 'banners/2.jpg',
+        'title' => 'Second',
+        'image' => 'banners/2.jpg',
         'sort_order' => 20,
     ]);
 
@@ -238,8 +237,8 @@ test('recordClick atomically increments clicks_count and bypasses observer cache
     expect(Cache::has('home_banners'))->toBeTrue();
 
     $banner = Banner::create([
-        'title'        => 'Clickable Banner',
-        'image'        => 'banners/click.jpg',
+        'title' => 'Clickable Banner',
+        'image' => 'banners/click.jpg',
         'clicks_count' => 0,
     ]);
 

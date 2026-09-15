@@ -17,32 +17,32 @@ test('blog index returns 200 and renders published posts and excludes drafts and
 
     $publishedPost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Xu Hướng Nội Thất Scandinavian 2026',
-        'slug'             => 'xu-huong-noi-that-scandinavian-2026',
-        'excerpt'          => 'Tổng quan xu hướng thiết kế tối giản Bắc Âu.',
-        'body'             => '<p>Nội dung chi tiết về phong cách Bắc Âu.</p>',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Xu Hướng Nội Thất Scandinavian 2026',
+        'slug' => 'xu-huong-noi-that-scandinavian-2026',
+        'excerpt' => 'Tổng quan xu hướng thiết kế tối giản Bắc Âu.',
+        'body' => '<p>Nội dung chi tiết về phong cách Bắc Âu.</p>',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $draftPost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Bản Thảo Chưa Xuất Bản',
-        'slug'             => 'ban-thao-chua-xuat-ban',
-        'body'             => '<p>Bản nháp.</p>',
-        'status'           => 'draft',
+        'user_id' => $user->id,
+        'title' => 'Bản Thảo Chưa Xuất Bản',
+        'slug' => 'ban-thao-chua-xuat-ban',
+        'body' => '<p>Bản nháp.</p>',
+        'status' => 'draft',
     ]);
 
     $futurePost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Bài Viết Lên Lịch Tương Lai',
-        'slug'             => 'bai-viet-len-lich-tuong-lai',
-        'body'             => '<p>Tương lai.</p>',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->addDays(5),
+        'user_id' => $user->id,
+        'title' => 'Bài Viết Lên Lịch Tương Lai',
+        'slug' => 'bai-viet-len-lich-tuong-lai',
+        'body' => '<p>Tương lai.</p>',
+        'status' => 'published',
+        'published_at' => Carbon::now()->addDays(5),
     ]);
 
     $response = $this->get(route('blog.index'));
@@ -61,22 +61,22 @@ test('blog index filters posts by category slug', function () {
 
     $postA = Post::create([
         'post_category_id' => $catA->id,
-        'user_id'          => $user->id,
-        'title'            => 'Bí Quyết Bố Trí Sofa Phòng Khách',
-        'slug'             => 'bi-quyet-bo-tri-sofa-phong-khach',
-        'body'             => 'Nội dung phòng khách',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Bí Quyết Bố Trí Sofa Phòng Khách',
+        'slug' => 'bi-quyet-bo-tri-sofa-phong-khach',
+        'body' => 'Nội dung phòng khách',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $postB = Post::create([
         'post_category_id' => $catB->id,
-        'user_id'          => $user->id,
-        'title'            => 'Mẹo Chọn Bàn Ăn Cho Nhà Bếp',
-        'slug'             => 'meo-chon-ban-an-cho-nha-bep',
-        'body'             => 'Nội dung phòng bếp',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Mẹo Chọn Bàn Ăn Cho Nhà Bếp',
+        'slug' => 'meo-chon-ban-an-cho-nha-bep',
+        'body' => 'Nội dung phòng bếp',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $responseA = $this->get(route('blog.index', ['category' => 'phong-khach']));
@@ -96,22 +96,22 @@ test('blog index searches posts by keyword', function () {
 
     $post1 = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Cách Bảo Quản Gỗ Sồi Tự Nhiên',
-        'slug'             => 'cach-bao-quan-go-soi-tu-nhien',
-        'body'             => 'Nội dung về gỗ sồi.',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Cách Bảo Quản Gỗ Sồi Tự Nhiên',
+        'slug' => 'cach-bao-quan-go-soi-tu-nhien',
+        'body' => 'Nội dung về gỗ sồi.',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $post2 = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Nghệ Thuật Lựa Chọn Đèn Trang Trí',
-        'slug'             => 'nghe-thuat-lua-chon-den-trang-tri',
-        'body'             => 'Nội dung về ánh sáng đèn.',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Nghệ Thuật Lựa Chọn Đèn Trang Trí',
+        'slug' => 'nghe-thuat-lua-chon-den-trang-tri',
+        'body' => 'Nội dung về ánh sáng đèn.',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $response = $this->get(route('blog.index', ['search' => 'Gỗ Sồi']));
@@ -135,13 +135,13 @@ test('blog show returns 200 and renders article details with toc for published p
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Hướng Dẫn Lựa Chọn Bàn Trà',
-        'slug'             => 'huong-dan-lua-chon-ban-tra',
-        'excerpt'          => 'Cẩm nang chọn bàn trà hoàn hảo.',
-        'body'             => '<h2>1. Kích thước tiêu chuẩn</h2><p>Đo đạc diện tích phòng.</p><h3>1.1 Chiều cao bàn trà</h3><p>Chiều cao phù hợp với ghế sofa.</p><h2>2. Chất liệu gỗ</h2><p>Gỗ sồi hoặc gỗ óc chó.</p>',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Hướng Dẫn Lựa Chọn Bàn Trà',
+        'slug' => 'huong-dan-lua-chon-ban-tra',
+        'excerpt' => 'Cẩm nang chọn bàn trà hoàn hảo.',
+        'body' => '<h2>1. Kích thước tiêu chuẩn</h2><p>Đo đạc diện tích phòng.</p><h3>1.1 Chiều cao bàn trà</h3><p>Chiều cao phù hợp với ghế sofa.</p><h2>2. Chất liệu gỗ</h2><p>Gỗ sồi hoặc gỗ óc chó.</p>',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $response = $this->get(route('blog.show', $post->slug));
@@ -165,11 +165,11 @@ test('blog show returns 404 for draft post to guest user', function () {
 
     $draftPost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Bản Thảo Chưa Đăng',
-        'slug'             => 'ban-thao-chua-dang',
-        'body'             => '<p>Bản thảo bí mật.</p>',
-        'status'           => 'draft',
+        'user_id' => $user->id,
+        'title' => 'Bản Thảo Chưa Đăng',
+        'slug' => 'ban-thao-chua-dang',
+        'body' => '<p>Bản thảo bí mật.</p>',
+        'status' => 'draft',
     ]);
 
     $response = $this->get(route('blog.show', $draftPost->slug));
@@ -182,11 +182,11 @@ test('blog show returns 200 preview for draft post to authenticated user', funct
 
     $draftPost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Bản Thảo Xem Trước',
-        'slug'             => 'ban-thao-xem-truoc',
-        'body'             => '<p>Nội dung bản thảo.</p>',
-        'status'           => 'draft',
+        'user_id' => $user->id,
+        'title' => 'Bản Thảo Xem Trước',
+        'slug' => 'ban-thao-xem-truoc',
+        'body' => '<p>Nội dung bản thảo.</p>',
+        'status' => 'draft',
     ]);
 
     $response = $this->actingAs($user)->get(route('blog.show', $draftPost->slug));
@@ -203,32 +203,32 @@ test('blog show renders contextual commerce bottom showcase and sticky sidebar c
 
     $product1 = Product::create([
         'category_id' => $ecomCategory->id,
-        'name'        => 'Ghế Armchair Muuto Visu',
-        'slug'        => 'ghe-armchair-muuto-visu',
-        'sku'         => 'MUU-001',
-        'price'       => 5500000,
-        'stock'       => 8,
-        'status'      => 'published',
+        'name' => 'Ghế Armchair Muuto Visu',
+        'slug' => 'ghe-armchair-muuto-visu',
+        'sku' => 'MUU-001',
+        'price' => 5500000,
+        'stock' => 8,
+        'status' => 'published',
     ]);
 
     $product2 = Product::create([
         'category_id' => $ecomCategory->id,
-        'name'        => 'Bàn Trà Around Coffee Table',
-        'slug'        => 'ban-tra-around-coffee-table',
-        'sku'         => 'ARO-002',
-        'price'       => 3800000,
-        'stock'       => 4,
-        'status'      => 'published',
+        'name' => 'Bàn Trà Around Coffee Table',
+        'slug' => 'ban-tra-around-coffee-table',
+        'sku' => 'ARO-002',
+        'price' => 3800000,
+        'stock' => 4,
+        'status' => 'published',
     ]);
 
     $post = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Phối Hợp Ghế Armchair Và Bàn Trà',
-        'slug'             => 'phoi-hop-ghe-armchair-va-ban-tra',
-        'body'             => '<p>Hướng dẫn phối hợp không gian sống với ghế armchair và bàn trà.</p>',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Phối Hợp Ghế Armchair Và Bàn Trà',
+        'slug' => 'phoi-hop-ghe-armchair-va-ban-tra',
+        'body' => '<p>Hướng dẫn phối hợp không gian sống với ghế armchair và bàn trà.</p>',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $post->products()->attach($product1->id, ['sort_order' => 1]);
@@ -251,32 +251,32 @@ test('blog show renders related articles from the same category', function () {
 
     $mainPost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Bài Viết Chính Hiện Tại',
-        'slug'             => 'bai-viet-chinh-hien-tai',
-        'body'             => '<p>Nội dung chính.</p>',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDays(1),
+        'user_id' => $user->id,
+        'title' => 'Bài Viết Chính Hiện Tại',
+        'slug' => 'bai-viet-chinh-hien-tai',
+        'body' => '<p>Nội dung chính.</p>',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDays(1),
     ]);
 
     $related1 = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Bài Viết Liên Quan Thứ Nhất',
-        'slug'             => 'bai-viet-lien-quan-thu-nhat',
-        'body'             => '<p>Nội dung liên quan 1.</p>',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDays(2),
+        'user_id' => $user->id,
+        'title' => 'Bài Viết Liên Quan Thứ Nhất',
+        'slug' => 'bai-viet-lien-quan-thu-nhat',
+        'body' => '<p>Nội dung liên quan 1.</p>',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDays(2),
     ]);
 
     $related2 = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Bài Viết Liên Quan Thứ Hai',
-        'slug'             => 'bai-viet-lien-quan-thu-hai',
-        'body'             => '<p>Nội dung liên quan 2.</p>',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDays(3),
+        'user_id' => $user->id,
+        'title' => 'Bài Viết Liên Quan Thứ Hai',
+        'slug' => 'bai-viet-lien-quan-thu-hai',
+        'body' => '<p>Nội dung liên quan 2.</p>',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDays(3),
     ]);
 
     $response = $this->get(route('blog.show', $mainPost->slug));
@@ -296,12 +296,12 @@ test('blog queries execute with optimal performance and zero N+1 queries', funct
     for ($i = 1; $i <= 5; $i++) {
         $products[] = Product::create([
             'category_id' => $ecomCat->id,
-            'name'        => "Product {$i}",
-            'slug'        => "product-{$i}",
-            'sku'         => "PRD-00{$i}",
-            'price'       => 1000000 * $i,
-            'stock'       => 10,
-            'status'      => 'published',
+            'name' => "Product {$i}",
+            'slug' => "product-{$i}",
+            'sku' => "PRD-00{$i}",
+            'price' => 1000000 * $i,
+            'stock' => 10,
+            'status' => 'published',
         ]);
     }
 
@@ -309,12 +309,12 @@ test('blog queries execute with optimal performance and zero N+1 queries', funct
     for ($i = 1; $i <= 10; $i++) {
         $p = Post::create([
             'post_category_id' => $category->id,
-            'user_id'          => $user->id,
-            'title'            => "Article {$i}",
-            'slug'             => "article-{$i}",
-            'body'             => "<h2>Heading {$i}</h2><p>Content for article {$i}.</p>",
-            'status'           => 'published',
-            'published_at'     => Carbon::now()->subHours($i),
+            'user_id' => $user->id,
+            'title' => "Article {$i}",
+            'slug' => "article-{$i}",
+            'body' => "<h2>Heading {$i}</h2><p>Content for article {$i}.</p>",
+            'status' => 'published',
+            'published_at' => Carbon::now()->subHours($i),
         ]);
         $p->products()->attach([$products[0]->id, $products[1]->id]);
         $posts[] = $p;

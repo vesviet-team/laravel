@@ -18,12 +18,12 @@ class OrderTrackingController extends Controller
             $order = Order::where('order_number', $order_number)
                 ->where(function ($query) use ($contact_info) {
                     $query->where('email', $contact_info)
-                          ->orWhere('phone', $contact_info);
+                        ->orWhere('phone', $contact_info);
                 })
                 ->with('items')
                 ->first();
-                
-            if (!$order) {
+
+            if (! $order) {
                 // Return an error to avoid enumeration attacks but provide feedback
                 return view('storefront.tracking.index', compact('order', 'order_number'))->with('error', 'Không tìm thấy đơn hàng với thông tin đã cung cấp.');
             }

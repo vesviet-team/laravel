@@ -14,8 +14,8 @@ class VietQrPaymentDriver implements PaymentGatewayInterface
 
     public function process(Order $order): array
     {
-        $bankCode    = config('services.banking.bank_code', 'MB');
-        $accountNo   = config('services.banking.account_no', '0123456789');
+        $bankCode = config('services.banking.bank_code', 'MB');
+        $accountNo = config('services.banking.account_no', '0123456789');
         $accountName = config('services.banking.account_name', 'MYSTORE');
 
         $syntax = "ORD {$order->order_number}";
@@ -31,12 +31,12 @@ class VietQrPaymentDriver implements PaymentGatewayInterface
         );
 
         $details = [
-            'bank_code'       => $bankCode,
+            'bank_code' => $bankCode,
             'bank_account_no' => $accountNo,
-            'account_name'    => $accountName,
+            'account_name' => $accountName,
             'transfer_syntax' => $syntax,
-            'amount'          => $order->total_amount,
-            'qr_url'          => $qrUrl,
+            'amount' => $order->total_amount,
+            'qr_url' => $qrUrl,
         ];
 
         $order->update([
@@ -44,11 +44,11 @@ class VietQrPaymentDriver implements PaymentGatewayInterface
         ]);
 
         return [
-            'status'         => 'awaiting_transfer',
+            'status' => 'awaiting_transfer',
             'payment_method' => 'vietqr',
-            'qr_url'         => $qrUrl,
-            'instructions'   => "Quét mã VietQR hoặc chuyển khoản với nội dung: {$syntax}",
-            'metadata'       => $details,
+            'qr_url' => $qrUrl,
+            'instructions' => "Quét mã VietQR hoặc chuyển khoản với nội dung: {$syntax}",
+            'metadata' => $details,
         ];
     }
 
@@ -62,10 +62,10 @@ class VietQrPaymentDriver implements PaymentGatewayInterface
     public function markPaid(Order $order, string $transactionId, array $payload = []): void
     {
         $order->update([
-            'payment_status'         => 'paid',
+            'payment_status' => 'paid',
             'payment_transaction_id' => $transactionId,
-            'paid_at'                => now(),
-            'payment_details'        => array_merge($order->payment_details ?? [], $payload),
+            'paid_at' => now(),
+            'payment_details' => array_merge($order->payment_details ?? [], $payload),
         ]);
     }
 }

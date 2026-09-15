@@ -7,7 +7,7 @@ use App\Models\CustomerAddress;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CustomerAddress>
+ * @extends Factory<CustomerAddress>
  */
 class CustomerAddressFactory extends Factory
 {
@@ -16,41 +16,41 @@ class CustomerAddressFactory extends Factory
     public function definition(): array
     {
         return [
-            "customer_id" => Customer::factory(),
-            "type" => $this->faker->randomElement(["shipping", "billing"]),
-            "label" => $this->faker->optional(0.5)->randomElement(["Nhà riêng", "Văn phòng", "Nhà người thân", "Kho hàng"]),
-            "recipient_name" => $this->faker->name(),
-            "phone" => $this->faker->numerify("09########"),
-            "address_line_1" => $this->faker->streetAddress(),
-            "address_line_2" => $this->faker->optional(0.3)->buildingNumber(),
-            "city" => $this->faker->city(),
-            "district" => $this->faker->citySuffix(),
-            "ward" => $this->faker->optional(0.5)->streetSuffix(),
-            "postal_code" => $this->faker->optional(0.3)->postcode(),
-            "country" => "Vietnam",
-            "is_default" => false,
-            "metadata" => null,
+            'customer_id' => Customer::factory(),
+            'type' => $this->faker->randomElement(['shipping', 'billing']),
+            'label' => $this->faker->optional(0.5)->randomElement(['Nhà riêng', 'Văn phòng', 'Nhà người thân', 'Kho hàng']),
+            'recipient_name' => $this->faker->name(),
+            'phone' => $this->faker->numerify('09########'),
+            'address_line_1' => $this->faker->streetAddress(),
+            'address_line_2' => $this->faker->optional(0.3)->buildingNumber(),
+            'city' => $this->faker->city(),
+            'district' => $this->faker->citySuffix(),
+            'ward' => $this->faker->optional(0.5)->streetSuffix(),
+            'postal_code' => $this->faker->optional(0.3)->postcode(),
+            'country' => 'Vietnam',
+            'is_default' => false,
+            'metadata' => null,
         ];
     }
 
     public function default(): static
     {
         return $this->state(fn (array $attributes) => [
-            "is_default" => true,
+            'is_default' => true,
         ]);
     }
 
     public function shipping(): static
     {
         return $this->state(fn (array $attributes) => [
-            "type" => "shipping",
+            'type' => 'shipping',
         ]);
     }
 
     public function billing(): static
     {
         return $this->state(fn (array $attributes) => [
-            "type" => "billing",
+            'type' => 'billing',
         ]);
     }
 }

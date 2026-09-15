@@ -42,9 +42,8 @@ class RegisterSellerAction
     /**
      * Register a new seller and provision their default page within a transaction.
      *
-     * @param  User   $user  The already-created User that will own this seller profile.
+     * @param  User  $user  The already-created User that will own this seller profile.
      * @param  array  $data  Must contain: shop_name, phone. Optionally: email.
-     * @return SellerProfile
      *
      * @throws SellerActionException
      */
@@ -58,32 +57,32 @@ class RegisterSellerAction
                     // On retry attempts, append a short random suffix to break the collision.
                     $subdomain = $attempt === 0
                         ? (new SellerProfile)->generateUniqueSubdomain($data['shop_name'])
-                        : (new SellerProfile)->generateUniqueSubdomain($data['shop_name']) . '-' . Str::random(4);
+                        : (new SellerProfile)->generateUniqueSubdomain($data['shop_name']).'-'.Str::random(4);
 
                     $sellerProfile = SellerProfile::create([
-                        'user_id'   => $user->id,
+                        'user_id' => $user->id,
                         'shop_name' => $data['shop_name'],
                         'subdomain' => $subdomain,
                         'shop_slug' => $subdomain, // Slice 1: seeded from subdomain; Admin can rename later
-                        'phone'     => $data['phone'],
-                        'email'     => $data['email'] ?? null,
-                        'status'    => 'active',
+                        'phone' => $data['phone'],
+                        'email' => $data['email'] ?? null,
+                        'status' => 'active',
                     ]);
 
                     // Provision a default Seller Page with sensible defaults.
                     SellerPage::create([
-                        'seller_id'    => $sellerProfile->id,
+                        'seller_id' => $sellerProfile->id,
                         'is_published' => true,
                         'theme_config' => [
                             'primary_color' => '#3b82f6',
-                            'font'          => 'Inter',
-                            'mode'          => 'light',
+                            'font' => 'Inter',
+                            'mode' => 'light',
                         ],
                         'blocks' => [
                             [
                                 'type' => 'hero',
                                 'data' => [
-                                    'title'    => 'Chào mừng đến với ' . $data['shop_name'],
+                                    'title' => 'Chào mừng đến với '.$data['shop_name'],
                                     'subtitle' => 'Chuyên cung cấp các sản phẩm chất lượng cao',
                                 ],
                             ],

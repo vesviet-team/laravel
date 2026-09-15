@@ -14,8 +14,11 @@ use Illuminate\Support\Str;
 class BannerResource extends Resource
 {
     protected static ?string $model = Banner::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-photo';
+
     protected static ?string $navigationGroup = 'Marketing';
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
@@ -93,7 +96,7 @@ class BannerResource extends Resource
                         Forms\Components\Select::make('status')
                             ->label('Trạng thái')
                             ->options([
-                                'active'   => 'Active (Hoạt động)',
+                                'active' => 'Active (Hoạt động)',
                                 'inactive' => 'Inactive (Tạm ẩn)',
                             ])
                             ->default('active')
@@ -155,22 +158,22 @@ class BannerResource extends Resource
                     ->label('Vị trí')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'hero_slider'          => '🌟 Slide Trang Chủ',
-                        'home_promo_2col'      => '🏷️ Khuyến Mãi 2 Cột',
+                        'hero_slider' => '🌟 Slide Trang Chủ',
+                        'home_promo_2col' => '🏷️ Khuyến Mãi 2 Cột',
                         'home_collection_3col' => '🛋️ Bộ Sưu Tập 3 Cột',
-                        'catalog_header'       => '📦 Header Catalog',
-                        'blog_sidebar'         => '📰 Blog Sidebar',
-                        'top_announcement'     => '📢 Thông Báo Header',
-                        default                => $state,
+                        'catalog_header' => '📦 Header Catalog',
+                        'blog_sidebar' => '📰 Blog Sidebar',
+                        'top_announcement' => '📢 Thông Báo Header',
+                        default => $state,
                     })
                     ->color(fn (string $state): string => match ($state) {
-                        'hero_slider'          => 'primary',
-                        'home_promo_2col'      => 'warning',
+                        'hero_slider' => 'primary',
+                        'home_promo_2col' => 'warning',
                         'home_collection_3col' => 'info',
-                        'catalog_header'       => 'success',
-                        'blog_sidebar'         => 'gray',
-                        'top_announcement'     => 'danger',
-                        default                => 'gray',
+                        'catalog_header' => 'success',
+                        'blog_sidebar' => 'gray',
+                        'top_announcement' => 'danger',
+                        default => 'gray',
                     })
                     ->sortable()
                     ->searchable(),
@@ -188,14 +191,14 @@ class BannerResource extends Resource
                     ->label('Trạng thái')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'active'   => 'success',
+                        'active' => 'success',
                         'inactive' => 'danger',
-                        default    => 'gray',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'active'   => 'Hoạt động',
+                        'active' => 'Hoạt động',
                         'inactive' => 'Tạm ẩn',
-                        default    => $state,
+                        default => $state,
                     })
                     ->sortable(),
 
@@ -227,7 +230,7 @@ class BannerResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->label('Trạng thái')
                     ->options([
-                        'active'   => 'Hoạt động',
+                        'active' => 'Hoạt động',
                         'inactive' => 'Tạm ẩn',
                     ]),
             ])

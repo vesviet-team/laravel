@@ -25,7 +25,7 @@ class SellerOrderStatusUpdated
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * @param  Order        $order      The updated order (post-save, refreshed).
+     * @param  Order  $order  The updated order (post-save, refreshed).
      * @param  OrderStatus  $oldStatus  The status before the transition.
      * @param  OrderStatus  $newStatus  The status after the transition.
      */

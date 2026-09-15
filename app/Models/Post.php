@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Services\ShortcodeService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -45,10 +47,10 @@ class Post extends Model
     protected function casts(): array
     {
         return [
-            'published_at'         => 'datetime',
-            'is_featured'          => 'boolean',
+            'published_at' => 'datetime',
+            'is_featured' => 'boolean',
             'reading_time_minutes' => 'integer',
-            'faq_schema'           => 'array',
+            'faq_schema' => 'array',
         ];
     }
 
@@ -206,10 +208,10 @@ class Post extends Model
     /**
      * Accessor: Banner / OG image resolved URL.
      */
-     public function getBannerImageUrlAttribute(): ?string
-     {
-         return Product::resolveImageUrl($this->og_image ?? $this->banner_image);
-     }
+    public function getBannerImageUrlAttribute(): ?string
+    {
+        return Product::resolveImageUrl($this->og_image ?? $this->banner_image);
+    }
 
     /**
      * Accessor: OG Image resolved URL.
@@ -232,8 +234,8 @@ class Post extends Model
 
         return $query->where(function ($q) use ($term) {
             $q->where('title', 'like', "%{$term}%")
-              ->orWhere('excerpt', 'like', "%{$term}%")
-              ->orWhere('body', 'like', "%{$term}%");
+                ->orWhere('excerpt', 'like', "%{$term}%")
+                ->orWhere('body', 'like', "%{$term}%");
         });
     }
 
@@ -250,7 +252,7 @@ class Post extends Model
      */
     public function getRelatedPosts(int $limit = 3)
     {
-        if (!$this->post_category_id) {
+        if (! $this->post_category_id) {
             return collect();
         }
 
@@ -268,9 +270,9 @@ class Post extends Model
      */
     public function toSchemaOrgJsonLd(string $url): array
     {
-        $shortcodeService = app(\App\Services\ShortcodeService::class);
+        $shortcodeService = app(ShortcodeService::class);
         $plainBody = $shortcodeService->strip($this->body);
-        $metaDescription = $this->seo_description ?: ($this->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($plainBody), 160));
+        $metaDescription = $this->seo_description ?: ($this->excerpt ?: Str::limit(strip_tags($plainBody), 160));
 
         $schema = [
             '@context' => 'https://schema.org',

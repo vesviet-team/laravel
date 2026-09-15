@@ -38,6 +38,7 @@ class AddToCartButton extends Component
     {
         if ($this->product->stock <= 0) {
             $this->dispatch('toast', message: 'Sản phẩm đã hết hàng.', type: 'error');
+
             return;
         }
 

@@ -7,12 +7,10 @@ use App\Models\CustomerCartItem;
 use App\Models\FlashSaleItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
-use App\Services\Promotions\DTOs\PromotedPriceResult;
 use App\Services\Promotions\PromotionEngine;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
-
 
 class CartService
 {
@@ -27,7 +25,6 @@ class CartService
         protected PromotionEngine $promotionEngine
     ) {}
 
-
     public function getCart(): array
     {
         // Logged-in: DB is source of truth; session is a cache.
@@ -35,9 +32,10 @@ class CartService
         // If session is empty → load from DB and warm session.
         if (Auth::guard('customer')->check()) {
             $sessionCart = Session::get($this->sessionKey, []);
-            if (!empty($sessionCart)) {
+            if (! empty($sessionCart)) {
                 return $sessionCart;
             }
+
             return $this->getCartFromDB();
         }
 
@@ -55,9 +53,9 @@ class CartService
             $cart[$key]['quantity'] = min($cart[$key]['quantity'] + $quantity, 99);
         } else {
             $cart[$key] = [
-                'product_id'         => $productId,
+                'product_id' => $productId,
                 'product_variant_id' => $variantId,
-                'quantity'           => min($quantity, 99),
+                'quantity' => min($quantity, 99),
             ];
         }
 
@@ -83,13 +81,13 @@ class CartService
         $rows = [];
         foreach ($guestCart as $key => $item) {
             $existingQty = $existing->get($key)?->quantity ?? 0;
-            $mergedQty   = min($existingQty + $item['quantity'], 99); // soft cap
+            $mergedQty = min($existingQty + $item['quantity'], 99); // soft cap
             $rows[] = [
-                'customer_id'        => $customer->id,
-                'product_id'         => $item['product_id'],
+                'customer_id' => $customer->id,
+                'product_id' => $item['product_id'],
                 'product_variant_id' => $item['product_variant_id'] ?? 0, // 0 = sentinel for null
-                'quantity'           => $mergedQty,
-                'updated_at'         => now(),
+                'quantity' => $mergedQty,
+                'updated_at' => now(),
             ];
         }
 
@@ -105,14 +103,14 @@ class CartService
 
             Log::info('CartService: guest cart merged to DB.', [
                 'customer_id' => $customer->id,
-                'items'       => count($rows),
+                'items' => count($rows),
             ]);
         } catch (\Throwable $e) {
             // D-03 fix: merge failure must NOT block login.
             // Guest cart remains in session and will be available this session.
             Log::warning('CartService: mergeGuestCartToDB failed — session cart preserved.', [
                 'customer_id' => $customer->id,
-                'error'       => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
     }
@@ -154,7 +152,7 @@ class CartService
             } catch (\Throwable $e) {
                 Log::warning('CartService: DB clear failed after checkout.', [
                     'customer_id' => Auth::guard('customer')->id(),
-                    'error'       => $e->getMessage(),
+                    'error' => $e->getMessage(),
                 ]);
             }
         }
@@ -207,7 +205,7 @@ class CartService
             $sku = '';
             $variantName = null;
             $isFlashSale = false;
-            $imagePath   = null;
+            $imagePath = null;
 
             $slug = null;
             $categoryId = null;
@@ -253,22 +251,22 @@ class CartService
             }
 
             $items[] = [
-                'product_id'          => $productId,
-                'product_variant_id'  => $variantId,
-                'category_id'         => $categoryId,
-                'product_name'        => $name,
-                'variant_name'        => $variantName,
-                'sku'                 => $sku,
-                'price'               => $price,
-                'original_price'      => $originalPrice,
-                'weight'              => max(100, $weight),
-                'quantity'            => $quantity,
-                'subtotal'            => $price * $quantity,
-                'is_flash_sale'       => $isFlashSale,
+                'product_id' => $productId,
+                'product_variant_id' => $variantId,
+                'category_id' => $categoryId,
+                'product_name' => $name,
+                'variant_name' => $variantName,
+                'sku' => $sku,
+                'price' => $price,
+                'original_price' => $originalPrice,
+                'weight' => max(100, $weight),
+                'quantity' => $quantity,
+                'subtotal' => $price * $quantity,
+                'is_flash_sale' => $isFlashSale,
                 'is_catalog_promoted' => ($promotedResult !== null && ! $isFlashSale),
-                'promoted_result'     => $promotedResult?->toArray(),
-                'image_path'          => $imagePath ?? null,
-                'slug'                => $slug,
+                'promoted_result' => $promotedResult?->toArray(),
+                'image_path' => $imagePath ?? null,
+                'slug' => $slug,
             ];
         }
 
@@ -313,7 +311,7 @@ class CartService
         $variantIds = array_filter(array_column($cart, 'product_variant_id'));
 
         $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
-        $variants = !empty($variantIds) ? ProductVariant::whereIn('id', $variantIds)->get()->keyBy('id') : collect();
+        $variants = ! empty($variantIds) ? ProductVariant::whereIn('id', $variantIds)->get()->keyBy('id') : collect();
 
         $issues = [];
 
@@ -326,7 +324,7 @@ class CartService
                 $variant = $variants->get($variantId);
                 if ($variant->stock < $quantity) {
                     $issues[] = [
-                        'name' => ($variant->product->name ?? 'Sản phẩm') . ' (' . $variant->name . ')',
+                        'name' => ($variant->product->name ?? 'Sản phẩm').' ('.$variant->name.')',
                         'requested' => $quantity,
                         'available' => $variant->stock,
                     ];
@@ -359,16 +357,16 @@ class CartService
             'items' => $items,
             'item_count' => $totalItems,
             'subtotal' => $subtotal,
-            'formatted_subtotal' => number_format($subtotal, 0, ',', '.') . '₫',
+            'formatted_subtotal' => number_format($subtotal, 0, ',', '.').'₫',
             'is_empty' => empty($items),
         ];
     }
 
-    protected function generateKey(int $productId, int|null $variantId): string
+    protected function generateKey(int $productId, ?int $variantId): string
     {
         // Normalize null and 0 to the same key '0' — both mean "no variant".
         // DB stores 0 (sentinel), session stores null; both must produce the same lookup key.
-        return $productId . '_' . (($variantId === null || $variantId === 0) ? '0' : $variantId);
+        return $productId.'_'.(($variantId === null || $variantId === 0) ? '0' : $variantId);
     }
 
     protected function saveCart(array $cart): void
@@ -394,22 +392,24 @@ class CartService
                 ->each(function ($row) use (&$cart) {
                     $key = $this->generateKey($row->product_id, $row->product_variant_id);
                     $cart[$key] = [
-                        'product_id'         => $row->product_id,
+                        'product_id' => $row->product_id,
                         // Convert sentinel 0 back to null for session cart compatibility
                         'product_variant_id' => $row->product_variant_id === 0 ? null : $row->product_variant_id,
-                        'quantity'           => $row->quantity,
+                        'quantity' => $row->quantity,
                     ];
                 });
 
             Session::put($this->sessionKey, $cart); // warm session cache
+
             return $cart;
         } catch (\Throwable $e) {
             // D-05 fix: DB failure on session miss must not crash the page.
             // Return empty cart — guest-like degraded mode until DB recovers.
             Log::warning('CartService: getCartFromDB failed — returning empty cart.', [
                 'customer_id' => Auth::guard('customer')->id(),
-                'error'       => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
+
             return [];
         }
     }
@@ -427,15 +427,16 @@ class CartService
 
             if (empty($cart)) {
                 CustomerCartItem::where('customer_id', $customerId)->delete();
+
                 return;
             }
 
             $rows = collect($cart)->map(fn ($item) => [
-                'customer_id'        => $customerId,
-                'product_id'         => $item['product_id'],
+                'customer_id' => $customerId,
+                'product_id' => $item['product_id'],
                 'product_variant_id' => $item['product_variant_id'] ?? 0, // 0 = no variant sentinel
-                'quantity'           => $item['quantity'],
-                'updated_at'         => now(),
+                'quantity' => $item['quantity'],
+                'updated_at' => now(),
             ])->values()->all();
 
             CustomerCartItem::upsert(
@@ -452,7 +453,7 @@ class CartService
 
             CustomerCartItem::where('customer_id', $customerId)
                 ->get()
-                ->filter(fn ($row) => !collect($activePairs)->contains(
+                ->filter(fn ($row) => ! collect($activePairs)->contains(
                     fn ($pair) => $pair[0] === (int) $row->product_id
                         && $pair[1] === (int) $row->product_variant_id
                 ))
@@ -462,9 +463,8 @@ class CartService
             // DB sync must NOT block the user — session cart remains valid.
             Log::warning('CartService: DB sync failed, session cart preserved.', [
                 'customer_id' => Auth::guard('customer')->id(),
-                'error'       => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
     }
 }
-

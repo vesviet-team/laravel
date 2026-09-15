@@ -3,8 +3,9 @@
 namespace Tests\Unit\Services;
 
 use App\Services\AiCopywriterService;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 
 /**
  * Unit tests for AiCopywriterService.
@@ -12,9 +13,8 @@ use Illuminate\Support\Facades\Config;
  * Trust boundary: LLM output is untrusted external content.
  * Tests verify: fallback paths, max_tokens enforcement, XSS sanitization.
  */
-
 beforeEach(function () {
-    $this->service = new AiCopywriterService();
+    $this->service = new AiCopywriterService;
 });
 
 // ── Fallback path tests ──────────────────────────────────────────────────────
@@ -32,7 +32,7 @@ it('returns static fallback when api key is not configured', function () {
 it('returns static fallback on http timeout exception', function () {
     Config::set('services.gemini.api_key', 'fake-key');
 
-    Http::fake(fn () => throw new \Illuminate\Http\Client\ConnectionException('timeout'));
+    Http::fake(fn () => throw new ConnectionException('timeout'));
 
     $result = $this->service->generateProductDescription('Test Product');
 
@@ -177,6 +177,7 @@ it('sends maxOutputTokens in api request', function () {
 
     Http::fake(function ($request) use (&$requestBody) {
         $requestBody = $request->data();
+
         return Http::response([
             'candidates' => [[
                 'content' => ['parts' => [['text' => '<p>ok</p>']]],

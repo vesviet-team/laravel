@@ -3,21 +3,21 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductReviewResource\Pages;
-use App\Filament\Resources\ProductReviewResource\RelationManagers;
 use App\Models\ProductReview;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProductReviewResource extends Resource
 {
     protected static ?string $model = ProductReview::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-star';
+
     protected static ?string $navigationGroup = 'Shop';
+
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
@@ -83,17 +83,17 @@ class ProductReviewResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('Approve')
-                    ->action(fn (\App\Models\ProductReview $record) => $record->update(['status' => 'approved']))
+                    ->action(fn (ProductReview $record) => $record->update(['status' => 'approved']))
                     ->requiresConfirmation()
                     ->color('success')
                     ->icon('heroicon-o-check-circle')
-                    ->visible(fn (\App\Models\ProductReview $record) => $record->status === 'pending'),
+                    ->visible(fn (ProductReview $record) => $record->status === 'pending'),
                 Tables\Actions\Action::make('Hide')
-                    ->action(fn (\App\Models\ProductReview $record) => $record->update(['status' => 'hidden']))
+                    ->action(fn (ProductReview $record) => $record->update(['status' => 'hidden']))
                     ->requiresConfirmation()
                     ->color('danger')
                     ->icon('heroicon-o-eye-slash')
-                    ->visible(fn (\App\Models\ProductReview $record) => $record->status === 'pending'),
+                    ->visible(fn (ProductReview $record) => $record->status === 'pending'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

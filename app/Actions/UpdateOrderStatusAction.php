@@ -22,9 +22,9 @@ class UpdateOrderStatusAction
     public function execute(Order $order, OrderStatus|string $newStatus, ?string $note = null): bool
     {
         $newStatusEnum = $newStatus instanceof OrderStatus ? $newStatus : OrderStatus::tryFrom($newStatus);
-        
-        if (!$newStatusEnum) {
-            throw new Exception("Trạng thái không hợp lệ.");
+
+        if (! $newStatusEnum) {
+            throw new Exception('Trạng thái không hợp lệ.');
         }
 
         $currentStatus = $order->status instanceof OrderStatus ? $order->status : OrderStatus::tryFrom($order->status);
@@ -33,16 +33,17 @@ class UpdateOrderStatusAction
             return true; // No change needed
         }
 
-        if ($currentStatus && !$currentStatus->canTransitionTo($newStatusEnum)) {
+        if ($currentStatus && ! $currentStatus->canTransitionTo($newStatusEnum)) {
             throw new Exception("Không thể chuyển trạng thái từ '{$currentStatus->label()}' sang '{$newStatusEnum->label()}'.");
         }
 
         // If transitioning to cancelled, delegate to CancelOrderAction
         if ($newStatusEnum === OrderStatus::Cancelled) {
             $this->cancelOrderAction->execute($order);
-            
+
             // CancelOrderAction already handles inventory, but we still want to log the history note
             $this->recordHistory($order, $currentStatus, $newStatusEnum, $note);
+
             return true;
         }
 

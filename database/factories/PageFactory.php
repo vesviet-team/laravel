@@ -16,20 +16,21 @@ class PageFactory extends Factory
     public function definition(): array
     {
         $title = fake()->sentence(3);
+
         return [
-            'title'            => $title,
-            'slug'             => Str::slug($title) . '-' . fake()->unique()->numberBetween(1, 99999),
-            'excerpt'          => fake()->paragraph(),
-            'body'             => '<p>' . implode('</p><p>', fake()->paragraphs(3)) . '</p>',
-            'featured_image'   => null,
-            'is_published'     => true,
-            'published_at'     => now(),
-            'template'         => 'default',
-            'meta_title'       => $title,
+            'title' => $title,
+            'slug' => Str::slug($title).'-'.fake()->unique()->numberBetween(1, 99999),
+            'excerpt' => fake()->paragraph(),
+            'body' => '<p>'.implode('</p><p>', fake()->paragraphs(3)).'</p>',
+            'featured_image' => null,
+            'is_published' => true,
+            'published_at' => now(),
+            'template' => 'default',
+            'meta_title' => $title,
             'meta_description' => fake()->sentence(),
-            'canonical_url'    => null,
-            'schema_type'      => 'WebPage',
-            'faq_schema'       => null,
+            'canonical_url' => null,
+            'schema_type' => 'WebPage',
+            'faq_schema' => null,
         ];
     }
 

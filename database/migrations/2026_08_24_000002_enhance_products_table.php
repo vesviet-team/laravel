@@ -67,7 +67,7 @@ return new class extends Migration
             $table->dropIndex('products_category_status_idx');
             $table->dropIndex('products_published_at_idx');
             $table->dropIndex('products_slug_idx');
-            
+
             $table->dropColumn([
                 'compare_at_price',
                 'published_at',

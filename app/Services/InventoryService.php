@@ -27,7 +27,7 @@ class InventoryService
     {
         // Sort items by composite key to guarantee lock ordering (deadlock prevention)
         $items = $order->items->sortBy(function ($item) {
-            return $item->product_id . '-' . ($item->product_variant_id ?? '0');
+            return $item->product_id.'-'.($item->product_variant_id ?? '0');
         });
 
         foreach ($items as $item) {
@@ -75,7 +75,7 @@ class InventoryService
     public function restoreStock(Order $order): void
     {
         $items = $order->items->sortBy(function ($item) {
-            return $item->product_id . '-' . ($item->product_variant_id ?? '0');
+            return $item->product_id.'-'.($item->product_variant_id ?? '0');
         });
 
         foreach ($items as $item) {

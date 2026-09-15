@@ -15,7 +15,7 @@ class TwoFactorService
 
     public function __construct()
     {
-        $this->google2fa = new Google2FA();
+        $this->google2fa = new Google2FA;
     }
 
     /**
@@ -31,7 +31,8 @@ class TwoFactorService
      */
     public function getQrCodeUrl(Customer $customer): string
     {
-        $appName = config("app.name", "Sober Furniture");
+        $appName = config('app.name', 'Sober Furniture');
+
         return $this->google2fa->getQRCodeUrl($appName, $customer->email, $customer->two_factor_secret);
     }
 
@@ -45,7 +46,7 @@ class TwoFactorService
         $writer = new Writer(
             new ImageRenderer(
                 new RendererStyle(300),
-                new SvgImageBackEnd()
+                new SvgImageBackEnd
             )
         );
 
@@ -69,6 +70,7 @@ class TwoFactorService
         for ($i = 0; $i < $count; $i++) {
             $codes[] = strtoupper(substr(bin2hex(random_bytes(8)), 0, 8));
         }
+
         return $codes;
     }
 
@@ -96,16 +98,16 @@ class TwoFactorService
      */
     public function enable(Customer $customer, string $code): bool
     {
-        if (!$this->verifyCode($customer, $code)) {
+        if (! $this->verifyCode($customer, $code)) {
             return false;
         }
 
         $recoveryCodes = $this->generateRecoveryCodes();
 
         $customer->update([
-            "two_factor_enabled" => true,
-            "two_factor_confirmed_at" => now(),
-            "two_factor_recovery_codes" => $recoveryCodes,
+            'two_factor_enabled' => true,
+            'two_factor_confirmed_at' => now(),
+            'two_factor_recovery_codes' => $recoveryCodes,
         ]);
 
         return true;
@@ -117,10 +119,10 @@ class TwoFactorService
     public function disable(Customer $customer): void
     {
         $customer->update([
-            "two_factor_enabled" => false,
-            "two_factor_secret" => null,
-            "two_factor_recovery_codes" => null,
-            "two_factor_confirmed_at" => null,
+            'two_factor_enabled' => false,
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'two_factor_confirmed_at' => null,
         ]);
     }
 
@@ -130,10 +132,10 @@ class TwoFactorService
     public function regenerateSecret(Customer $customer): void
     {
         $customer->update([
-            "two_factor_secret" => $this->generateSecret(),
-            "two_factor_enabled" => false,
-            "two_factor_confirmed_at" => null,
-            "two_factor_recovery_codes" => null,
+            'two_factor_secret' => $this->generateSecret(),
+            'two_factor_enabled' => false,
+            'two_factor_confirmed_at' => null,
+            'two_factor_recovery_codes' => null,
         ]);
     }
 }

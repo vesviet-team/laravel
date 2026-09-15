@@ -3,12 +3,13 @@
 namespace App\Observers;
 
 use App\Models\LandingPage;
+use Illuminate\Support\Facades\Cache;
 
 class LandingPageObserver
 {
     private function clearCache(LandingPage $landingPage): void
     {
-        \Illuminate\Support\Facades\Cache::forget('landing_page_' . $landingPage->slug);
+        Cache::forget('landing_page_'.$landingPage->slug);
     }
 
     /**
@@ -26,7 +27,7 @@ class LandingPageObserver
     {
         $this->clearCache($landingPage);
         if ($landingPage->isDirty('slug')) {
-            \Illuminate\Support\Facades\Cache::forget('landing_page_' . $landingPage->getOriginal('slug'));
+            Cache::forget('landing_page_'.$landingPage->getOriginal('slug'));
         }
     }
 

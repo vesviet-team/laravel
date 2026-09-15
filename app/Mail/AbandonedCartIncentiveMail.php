@@ -23,7 +23,7 @@ class AbandonedCartIncentiveMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '🎁 Ưu đãi độc quyền dành riêng cho bạn: Giảm ' . $this->discountPercent . '% đơn hàng',
+            subject: '🎁 Ưu đãi độc quyền dành riêng cho bạn: Giảm '.$this->discountPercent.'% đơn hàng',
         );
     }
 

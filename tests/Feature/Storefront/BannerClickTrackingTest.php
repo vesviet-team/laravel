@@ -9,7 +9,7 @@ uses(RefreshDatabase::class);
 test('tracking route increments banner clicks_count by 1', function () {
     $banner = Banner::factory()->hero()->active()->create([
         'clicks_count' => 0,
-        'link'         => '/products',
+        'link' => '/products',
     ]);
 
     expect($banner->clicks_count)->toBe(0);
@@ -108,8 +108,8 @@ test('tracking route returns 404 for non-existent banner', function () {
 
 test('tracking route does not invalidate home_banners cache', function () {
     $cachedPayload = [
-        'heroSlides'        => collect(['cached_hero']),
-        'promoBanners'      => collect(['cached_promo']),
+        'heroSlides' => collect(['cached_hero']),
+        'promoBanners' => collect(['cached_promo']),
         'collectionBanners' => collect(['cached_collection']),
     ];
 

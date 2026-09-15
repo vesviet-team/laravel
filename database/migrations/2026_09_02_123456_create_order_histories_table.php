@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('new_status');
             $table->text('note')->nullable();
             $table->timestamps();
-            
+
             $table->index(['order_id', 'seller_id']);
         });
     }

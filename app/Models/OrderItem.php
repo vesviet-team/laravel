@@ -55,7 +55,7 @@ class OrderItem extends Model
      */
     public function getFormattedPriceAttribute(): string
     {
-        return number_format($this->price_at_purchase, 0, ',', '.') . '₫';
+        return number_format($this->price_at_purchase, 0, ',', '.').'₫';
     }
 
     /**
@@ -63,7 +63,7 @@ class OrderItem extends Model
      */
     public function getFormattedSubtotalAttribute(): string
     {
-        return number_format($this->subtotal, 0, ',', '.') . '₫';
+        return number_format($this->subtotal, 0, ',', '.').'₫';
     }
 
     /**

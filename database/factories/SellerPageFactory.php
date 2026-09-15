@@ -16,18 +16,18 @@ class SellerPageFactory extends Factory
     public function definition(): array
     {
         return [
-            'seller_id'    => SellerProfile::factory(),
+            'seller_id' => SellerProfile::factory(),
             'is_published' => true,
             'theme_config' => [
                 'primary_color' => '#3b82f6',
-                'font'          => 'Inter',
-                'mode'          => 'light',
+                'font' => 'Inter',
+                'mode' => 'light',
             ],
             'blocks' => [
                 [
                     'type' => 'hero',
                     'data' => [
-                        'title'    => $this->faker->sentence(4),
+                        'title' => $this->faker->sentence(4),
                         'subtitle' => $this->faker->sentence(8),
                     ],
                 ],

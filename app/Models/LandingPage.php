@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use App\Observers\LandingPageObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use App\Observers\LandingPageObserver;
 
 #[ObservedBy([LandingPageObserver::class])]
 class LandingPage extends Model
@@ -34,10 +34,10 @@ class LandingPage extends Model
     ];
 
     protected $casts = [
-        'is_active'        => 'boolean',
+        'is_active' => 'boolean',
         'urgency_end_time' => 'datetime',
         'combo_rules_json' => 'array',
-        'features_json'    => 'array',
+        'features_json' => 'array',
     ];
 
     // ── Relations ────────────────────────────────────────────────────────────

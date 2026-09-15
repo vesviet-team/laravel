@@ -8,11 +8,9 @@ use App\Models\User;
 use App\Observers\BannerObserver;
 use Database\Seeders\BannerSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
@@ -332,7 +330,7 @@ class ChallengerM5RemediationVerificationTest extends TestCase
      */
     public function test_banner_seeder_strict_idempotency_with_clean_schema(): void
     {
-        $seeder = new BannerSeeder();
+        $seeder = new BannerSeeder;
 
         // Run seeder 3 times consecutively
         $seeder->run();

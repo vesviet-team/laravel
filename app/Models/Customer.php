@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\CustomerAddress;
-use App\Models\CustomerAuditLog;
+use Illuminate\Support\Str;
 
 class Customer extends Authenticatable
 {
@@ -128,10 +128,10 @@ class Customer extends Authenticatable
     {
         return (int) $this->orders()
             ->whereIn('status', [
-                \App\Enums\OrderStatus::Confirmed,
-                \App\Enums\OrderStatus::Processing,
-                \App\Enums\OrderStatus::Shipped,
-                \App\Enums\OrderStatus::Delivered,
+                OrderStatus::Confirmed,
+                OrderStatus::Processing,
+                OrderStatus::Shipped,
+                OrderStatus::Delivered,
             ])
             ->sum('total_amount');
     }
@@ -141,7 +141,7 @@ class Customer extends Authenticatable
      */
     public function getFormattedTotalSpentAttribute(): string
     {
-        return number_format($this->total_spent, 0, ',', '.') . '₫';
+        return number_format($this->total_spent, 0, ',', '.').'₫';
     }
 
     /**
@@ -170,9 +170,9 @@ class Customer extends Authenticatable
         $tier = $this->membership_tier;
 
         return match ($tier) {
-            'VIP Diamond'              => 'bg-[#23232C] text-white border border-[#23232C]',
-            'Thành Viên Thân Thiết'   => 'bg-amber-100 text-amber-900 border border-amber-300',
-            default                    => 'bg-[#F0F0F0] text-[#23232C] border border-[#E5E5E5]',
+            'VIP Diamond' => 'bg-[#23232C] text-white border border-[#23232C]',
+            'Thành Viên Thân Thiết' => 'bg-amber-100 text-amber-900 border border-amber-300',
+            default => 'bg-[#F0F0F0] text-[#23232C] border border-[#E5E5E5]',
         };
     }
 
@@ -183,18 +183,18 @@ class Customer extends Authenticatable
     {
         $latestOrder = $this->orders()->latest()->first();
 
-        if (!$latestOrder) {
+        if (! $latestOrder) {
             return null;
         }
 
         return [
             'customer_name' => $latestOrder->customer_name ?? $this->name,
-            'phone'         => $latestOrder->phone ?? $this->phone,
-            'email'         => $latestOrder->email ?? $this->email,
-            'address'       => $latestOrder->address,
-            'city'          => $latestOrder->city,
-            'district'      => $latestOrder->district,
-            'ward'          => $latestOrder->ward,
+            'phone' => $latestOrder->phone ?? $this->phone,
+            'email' => $latestOrder->email ?? $this->email,
+            'address' => $latestOrder->address,
+            'city' => $latestOrder->city,
+            'district' => $latestOrder->district,
+            'ward' => $latestOrder->ward,
         ];
     }
 
@@ -216,7 +216,7 @@ class Customer extends Authenticatable
      */
     public function regenerateRememberToken(): string
     {
-        $this->remember_token = \Illuminate\Support\Str::random(60);
+        $this->remember_token = Str::random(60);
         $this->save();
 
         return $this->remember_token;
@@ -264,12 +264,12 @@ class Customer extends Authenticatable
     public function incrementFailedLoginAttempts(): void
     {
         $this->failed_login_attempts += 1;
-        
+
         // Lock account after 5 failed attempts for 15 minutes
         if ($this->failed_login_attempts >= 5) {
             $this->locked_until = now()->addMinutes(15);
         }
-        
+
         $this->save();
     }
 
@@ -288,10 +288,10 @@ class Customer extends Authenticatable
      */
     public function getLockoutRemainingMinutes(): int
     {
-        if (!$this->isLocked()) {
+        if (! $this->isLocked()) {
             return 0;
         }
-        
+
         return max(1, (int) $this->locked_until->diffInMinutes(now()));
     }
 }

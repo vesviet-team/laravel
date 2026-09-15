@@ -12,37 +12,37 @@ class AddressSelector extends Component
 
     public array $selectedAddress = [];
 
-    public string $addressType = "shipping"; // shipping | billing
+    public string $addressType = 'shipping'; // shipping | billing
 
     public bool $showNewAddressForm = false;
 
     public array $newAddress = [
-        "type" => "shipping",
-        "label" => "",
-        "recipient_name" => "",
-        "phone" => "",
-        "address_line_1" => "",
-        "address_line_2" => "",
-        "city" => "",
-        "district" => "",
-        "ward" => "",
-        "postal_code" => "",
-        "country" => "Vietnam",
-        "is_default" => false,
+        'type' => 'shipping',
+        'label' => '',
+        'recipient_name' => '',
+        'phone' => '',
+        'address_line_1' => '',
+        'address_line_2' => '',
+        'city' => '',
+        'district' => '',
+        'ward' => '',
+        'postal_code' => '',
+        'country' => 'Vietnam',
+        'is_default' => false,
     ];
 
     public array $addresses = [];
 
     protected $listeners = [
-        "addressSaved" => "loadAddresses",
-        "addressSelected" => "onAddressSelected",
+        'addressSaved' => 'loadAddresses',
+        'addressSelected' => 'onAddressSelected',
     ];
 
-    public function mount(Customer $customer, string $addressType = "shipping"): void
+    public function mount(Customer $customer, string $addressType = 'shipping'): void
     {
         $this->customer = $customer;
         $this->addressType = $addressType;
-        $this->newAddress["type"] = $addressType;
+        $this->newAddress['type'] = $addressType;
         $this->loadAddresses();
     }
 
@@ -50,31 +50,31 @@ class AddressSelector extends Component
     {
         $this->addresses = $this->customer
             ->addresses()
-            ->where("type", $this->addressType)
-            ->orderBy("is_default", "desc")
-            ->orderBy("created_at", "desc")
+            ->where('type', $this->addressType)
+            ->orderBy('is_default', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get()
             ->map(fn ($a) => [
-                "id" => $a->id,
-                "label" => $a->label,
-                "type" => $a->type,
-                "recipient_name" => $a->recipient_name,
-                "phone" => $a->phone,
-                "formatted_address" => $a->formatted_address,
-                "is_default" => $a->is_default,
-                "address_line_1" => $a->address_line_1,
-                "address_line_2" => $a->address_line_2,
-                "city" => $a->city,
-                "district" => $a->district,
-                "ward" => $a->ward,
-                "postal_code" => $a->postal_code,
-                "country" => $a->country,
+                'id' => $a->id,
+                'label' => $a->label,
+                'type' => $a->type,
+                'recipient_name' => $a->recipient_name,
+                'phone' => $a->phone,
+                'formatted_address' => $a->formatted_address,
+                'is_default' => $a->is_default,
+                'address_line_1' => $a->address_line_1,
+                'address_line_2' => $a->address_line_2,
+                'city' => $a->city,
+                'district' => $a->district,
+                'ward' => $a->ward,
+                'postal_code' => $a->postal_code,
+                'country' => $a->country,
             ])
             ->toArray();
 
         // Auto-select default address if none selected
-        if (empty($this->selectedAddress) && !empty($this->addresses)) {
-            $default = collect($this->addresses)->firstWhere("is_default", true);
+        if (empty($this->selectedAddress) && ! empty($this->addresses)) {
+            $default = collect($this->addresses)->firstWhere('is_default', true);
             $this->selectedAddress = $default ?? $this->addresses[0];
         }
     }
@@ -83,18 +83,18 @@ class AddressSelector extends Component
     {
         $this->selectedAddress = $address;
         // Livewire v3: dispatch() broadcasts to all components (replaces emitUp)
-        $this->dispatch("address-changed", address: $address);
+        $this->dispatch('address-changed', address: $address);
     }
 
     public function onAddressSelected(array $address): void
     {
         $this->selectedAddress = $address;
-        $this->dispatch("address-changed", address: $address);
+        $this->dispatch('address-changed', address: $address);
     }
 
     public function toggleNewAddressForm(): void
     {
-        $this->showNewAddressForm = !$this->showNewAddressForm;
+        $this->showNewAddressForm = ! $this->showNewAddressForm;
         if ($this->showNewAddressForm) {
             $this->resetNewAddressForm();
         }
@@ -103,21 +103,21 @@ class AddressSelector extends Component
     public function saveNewAddress(): void
     {
         $this->validate([
-            "newAddress.recipient_name" => ["required", "string", "max:255"],
-            "newAddress.phone" => ["required", "string", "max:20", "regex:/^(\+84|0)[0-9]{9,10}$/"],
-            "newAddress.address_line_1" => ["required", "string", "max:500"],
-            "newAddress.city" => ["required", "string", "max:100"],
-            "newAddress.district" => ["required", "string", "max:100"],
-            "newAddress.ward" => ["required", "string", "max:100"],
+            'newAddress.recipient_name' => ['required', 'string', 'max:255'],
+            'newAddress.phone' => ['required', 'string', 'max:20', "regex:/^(\+84|0)[0-9]{9,10}$/"],
+            'newAddress.address_line_1' => ['required', 'string', 'max:500'],
+            'newAddress.city' => ['required', 'string', 'max:100'],
+            'newAddress.district' => ['required', 'string', 'max:100'],
+            'newAddress.ward' => ['required', 'string', 'max:100'],
         ]);
 
         $data = $this->newAddress;
-        $data["customer_id"] = $this->customer->id;
+        $data['customer_id'] = $this->customer->id;
 
         // If this is the first address of this type, make it default
-        $existingCount = $this->customer->addresses()->where("type", $data["type"])->count();
+        $existingCount = $this->customer->addresses()->where('type', $data['type'])->count();
         if ($existingCount === 0) {
-            $data["is_default"] = true;
+            $data['is_default'] = true;
         }
 
         CustomerAddress::create($data);
@@ -126,14 +126,14 @@ class AddressSelector extends Component
         $this->showNewAddressForm = false;
         $this->loadAddresses();
 
-        $this->dispatch("address-saved");
+        $this->dispatch('address-saved');
     }
 
     public function setDefault(int $addressId): void
     {
         $address = $this->customer->addresses()->find($addressId);
         if ($address) {
-            $address->update(["is_default" => true]);
+            $address->update(['is_default' => true]);
             $this->loadAddresses();
         }
     }
@@ -148,37 +148,37 @@ class AddressSelector extends Component
 
             // If deleted was default, set next as default
             if ($wasDefault) {
-                $next = $this->customer->addresses()->where("type", $type)->first();
+                $next = $this->customer->addresses()->where('type', $type)->first();
                 if ($next) {
-                    $next->update(["is_default" => true]);
+                    $next->update(['is_default' => true]);
                 }
             }
 
             $this->loadAddresses();
-            $this->dispatch("address-saved");
+            $this->dispatch('address-saved');
         }
     }
 
     public function resetNewAddressForm(): void
     {
         $this->newAddress = [
-            "type" => $this->addressType,
-            "label" => "",
-            "recipient_name" => "",
-            "phone" => "",
-            "address_line_1" => "",
-            "address_line_2" => "",
-            "city" => "",
-            "district" => "",
-            "ward" => "",
-            "postal_code" => "",
-            "country" => "Vietnam",
-            "is_default" => false,
+            'type' => $this->addressType,
+            'label' => '',
+            'recipient_name' => '',
+            'phone' => '',
+            'address_line_1' => '',
+            'address_line_2' => '',
+            'city' => '',
+            'district' => '',
+            'ward' => '',
+            'postal_code' => '',
+            'country' => 'Vietnam',
+            'is_default' => false,
         ];
     }
 
     public function render()
     {
-        return view("livewire.address-selector");
+        return view('livewire.address-selector');
     }
 }

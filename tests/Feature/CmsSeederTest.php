@@ -11,7 +11,6 @@ use Database\Seeders\CmsSeeder;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 uses(RefreshDatabase::class);
 
@@ -22,22 +21,22 @@ test('cms seeder seeds 3 post categories with correct attributes, active status 
 
     $expectedCategories = [
         [
-            'slug'        => 'kien-thuc-noi-that',
-            'name'        => 'Kiến Thức Nội Thất',
-            'sort_order'  => 1,
-            'is_active'   => true,
+            'slug' => 'kien-thuc-noi-that',
+            'name' => 'Kiến Thức Nội Thất',
+            'sort_order' => 1,
+            'is_active' => true,
         ],
         [
-            'slug'        => 'phong-cach-song',
-            'name'        => 'Phong Cách Sống',
-            'sort_order'  => 2,
-            'is_active'   => true,
+            'slug' => 'phong-cach-song',
+            'name' => 'Phong Cách Sống',
+            'sort_order' => 2,
+            'is_active' => true,
         ],
         [
-            'slug'        => 'huong-dan-bao-quan',
-            'name'        => 'Hướng Dẫn Bảo Quản',
-            'sort_order'  => 3,
-            'is_active'   => true,
+            'slug' => 'huong-dan-bao-quan',
+            'name' => 'Hướng Dẫn Bảo Quản',
+            'sort_order' => 3,
+            'is_active' => true,
         ],
     ];
 
@@ -168,53 +167,53 @@ test('cms seeder attaches existing products via contextual commerce post_product
     $cat = Category::create(['name' => 'Ghế & Armchair', 'slug' => 'ghe-armchair']);
     $p1 = Product::create([
         'category_id' => $cat->id,
-        'name'        => 'Đèn Thả Trần Ambit',
-        'slug'        => 'ambit-pendant-lamp',
-        'sku'         => 'LMP-001',
-        'price'       => 4500000,
-        'stock'       => 20,
-        'weight'      => 1500,
-        'status'      => 'published',
+        'name' => 'Đèn Thả Trần Ambit',
+        'slug' => 'ambit-pendant-lamp',
+        'sku' => 'LMP-001',
+        'price' => 4500000,
+        'stock' => 20,
+        'weight' => 1500,
+        'status' => 'published',
     ]);
     $p2 = Product::create([
         'category_id' => $cat->id,
-        'name'        => 'Ghế Ăn Synnes',
-        'slug'        => 'synnes-dining-chair',
-        'sku'         => 'CHR-004',
-        'price'       => 5800000,
-        'stock'       => 15,
-        'weight'      => 4500,
-        'status'      => 'published',
+        'name' => 'Ghế Ăn Synnes',
+        'slug' => 'synnes-dining-chair',
+        'sku' => 'CHR-004',
+        'price' => 5800000,
+        'stock' => 15,
+        'weight' => 4500,
+        'status' => 'published',
     ]);
     $p3 = Product::create([
         'category_id' => $cat->id,
-        'name'        => 'Đồng Hồ Freakish',
-        'slug'        => 'freakish-clock',
-        'sku'         => 'ACC-003',
-        'price'       => 2650000,
-        'stock'       => 25,
-        'weight'      => 800,
-        'status'      => 'published',
+        'name' => 'Đồng Hồ Freakish',
+        'slug' => 'freakish-clock',
+        'sku' => 'ACC-003',
+        'price' => 2650000,
+        'stock' => 25,
+        'weight' => 800,
+        'status' => 'published',
     ]);
     $p4 = Product::create([
         'category_id' => $cat->id,
-        'name'        => 'Bộ Cối Xay Tiêu',
-        'slug'        => 'bottle-grinders-set',
-        'sku'         => 'ACC-002',
-        'price'       => 1250000,
-        'stock'       => 30,
-        'weight'      => 600,
-        'status'      => 'published',
+        'name' => 'Bộ Cối Xay Tiêu',
+        'slug' => 'bottle-grinders-set',
+        'sku' => 'ACC-002',
+        'price' => 1250000,
+        'stock' => 30,
+        'weight' => 600,
+        'status' => 'published',
     ]);
     $p5 = Product::create([
         'category_id' => $cat->id,
-        'name'        => 'Đèn Bàn Xi Măng',
-        'slug'        => 'cement-wood-lamp',
-        'sku'         => 'LMP-007',
-        'price'       => 2150000,
-        'stock'       => 18,
-        'weight'      => 2400,
-        'status'      => 'published',
+        'name' => 'Đèn Bàn Xi Măng',
+        'slug' => 'cement-wood-lamp',
+        'sku' => 'LMP-007',
+        'price' => 2150000,
+        'stock' => 18,
+        'weight' => 2400,
+        'status' => 'published',
     ]);
 
     $this->seed(CmsSeeder::class);
@@ -243,8 +242,8 @@ test('cms seeder seeds 3 policy pages with policy template, valid body and faq s
     expect(Page::published()->count())->toBe(3);
 
     $expectedPages = [
-        'chinh-sach-bao-mat'          => 'Chính Sách Bảo Mật',
-        'dieu-khoan-dich-vu'          => 'Điều Khoản Dịch Vụ',
+        'chinh-sach-bao-mat' => 'Chính Sách Bảo Mật',
+        'dieu-khoan-dich-vu' => 'Điều Khoản Dịch Vụ',
         'chinh-sach-van-chuyen-doi-tra' => 'Chính Sách Vận Chuyển & Đổi Trả',
     ];
 

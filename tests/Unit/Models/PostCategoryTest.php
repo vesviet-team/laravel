@@ -10,11 +10,11 @@ uses(RefreshDatabase::class);
 
 test('can create and persist a post category', function () {
     $category = PostCategory::create([
-        'name'        => 'Kiến Thức Nội Thất',
-        'slug'        => 'kien-thuc-noi-that',
+        'name' => 'Kiến Thức Nội Thất',
+        'slug' => 'kien-thuc-noi-that',
         'description' => 'Chuyên mục chia sẻ kiến thức về nội thất Scandinavian.',
-        'is_active'   => true,
-        'sort_order'  => 1,
+        'is_active' => true,
+        'sort_order' => 1,
     ]);
 
     expect($category->exists)->toBeTrue();
@@ -25,16 +25,16 @@ test('can create and persist a post category', function () {
     expect($category->sort_order)->toBe(1);
 
     $this->assertDatabaseHas('post_categories', [
-        'id'   => $category->id,
+        'id' => $category->id,
         'slug' => 'kien-thuc-noi-that',
     ]);
 });
 
 test('casts attributes correctly on post category', function () {
     $category = PostCategory::create([
-        'name'       => 'Test Category',
-        'slug'       => 'test-category',
-        'is_active'  => 1,
+        'name' => 'Test Category',
+        'slug' => 'test-category',
+        'is_active' => 1,
         'sort_order' => '5',
     ]);
 
@@ -44,18 +44,18 @@ test('casts attributes correctly on post category', function () {
 
 test('active scope returns only active categories', function () {
     $active1 = PostCategory::create([
-        'name'      => 'Active 1',
-        'slug'      => 'active-1',
+        'name' => 'Active 1',
+        'slug' => 'active-1',
         'is_active' => true,
     ]);
     $active2 = PostCategory::create([
-        'name'      => 'Active 2',
-        'slug'      => 'active-2',
+        'name' => 'Active 2',
+        'slug' => 'active-2',
         'is_active' => true,
     ]);
     $inactive = PostCategory::create([
-        'name'      => 'Inactive Category',
-        'slug'      => 'inactive-category',
+        'name' => 'Inactive Category',
+        'slug' => 'inactive-category',
         'is_active' => false,
     ]);
 
@@ -82,20 +82,20 @@ test('posts relationship returns all posts belonging to category', function () {
 
     $post1 = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Post 1',
-        'slug'             => 'post-1',
-        'body'             => 'Content for post 1',
-        'status'           => 'published',
+        'user_id' => $user->id,
+        'title' => 'Post 1',
+        'slug' => 'post-1',
+        'body' => 'Content for post 1',
+        'status' => 'published',
     ]);
 
     $post2 = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Post 2',
-        'slug'             => 'post-2',
-        'body'             => 'Content for post 2',
-        'status'           => 'draft',
+        'user_id' => $user->id,
+        'title' => 'Post 2',
+        'slug' => 'post-2',
+        'body' => 'Content for post 2',
+        'status' => 'draft',
     ]);
 
     expect($category->posts)->toHaveCount(2);
@@ -108,31 +108,31 @@ test('publishedPosts relationship returns only published posts for category', fu
 
     $publishedPost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Published Post',
-        'slug'             => 'published-post',
-        'body'             => 'Published post content',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->subDay(),
+        'user_id' => $user->id,
+        'title' => 'Published Post',
+        'slug' => 'published-post',
+        'body' => 'Published post content',
+        'status' => 'published',
+        'published_at' => Carbon::now()->subDay(),
     ]);
 
     $draftPost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Draft Post',
-        'slug'             => 'draft-post',
-        'body'             => 'Draft post content',
-        'status'           => 'draft',
+        'user_id' => $user->id,
+        'title' => 'Draft Post',
+        'slug' => 'draft-post',
+        'body' => 'Draft post content',
+        'status' => 'draft',
     ]);
 
     $scheduledPost = Post::create([
         'post_category_id' => $category->id,
-        'user_id'          => $user->id,
-        'title'            => 'Future Post',
-        'slug'             => 'future-post',
-        'body'             => 'Future post content',
-        'status'           => 'published',
-        'published_at'     => Carbon::now()->addDays(2),
+        'user_id' => $user->id,
+        'title' => 'Future Post',
+        'slug' => 'future-post',
+        'body' => 'Future post content',
+        'status' => 'published',
+        'published_at' => Carbon::now()->addDays(2),
     ]);
 
     $publishedPosts = $category->publishedPosts;

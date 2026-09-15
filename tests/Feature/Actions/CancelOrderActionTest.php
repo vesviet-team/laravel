@@ -15,33 +15,33 @@ it('cancels pending order, restores product stock, and fires OrderCancelled even
     Event::fake([OrderCancelled::class]);
 
     $product = Product::create([
-        'name'   => 'Test Product',
-        'slug'   => 'test-prod-' . uniqid(),
-        'price'  => 200000,
-        'stock'  => 5, // Initially 5
+        'name' => 'Test Product',
+        'slug' => 'test-prod-'.uniqid(),
+        'price' => 200000,
+        'stock' => 5, // Initially 5
         'status' => 'published',
     ]);
 
     $order = Order::create([
-        'order_number'    => 'ORD-' . uniqid(),
-        'status'          => OrderStatus::Pending,
-        'payment_method'  => 'cod',
-        'customer_name'   => 'Test Customer',
-        'phone'           => '0901234567',
-        'address'         => '123 Test St',
-        'subtotal'        => 400000,
+        'order_number' => 'ORD-'.uniqid(),
+        'status' => OrderStatus::Pending,
+        'payment_method' => 'cod',
+        'customer_name' => 'Test Customer',
+        'phone' => '0901234567',
+        'address' => '123 Test St',
+        'subtotal' => 400000,
         'discount_amount' => 0,
-        'shipping_fee'    => 0,
-        'total_amount'    => 400000,
+        'shipping_fee' => 0,
+        'total_amount' => 400000,
     ]);
 
     OrderItem::create([
-        'order_id'          => $order->id,
-        'product_id'        => $product->id,
-        'product_name'      => $product->name,
-        'quantity'          => 2,
+        'order_id' => $order->id,
+        'product_id' => $product->id,
+        'product_name' => $product->name,
+        'quantity' => 2,
         'price_at_purchase' => 200000,
-        'subtotal'          => 400000,
+        'subtotal' => 400000,
     ]);
 
     // Deduct stock first as if checkout happened
@@ -62,24 +62,24 @@ it('cancels pending order, restores product stock, and fires OrderCancelled even
 
 it('rejects cancelling an order that is already delivered or shipping', function () {
     $product = Product::create([
-        'name'   => 'Test Product 2',
-        'slug'   => 'test-prod-2-' . uniqid(),
-        'price'  => 100000,
-        'stock'  => 10,
+        'name' => 'Test Product 2',
+        'slug' => 'test-prod-2-'.uniqid(),
+        'price' => 100000,
+        'stock' => 10,
         'status' => 'published',
     ]);
 
     $order = Order::create([
-        'order_number'    => 'ORD-DELIVERED',
-        'status'          => OrderStatus::Delivered,
-        'payment_method'  => 'cod',
-        'customer_name'   => 'Test Customer',
-        'phone'           => '0901234567',
-        'address'         => '123 Test St',
-        'subtotal'        => 100000,
+        'order_number' => 'ORD-DELIVERED',
+        'status' => OrderStatus::Delivered,
+        'payment_method' => 'cod',
+        'customer_name' => 'Test Customer',
+        'phone' => '0901234567',
+        'address' => '123 Test St',
+        'subtotal' => 100000,
         'discount_amount' => 0,
-        'shipping_fee'    => 0,
-        'total_amount'    => 100000,
+        'shipping_fee' => 0,
+        'total_amount' => 100000,
     ]);
 
     $action = app(CancelOrderAction::class);

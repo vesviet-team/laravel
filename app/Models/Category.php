@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class Category extends Model
 {
@@ -27,9 +29,9 @@ class Category extends Model
 
     protected $casts = [
         'structured_data' => 'array',
-        'is_visible'      => 'boolean',
-        'sort_order'      => 'integer',
-        'level'           => 'integer',
+        'is_visible' => 'boolean',
+        'sort_order' => 'integer',
+        'level' => 'integer',
     ];
 
     protected $appends = [
@@ -47,8 +49,8 @@ class Category extends Model
     public function children()
     {
         return $this->hasMany(Category::class, 'parent_id')
-                    ->orderBy('sort_order')
-                    ->orderBy('name');
+            ->orderBy('sort_order')
+            ->orderBy('name');
     }
 
     public function products()
@@ -59,8 +61,8 @@ class Category extends Model
     public function activeProducts()
     {
         return $this->hasMany(Product::class)
-                    ->whereIn('status', ['active', 'published'])
-                    ->where('is_visible', true);
+            ->whereIn('status', ['active', 'published'])
+            ->where('is_visible', true);
     }
 
     public function scopeWithActiveProductsCount($query)
@@ -81,18 +83,18 @@ class Category extends Model
     public function scopeRoot($query)
     {
         return $query->whereNull('parent_id')
-                     ->where('is_visible', true)
-                     ->orderBy('sort_order')
-                     ->orderBy('name');
+            ->where('is_visible', true)
+            ->orderBy('sort_order')
+            ->orderBy('name');
     }
 
     public function scopeNested($query)
     {
         return $query->with('children')
-                     ->whereNull('parent_id')
-                     ->where('is_visible', true)
-                     ->orderBy('sort_order')
-                     ->orderBy('name');
+            ->whereNull('parent_id')
+            ->where('is_visible', true)
+            ->orderBy('sort_order')
+            ->orderBy('name');
     }
 
     public function scopeOrdered($query)
@@ -119,7 +121,7 @@ class Category extends Model
     /**
      * Get all ancestor categories up to root.
      */
-    public function getAncestors(): \Illuminate\Support\Collection
+    public function getAncestors(): Collection
     {
         $ancestors = collect();
         $current = $this->parent;
@@ -146,21 +148,21 @@ class Category extends Model
     public function getBreadcrumbs(): array
     {
         $breadcrumbs = [];
-        
+
         foreach ($this->getAncestors() as $ancestor) {
             $breadcrumbs[] = [
-                'id'    => $ancestor->id,
-                'name'  => $ancestor->name,
-                'slug'  => $ancestor->slug,
-                'url'   => route('products.index', ['category' => $ancestor->slug]),
+                'id' => $ancestor->id,
+                'name' => $ancestor->name,
+                'slug' => $ancestor->slug,
+                'url' => route('products.index', ['category' => $ancestor->slug]),
             ];
         }
 
         $breadcrumbs[] = [
-            'id'    => $this->id,
-            'name'  => $this->name,
-            'slug'  => $this->slug,
-            'url'   => route('products.index', ['category' => $this->slug]),
+            'id' => $this->id,
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'url' => route('products.index', ['category' => $this->slug]),
         ];
 
         return $breadcrumbs;
@@ -183,13 +185,13 @@ class Category extends Model
             return null;
         }
 
-        if (str_starts_with($this->image_path, 'http://') || 
-            str_starts_with($this->image_path, 'https://') || 
+        if (str_starts_with($this->image_path, 'http://') ||
+            str_starts_with($this->image_path, 'https://') ||
             str_starts_with($this->image_path, '//')) {
             return $this->image_path;
         }
 
-        return \Illuminate\Support\Facades\Storage::url($this->image_path);
+        return Storage::url($this->image_path);
     }
 
     /**
@@ -264,13 +266,13 @@ class Category extends Model
         return static::root()
             ->with(['children' => function ($query) {
                 $query->where('is_visible', true)
-                      ->orderBy('sort_order')
-                      ->orderBy('name')
-                      ->with(['children' => function ($q) {
-                          $q->where('is_visible', true)
+                    ->orderBy('sort_order')
+                    ->orderBy('name')
+                    ->with(['children' => function ($q) {
+                        $q->where('is_visible', true)
                             ->orderBy('sort_order')
                             ->orderBy('name');
-                      }]);
+                    }]);
             }])
             ->get();
     }
@@ -285,7 +287,7 @@ class Category extends Model
 
         foreach ($categories as $category) {
             $indent = str_repeat('— ', $category->level);
-            $list[$category->id] = $indent . $category->name;
+            $list[$category->id] = $indent.$category->name;
         }
 
         return $list;

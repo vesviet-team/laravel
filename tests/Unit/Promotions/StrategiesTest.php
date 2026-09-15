@@ -13,15 +13,15 @@ uses(RefreshDatabase::class);
 
 describe('PercentageWithCapStrategy', function () {
     beforeEach(function () {
-        $this->strategy = new PercentageWithCapStrategy();
+        $this->strategy = new PercentageWithCapStrategy;
     });
 
     test('calculates exact percentage discount on eligible subtotal', function () {
         $rule = new PromotionRule([
-            'id'                  => 1,
-            'name'                => '10% Off',
-            'action_type'         => PromotionRule::ACTION_PERCENTAGE,
-            'discount_value'      => 10.0,
+            'id' => 1,
+            'name' => '10% Off',
+            'action_type' => PromotionRule::ACTION_PERCENTAGE,
+            'discount_value' => 10.0,
             'max_discount_amount' => null,
         ]);
 
@@ -33,10 +33,10 @@ describe('PercentageWithCapStrategy', function () {
 
     test('enforces upper ceiling cap when calculated discount exceeds max_discount_amount', function () {
         $rule = new PromotionRule([
-            'id'                  => 2,
-            'name'                => '20% Off Max 300k',
-            'action_type'         => PromotionRule::ACTION_PERCENTAGE,
-            'discount_value'      => 20.0,
+            'id' => 2,
+            'name' => '20% Off Max 300k',
+            'action_type' => PromotionRule::ACTION_PERCENTAGE,
+            'discount_value' => 20.0,
             'max_discount_amount' => 300000.0,
         ]);
 
@@ -49,9 +49,9 @@ describe('PercentageWithCapStrategy', function () {
 
     test('handles fractional percentages accurately', function () {
         $rule = new PromotionRule([
-            'id'             => 3,
-            'name'           => '12.5% Off',
-            'action_type'    => PromotionRule::ACTION_PERCENTAGE,
+            'id' => 3,
+            'name' => '12.5% Off',
+            'action_type' => PromotionRule::ACTION_PERCENTAGE,
             'discount_value' => 12.5,
         ]);
 
@@ -77,22 +77,22 @@ describe('PercentageWithCapStrategy', function () {
 
 describe('BuyXGetYStrategy', function () {
     beforeEach(function () {
-        $this->strategy = new BuyXGetYStrategy();
+        $this->strategy = new BuyXGetYStrategy;
     });
 
     test('applies 100% discount on reward item when trigger item quantity satisfied', function () {
         $rule = new PromotionRule([
-            'id'          => 10,
-            'name'        => 'Buy Desk Get Lamp Free',
+            'id' => 10,
+            'name' => 'Buy Desk Get Lamp Free',
             'action_type' => PromotionRule::ACTION_BUY_X_GET_Y,
-            'conditions'  => [
+            'conditions' => [
                 'bxgy_config' => [
                     'buy_product_id' => 101,
-                    'buy_quantity'   => 2,
+                    'buy_quantity' => 2,
                     'get_product_id' => 202,
-                    'get_quantity'   => 1,
+                    'get_quantity' => 1,
                     'discount_value' => 100.0,
-                    'is_free'        => true,
+                    'is_free' => true,
                 ],
             ],
         ]);
@@ -109,14 +109,14 @@ describe('BuyXGetYStrategy', function () {
 
     test('calculates multiple reward bundles proportionally', function () {
         $rule = new PromotionRule([
-            'id'          => 11,
+            'id' => 11,
             'action_type' => PromotionRule::ACTION_BUY_X_GET_Y,
-            'conditions'  => [
+            'conditions' => [
                 'bxgy_config' => [
                     'buy_product_id' => 101,
-                    'buy_quantity'   => 2,
+                    'buy_quantity' => 2,
                     'get_product_id' => 202,
-                    'get_quantity'   => 1,
+                    'get_quantity' => 1,
                     'discount_value' => 100.0,
                 ],
             ],
@@ -135,16 +135,16 @@ describe('BuyXGetYStrategy', function () {
 
     test('applies Buy X Get Y from same product pool', function () {
         $rule = new PromotionRule([
-            'id'          => 12,
-            'name'        => 'Buy 2 Get 1 Free Chair',
+            'id' => 12,
+            'name' => 'Buy 2 Get 1 Free Chair',
             'action_type' => PromotionRule::ACTION_BUY_X_GET_Y,
-            'conditions'  => [
+            'conditions' => [
                 'bxgy_config' => [
                     'buy_product_id' => 50,
-                    'buy_quantity'   => 2,
+                    'buy_quantity' => 2,
                     'get_product_id' => 50,
-                    'get_quantity'   => 1,
-                    'is_free'        => true,
+                    'get_quantity' => 1,
+                    'is_free' => true,
                 ],
             ],
         ]);
@@ -162,10 +162,10 @@ describe('BuyXGetYStrategy', function () {
     test('returns null when trigger item quantity is insufficient', function () {
         $rule = new PromotionRule([
             'action_type' => PromotionRule::ACTION_BUY_X_GET_Y,
-            'conditions'  => [
+            'conditions' => [
                 'bxgy_config' => [
                     'buy_product_id' => 101,
-                    'buy_quantity'   => 2,
+                    'buy_quantity' => 2,
                     'get_product_id' => 202,
                 ],
             ],
@@ -182,10 +182,10 @@ describe('BuyXGetYStrategy', function () {
     test('returns null when reward item is not present in cart', function () {
         $rule = new PromotionRule([
             'action_type' => PromotionRule::ACTION_BUY_X_GET_Y,
-            'conditions'  => [
+            'conditions' => [
                 'bxgy_config' => [
                     'buy_product_id' => 101,
-                    'buy_quantity'   => 2,
+                    'buy_quantity' => 2,
                     'get_product_id' => 202,
                 ],
             ],
@@ -200,15 +200,15 @@ describe('BuyXGetYStrategy', function () {
 
     test('respects max_rewards configuration limit', function () {
         $rule = new PromotionRule([
-            'id'          => 13,
+            'id' => 13,
             'action_type' => PromotionRule::ACTION_BUY_X_GET_Y,
-            'conditions'  => [
+            'conditions' => [
                 'bxgy_config' => [
                     'buy_product_id' => 101,
-                    'buy_quantity'   => 1,
+                    'buy_quantity' => 1,
                     'get_product_id' => 202,
-                    'get_quantity'   => 1,
-                    'max_rewards'    => 2,
+                    'get_quantity' => 1,
+                    'max_rewards' => 2,
                 ],
             ],
         ]);
@@ -227,12 +227,12 @@ describe('BuyXGetYStrategy', function () {
 
 describe('TieredQuantityStrategy', function () {
     beforeEach(function () {
-        $this->strategy = new TieredQuantityStrategy();
+        $this->strategy = new TieredQuantityStrategy;
         $this->rule = new PromotionRule([
-            'id'          => 20,
-            'name'        => 'Tiered Bulk Discount',
+            'id' => 20,
+            'name' => 'Tiered Bulk Discount',
             'action_type' => PromotionRule::ACTION_TIERED_QUANTITY,
-            'conditions'  => [
+            'conditions' => [
                 'tiered_steps' => [
                     ['min_qty' => 2, 'discount' => 5.0],
                     ['min_qty' => 4, 'discount' => 10.0],
@@ -270,10 +270,10 @@ describe('TieredQuantityStrategy', function () {
 
     test('falls back to rule discount_value and min_quantity if no steps defined', function () {
         $rule = new PromotionRule([
-            'id'             => 21,
-            'action_type'    => PromotionRule::ACTION_TIERED_QUANTITY,
+            'id' => 21,
+            'action_type' => PromotionRule::ACTION_TIERED_QUANTITY,
             'discount_value' => 8.0,
-            'min_quantity'   => 3,
+            'min_quantity' => 3,
         ]);
 
         $cartItems = [['quantity' => 3, 'price' => 100000, 'subtotal' => 300000]];
@@ -285,13 +285,13 @@ describe('TieredQuantityStrategy', function () {
 
 describe('FixedAmountStrategy', function () {
     beforeEach(function () {
-        $this->strategy = new FixedAmountStrategy();
+        $this->strategy = new FixedAmountStrategy;
     });
 
     test('applies direct fixed amount deduction', function () {
         $rule = new PromotionRule([
-            'id'             => 30,
-            'action_type'    => PromotionRule::ACTION_FIXED_AMOUNT,
+            'id' => 30,
+            'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
             'discount_value' => 50000.0,
         ]);
 
@@ -302,8 +302,8 @@ describe('FixedAmountStrategy', function () {
 
     test('caps fixed discount at eligible subtotal to prevent negative cart', function () {
         $rule = new PromotionRule([
-            'id'             => 31,
-            'action_type'    => PromotionRule::ACTION_FIXED_AMOUNT,
+            'id' => 31,
+            'action_type' => PromotionRule::ACTION_FIXED_AMOUNT,
             'discount_value' => 100000.0,
         ]);
 
@@ -320,13 +320,13 @@ describe('FixedAmountStrategy', function () {
 
 describe('FreeShippingStrategy', function () {
     beforeEach(function () {
-        $this->strategy = new FreeShippingStrategy();
+        $this->strategy = new FreeShippingStrategy;
     });
 
     test('waives full shipping fee when discount_value is zero or null', function () {
         $rule = new PromotionRule([
-            'id'             => 40,
-            'action_type'    => PromotionRule::ACTION_FREE_SHIPPING,
+            'id' => 40,
+            'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
             'discount_value' => 0.0,
         ]);
 
@@ -338,8 +338,8 @@ describe('FreeShippingStrategy', function () {
 
     test('caps shipping discount at actual shipping fee amount', function () {
         $rule = new PromotionRule([
-            'id'             => 41,
-            'action_type'    => PromotionRule::ACTION_FREE_SHIPPING,
+            'id' => 41,
+            'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
             'discount_value' => 50000.0,
         ]);
 
@@ -350,8 +350,8 @@ describe('FreeShippingStrategy', function () {
 
     test('applies partial shipping discount when discount_value is less than shipping fee', function () {
         $rule = new PromotionRule([
-            'id'             => 42,
-            'action_type'    => PromotionRule::ACTION_FREE_SHIPPING,
+            'id' => 42,
+            'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
             'discount_value' => 20000.0,
         ]);
 
@@ -362,7 +362,7 @@ describe('FreeShippingStrategy', function () {
 
     test('returns null when shipping fee is zero', function () {
         $rule = new PromotionRule([
-            'id'          => 43,
+            'id' => 43,
             'action_type' => PromotionRule::ACTION_FREE_SHIPPING,
         ]);
 

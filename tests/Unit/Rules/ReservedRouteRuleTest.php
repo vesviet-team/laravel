@@ -3,7 +3,7 @@
 use App\Rules\ReservedRouteRule;
 
 test('valid custom slugs pass validation', function (string $slug) {
-    $rule = new ReservedRouteRule();
+    $rule = new ReservedRouteRule;
     $failed = false;
     $failureMessage = null;
 
@@ -25,7 +25,7 @@ test('valid custom slugs pass validation', function (string $slug) {
 ]);
 
 test('reserved system slugs fail validation', function (string $slug) {
-    $rule = new ReservedRouteRule();
+    $rule = new ReservedRouteRule;
     $failed = false;
     $failureMessage = null;
 
@@ -70,7 +70,7 @@ test('reserved system slugs fail validation', function (string $slug) {
 ]);
 
 test('reserved slugs fail case-insensitively', function (string $slug) {
-    $rule = new ReservedRouteRule();
+    $rule = new ReservedRouteRule;
     $failed = false;
 
     $rule->validate('slug', $slug, function () use (&$failed) {
@@ -91,7 +91,7 @@ test('reserved slugs fail case-insensitively', function (string $slug) {
 ]);
 
 test('reserved slugs with leading or trailing slashes and whitespace fail validation', function (string $slug) {
-    $rule = new ReservedRouteRule();
+    $rule = new ReservedRouteRule;
     $failed = false;
 
     $rule->validate('slug', $slug, function () use (&$failed) {
@@ -110,7 +110,7 @@ test('reserved slugs with leading or trailing slashes and whitespace fail valida
 ]);
 
 test('getReservedSlugs returns complete list of protected system routes', function () {
-    $rule = new ReservedRouteRule();
+    $rule = new ReservedRouteRule;
     $reserved = $rule->getReservedSlugs();
 
     expect($reserved)->toBeArray();

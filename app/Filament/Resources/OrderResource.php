@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use App\Actions\CancelOrderAction;
 use App\Enums\OrderStatus;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Order;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -14,8 +16,11 @@ use Filament\Tables\Table;
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
+
     protected static ?string $navigationGroup = 'Orders';
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
@@ -84,7 +89,7 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('customer_name')->searchable(),
                 Tables\Columns\TextColumn::make('phone')->searchable(),
                 Tables\Columns\TextColumn::make('total_amount')
-                    ->formatStateUsing(fn ($state) => number_format((int) $state, 0, ',', '.') . '₫')
+                    ->formatStateUsing(fn ($state) => number_format((int) $state, 0, ',', '.').'₫')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
@@ -108,14 +113,14 @@ class OrderResource extends Resource
                     ->visible(fn (Order $record): bool => ! ($record->status instanceof OrderStatus ? $record->status : OrderStatus::tryFrom($record->status))?->isTerminal())
                     ->action(function (Order $record) {
                         try {
-                            app(\App\Actions\CancelOrderAction::class)->execute($record);
-                            \Filament\Notifications\Notification::make()
+                            app(CancelOrderAction::class)->execute($record);
+                            Notification::make()
                                 ->title('Huỷ đơn hàng thành công')
                                 ->body('Đơn hàng đã được huỷ và tồn kho đã được hoàn lại.')
                                 ->success()
                                 ->send();
                         } catch (\Throwable $e) {
-                            \Filament\Notifications\Notification::make()
+                            Notification::make()
                                 ->title('Không thể huỷ đơn hàng')
                                 ->body($e->getMessage())
                                 ->danger()

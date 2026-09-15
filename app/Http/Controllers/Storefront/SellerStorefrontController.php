@@ -74,8 +74,8 @@ class SellerStorefrontController extends Controller
         }
 
         return view('storefront.seller.index', [
-            'page'      => $page,
-            'tenant'    => $seller,
+            'page' => $page,
+            'tenant' => $seller,
             'isPreview' => false,
         ]);
     }
@@ -130,8 +130,8 @@ class SellerStorefrontController extends Controller
         }
 
         return view('storefront.seller.index', [
-            'page'      => $page,
-            'tenant'    => $tenant,
+            'page' => $page,
+            'tenant' => $tenant,
             'isPreview' => true,
         ]);
     }

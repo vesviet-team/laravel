@@ -27,7 +27,7 @@ class ShortcodeService
         $pattern = '/\[product(?:\s+(?:id|sku)=["\']?([^"\'\]\s]+)["\']?|\s+([a-zA-Z0-9_\-]+))\]/i';
 
         return preg_replace_callback($pattern, function ($matches) {
-            $identifier = !empty($matches[1]) ? trim($matches[1]) : (isset($matches[2]) ? trim($matches[2]) : null);
+            $identifier = ! empty($matches[1]) ? trim($matches[1]) : (isset($matches[2]) ? trim($matches[2]) : null);
 
             if (empty($identifier)) {
                 return '';
@@ -45,11 +45,11 @@ class ShortcodeService
                 ->with(['category'])
                 ->first();
 
-            if (!$product) {
+            if (! $product) {
                 return '';
             }
 
-            if (!View::exists('storefront.blog.partials.product-card-embed')) {
+            if (! View::exists('storefront.blog.partials.product-card-embed')) {
                 return '';
             }
 

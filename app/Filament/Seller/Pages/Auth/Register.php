@@ -4,14 +4,15 @@ namespace App\Filament\Seller\Pages\Auth;
 
 use App\Actions\RegisterSellerAction;
 use App\Exceptions\SellerActionException;
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Auth\Register as BaseRegister;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 use Throwable;
 
 /**
@@ -62,14 +63,14 @@ class Register extends BaseRegister
                             Select::make('industry')
                                 ->label('Ngành hàng')
                                 ->options([
-                                    'fashion'   => 'Thời trang & Phụ kiện',
-                                    'food'      => 'Ẩm thực & Đồ uống',
+                                    'fashion' => 'Thời trang & Phụ kiện',
+                                    'food' => 'Ẩm thực & Đồ uống',
                                     'cosmetics' => 'Mỹ phẩm & Làm đẹp',
-                                    'general'   => 'Khác',
+                                    'general' => 'Khác',
                                 ])
                                 ->required(),
                         ]),
-                ])->submitAction(new \Illuminate\Support\HtmlString('<button type="submit" class="filament-button">Hoàn tất đăng ký</button>')),
+                ])->submitAction(new HtmlString('<button type="submit" class="filament-button">Hoàn tất đăng ký</button>')),
             ])->statePath('data');
     }
 
@@ -95,8 +96,8 @@ class Register extends BaseRegister
                 // RegisterSellerAction::execute() expects an explicit User instance (SF-09).
                 app(RegisterSellerAction::class)->execute($user, [
                     'shop_name' => $data['shop_name'],
-                    'phone'     => $data['phone'],
-                    'email'     => $user->email, // Use User's email, not form data (Wizard may not expose it in $data)
+                    'phone' => $data['phone'],
+                    'email' => $user->email, // Use User's email, not form data (Wizard may not expose it in $data)
                 ]);
 
                 return $user;

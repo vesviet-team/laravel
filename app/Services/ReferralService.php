@@ -10,15 +10,15 @@ class ReferralService
     public function generateReferralCode(): string
     {
         do {
-            $code = "REF-" . Str::upper(Str::random(8));
-        } while (Customer::where("referral_code", $code)->exists());
+            $code = 'REF-'.Str::upper(Str::random(8));
+        } while (Customer::where('referral_code', $code)->exists());
 
         return $code;
     }
 
     public function ensureReferralCode(Customer $customer): void
     {
-        if (!$customer->referral_code) {
+        if (! $customer->referral_code) {
             $customer->referral_code = $this->generateReferralCode();
             $customer->save();
         }
@@ -26,9 +26,9 @@ class ReferralService
 
     public function processReferral(Customer $newCustomer, string $referralCode): ?Customer
     {
-        $referrer = Customer::where("referral_code", $referralCode)->first();
+        $referrer = Customer::where('referral_code', $referralCode)->first();
 
-        if (!$referrer) {
+        if (! $referrer) {
             return null;
         }
 
@@ -50,14 +50,14 @@ class ReferralService
 
     public function awardReferralPoints(Customer $referrer, int $points = 50000): void
     {
-        $referrer->increment("loyalty_points", $points);
+        $referrer->increment('loyalty_points', $points);
     }
 
     public function awardPurchasePoints(Customer $customer, int $amount): void
     {
         $points = (int) ($amount / 1000);
         if ($points > 0) {
-            $customer->increment("loyalty_points", $points);
+            $customer->increment('loyalty_points', $points);
         }
     }
 
@@ -67,7 +67,8 @@ class ReferralService
             return false;
         }
 
-        $customer->decrement("loyalty_points", $points);
+        $customer->decrement('loyalty_points', $points);
+
         return true;
     }
 
@@ -75,17 +76,17 @@ class ReferralService
     {
         $referrals = $customer->referrals()->count();
         $completedReferrals = $customer->referrals()
-            ->whereHas("orders", function ($query) {
-                $query->whereIn("status", ["confirmed", "processing", "shipped", "delivered"]);
+            ->whereHas('orders', function ($query) {
+                $query->whereIn('status', ['confirmed', 'processing', 'shipped', 'delivered']);
             })
             ->count();
 
         return [
-            "total_referrals" => $referrals,
-            "completed_referrals" => $completedReferrals,
-            "loyalty_points" => $customer->loyalty_points,
-            "referral_code" => $customer->referral_code,
-            "referral_url" => url("/account/register") . "?ref=" . $customer->referral_code,
+            'total_referrals' => $referrals,
+            'completed_referrals' => $completedReferrals,
+            'loyalty_points' => $customer->loyalty_points,
+            'referral_code' => $customer->referral_code,
+            'referral_url' => url('/account/register').'?ref='.$customer->referral_code,
         ];
     }
 }

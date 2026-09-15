@@ -17,7 +17,7 @@ class ListSellerPages extends ListRecords
         // P1-04: Use Filament::getTenant() — the authoritative active tenant context.
         // auth()->user()->sellerProfile may not match the active Filament tenant.
         $seller = Filament::getTenant();
-        $page   = $seller?->pages()->first();
+        $page = $seller?->pages()->first();
 
         if ($page) {
             $this->redirect(SellerPageResource::getUrl('edit', ['record' => $page->id]));
