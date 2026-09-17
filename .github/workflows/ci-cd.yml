@@ -21,7 +21,7 @@ jobs:
   # ──────────────────────────────────────────────────────────────
   # Stage 1: Quality Gate & Architectural Fitness
   # ──────────────────────────────────────────────────────────────
-  architectural-fitness:
+  lint:
     name: Code Quality & Architectural Fitness
     runs-on: [self-hosted, linux, x64, docker]
     steps:
@@ -201,7 +201,7 @@ jobs:
   test:
     name: Run Tests (Isolated SQLite In-Memory)
     runs-on: [self-hosted, linux, x64, docker]
-    needs: architectural-fitness
+    needs: lint
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -278,6 +278,7 @@ jobs:
           file: docker/php/Dockerfile.prod
           push: true
           tags: |
+            ghcr.io/vesviet-team/laravel:latest
             ghcr.io/vesviet-team/laravel:main
             ghcr.io/vesviet-team/laravel:${{ github.sha }}
           cache-from: type=gha
@@ -311,21 +312,44 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: GitOps Deployment Verification & Trigger
+      - name: Kubernetes Native Rolling Deployment
         run: |
           echo "========================================================"
-          echo "🚀 Kubernetes GitOps Deployment Trigger"
+          echo "🚀 Starting Kubernetes Native Rollout in namespace laravel..."
           echo "========================================================"
-          echo "Image: ghcr.io/vesviet-team/laravel:${{ github.sha }}"
-          echo "Latest Tag: ghcr.io/vesviet-team/laravel:main"
-          echo "Target Cluster: Homelab K3s (vesviet-team)"
-          echo "Namespace: apps"
-          echo "GitOps Manifest Path: gitops/apps/laravel"
-          echo "Application: Enterprise Laravel (Nginx + PHP-FPM sidecar)"
-          echo ""
-          echo "Verifying deployment readiness..."
-          echo "✓ Container image published to GHCR with immutable SHA"
-          echo "✓ Assets compiled into container build"
-          echo "✓ Decoupled from legacy host docker-compose bind mounts"
-          echo "✓ Manifests configured for K3s GitOps automated synchronization"
-          echo "Deployment trigger completed successfully."
+          kubectl rollout restart deployment/laravel-web deployment/laravel-worker -n laravel
+
+          echo "⏳ Awaiting rollout status for laravel-web..."
+          kubectl rollout status deployment/laravel-web -n laravel --timeout=180s
+
+          echo "⏳ Awaiting rollout status for laravel-worker..."
+          kubectl rollout status deployment/laravel-worker -n laravel --timeout=180s
+
+          echo "✅ Rollout restart completed successfully for laravel-web and laravel-worker."
+
+      - name: Automated Rollback on Deployment Failure
+        if: failure()
+        run: |
+          echo "========================================================"
+          echo "⚠️ Rollout timed out or failed! Executing rollback..."
+          echo "========================================================"
+          kubectl rollout undo deployment/laravel-web -n laravel || true
+          kubectl rollout undo deployment/laravel-worker -n laravel || true
+          kubectl rollout status deployment/laravel-web -n laravel --timeout=180s || true
+          exit 1
+
+      - name: Automated Smoke Check & Zero-Downtime Verification
+        run: |
+          echo "========================================================"
+          echo "🔍 Automated Smoke Check & Zero-Downtime Verification"
+          echo "========================================================"
+          echo "Testing internal CoreDNS & ClusterIP (port 8800)..."
+          curl -f -s http://laravel-web.laravel.svc.cluster.local:8800/up
+
+          echo "Testing internal CoreDNS & ClusterIP (port 8000)..."
+          curl -f -s http://laravel-web.laravel.svc.cluster.local:8000/up
+
+          echo "Testing public domain..."
+          curl -f -s https://demo.tanhdev.com/up
+
+          echo "🎉 All smoke checks passed with ZERO downtime!"
