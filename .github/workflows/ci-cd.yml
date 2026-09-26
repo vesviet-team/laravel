@@ -242,6 +242,8 @@ jobs:
     runs-on: [self-hosted, linux, x64, docker]
     needs: test
     if: github.ref == 'refs/heads/main'
+    outputs:
+      image_tag: ${{ steps.vars.outputs.short_sha }}
     permissions:
       contents: read
       packages: write
@@ -249,6 +251,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Compute Short SHA
+        id: vars
+        run: echo "short_sha=$(echo "$GITHUB_SHA" | cut -c1-7)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js for Asset Compilation
         uses: actions/setup-node@v4
@@ -278,9 +284,8 @@ jobs:
           file: docker/php/Dockerfile.prod
           push: true
           tags: |
-            ghcr.io/vesviet-team/laravel:latest
+            ghcr.io/vesviet-team/laravel:${{ steps.vars.outputs.short_sha }}
             ghcr.io/vesviet-team/laravel:main
-            ghcr.io/vesviet-team/laravel:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -303,53 +308,35 @@ jobs:
   # Stage 4: GitOps Deployment Notification / Trigger
   # ──────────────────────────────────────────────────────────────
   deploy:
-    name: Deploy to Kubernetes Cluster (GitOps)
+    name: GitOps Write-Back Deploy
     runs-on: [self-hosted, linux, x64, docker]
-    environment: production
-    needs: build
-    if: github.ref == 'refs/heads/main'
+    needs: [build]
     steps:
-      - name: Checkout Code
+      - name: Checkout GitOps Repository
         uses: actions/checkout@v4
+        with:
+          repository: vesviet-team/gitops
+          token: ${{ secrets.GITOPS_PUSH_TOKEN }}
+          path: gitops
 
-      - name: Kubernetes Native Rolling Deployment
+      - name: Install Kustomize
         run: |
-          echo "========================================================"
-          echo "🚀 Starting Kubernetes Native Rollout in namespace laravel..."
-          echo "========================================================"
-          kubectl rollout restart deployment/laravel-web deployment/laravel-worker -n laravel
+          mkdir -p bin
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash -s -- 5.4.3 bin
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
 
-          echo "⏳ Awaiting rollout status for laravel-web..."
-          kubectl rollout status deployment/laravel-web -n laravel --timeout=180s
-
-          echo "⏳ Awaiting rollout status for laravel-worker..."
-          kubectl rollout status deployment/laravel-worker -n laravel --timeout=180s
-
-          echo "✅ Rollout restart completed successfully for laravel-web and laravel-worker."
-
-      - name: Automated Rollback on Deployment Failure
-        if: failure()
+      - name: Update Laravel Image Tag
+        working-directory: gitops/apps/laravel
         run: |
-          echo "========================================================"
-          echo "⚠️ Rollout timed out or failed! Executing rollback..."
-          echo "========================================================"
-          kubectl rollout undo deployment/laravel-web -n laravel || true
-          kubectl rollout undo deployment/laravel-worker -n laravel || true
-          kubectl rollout status deployment/laravel-web -n laravel --timeout=180s || true
-          exit 1
+          kustomize edit set image ghcr.io/vesviet-team/laravel=ghcr.io/vesviet-team/laravel:${{ needs.build.outputs.image_tag }}
 
-      - name: Automated Smoke Check & Zero-Downtime Verification
+      - name: Commit and Push with Retry
+        working-directory: gitops
         run: |
-          echo "========================================================"
-          echo "🔍 Automated Smoke Check & Zero-Downtime Verification"
-          echo "========================================================"
-          echo "Testing internal CoreDNS & ClusterIP (port 8800)..."
-          curl -f -s http://laravel-web.laravel.svc.cluster.local:8800/up
-
-          echo "Testing internal CoreDNS & ClusterIP (port 8000)..."
-          curl -f -s http://laravel-web.laravel.svc.cluster.local:8000/up
-
-          echo "Testing public domain..."
-          curl -f -s https://demo.tanhdev.com/up
-
-          echo "🎉 All smoke checks passed with ZERO downtime!"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add apps/laravel/kustomization.yaml
+          git commit -m "chore(deploy): bump laravel to ${{ needs.build.outputs.image_tag }} [skip ci]" || exit 0
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin main && break || sleep $((i * 2))
+          done
